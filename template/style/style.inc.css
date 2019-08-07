@@ -1,0 +1,49 @@
+/* Generic slides */
+body { font-family: Lato }
+input { font-family: Lato }
+
+h1 { font-size: 30px; font-weight: 800; margin: 50px 0; text-align: center }
+h2 { font-size: 20px; font-weight: 800; margin: 20px 0 }
+h3 { font-size: 20px; font-weight: bold; margin: 10px 0 }
+p { margin: 10px 0 }
+div.bigText { font-size: 30px }
+div.smallText { font-size: 16px; line-height: 20px }
+
+div.wide { margin: 0 auto; width: 900px }
+div.narrow { margin: 0 auto; width: 600px }
+div.columns { display: flex; justify-content: center }
+div.columns > div { border-left: 2px dotted black; display: inline-block; flex-grow: 1; padding: 40px 20px; vertical-align: top; width: 100px }
+div.columns > div:first-child { border-left: none }
+
+table.text { border-bottom: 1px solid black; border-collapse: collapse; margin: 20px auto }
+table.text td { border-top: 1px solid black; padding: 10px 20px }
+
+/* Fonts */
+
+@font-face {
+	font-family: "Lato";
+	font-style: normal;
+	font-weight: normal;
+	src: url(style/LatoLatin-Regular.woff) format('woff'), url(style/LatoLatin-Regular.woff2) format('woff2')
+	}
+
+@font-face {
+	font-family: "Lato";
+	font-style: normal;
+	font-weight: bold;
+	src: url(style/LatoLatin-Bold.woff) format('woff'), url(style/LatoLatin-Bold.woff2) format('woff2')
+	}
+
+@font-face {
+	font-family: "Lato";
+	font-style: normal;
+	font-weight: 300;
+	src: url(style/LatoLatin-Light.woff) format('woff'), url(style/LatoLatin-Light.woff2) format('woff2')
+	}
+
+@font-face {
+	font-family: "Lato";
+	font-style: normal;
+	font-weight: 800;
+	src: url(style/LatoLatin-Black.woff) format('woff'), url(style/LatoLatin-Black.woff2) format('woff2')
+	}

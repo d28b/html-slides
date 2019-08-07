@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+
+<html lang="en" style="height: 100%">
+<head>
+	<meta charset="utf-8">
+	<meta content="yes" name="mobile-web-app-capable">
+	<link href="manifest.json" rel="manifest">
+	<title><? title ?></title>
+	<meta content="" name="description">
+	<meta content="" name="keywords">
+	<style>
+		INCLUDE slides.inc.css
+		INCLUDE ../style/style.inc.css
+	</style>
+</head>
+<body>
+
+<svg height="50" id="indexButton" width="50">
+	<path d="m 13.5,13.5 22,0 0,4 -22,0 z m 0,9 22,0 0,4 -22,0 z m 0,9 22,0 0,4 -22,0 z" />
+</svg>
+
+<div id="index">
+	<div id="indexContent">
+		<div style="margin: 30px 0 0 0">
+			<div style="display: inline-block; margin-right: 40px">
+				<div class="largeButtonHeader">Mode</div>
+				<div>
+					<div class="largeButton" id="normalModeButton" title="Show all slides">
+						<svg class="bigIcon" height="30" width="30" xmlns="http://www.w3.org/2000/svg">
+							<rect height="6" style="fill: #ffffff" width="10" x="10" y="4" />
+							<rect height="6" style="fill: #ffffff" width="10" x="10" y="12" />
+							<rect height="6" style="fill: #ffffff" width="10" x="10" y="20" />
+						</svg>
+						<div>Slides</div>
+					</div>
+					<div class="largeButton" id="presentationModeButton" title="Show just one slide at a time">
+						<svg class="bigIcon" height="30" width="30" xmlns="http://www.w3.org/2000/svg">
+							<path d="M 25,15 9,22 9,8 z" style="fill: #ffffff" />
+						</svg>
+						<div><u>P</u>resentation</div>
+					</div>
+				</div>
+			</div>
+
+			<div style="display: inline-block">
+				<div class="largeButtonHeader">Remote control</div>
+				<div>
+					<div class="largeButton" id="remoteSend" title="Act as remote control">
+						<svg class="smallIcon" height="20" width="20" xmlns="http://www.w3.org/2000/svg">
+							<circle cx="6.5" cy="13.5" r="2.5" style="fill: #ffffff" />
+							<path d="M 7.4325618,8.5877369 A 5,5 0 0 1 11.416342,12.589187" style="fill: none; stroke: #ffffff; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1" />
+							<path d="M 7.992099,5.6403791 A 8,8 0 0 1 14.366148,12.0427" style="fill: none; stroke: #ffffff; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 4; stroke-width: 1" />
+							<path d="M 8.5516361,2.6930213 A 11,11 0 0 1 17.315953,11.496212" style="fill: none; stroke: #ffffff; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 4; stroke-width: 1" />
+						</svg>
+						<div>Send</div>
+						<div id="remoteSendToken"></div>
+					</div>
+
+					<div class="largeButton" id="remoteListen" title="Listen to a remote control">
+						<svg class="smallIcon" height="20" width="20" xmlns="http://www.w3.org/2000/svg">
+							<g transform="translate(20, 0) scale(-1,1)">
+								<circle cx="6.5" cy="13.5" r="2.5" style="fill: #ffffff" />
+								<path d="M 7.4325618,8.5877369 A 5,5 0 0 1 11.416342,12.589187" style="fill: none; stroke: #ffffff; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1" />
+								<path d="M 7.992099,5.6403791 A 8,8 0 0 1 14.366148,12.0427" style="fill: none; stroke: #ffffff; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 4; stroke-width: 1" />
+								<path d="M 8.5516361,2.6930213 A 11,11 0 0 1 17.315953,11.496212" style="fill: none; stroke: #ffffff; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 4; stroke-width: 1" />
+							</g>
+						</svg>
+
+						<div>Listen</div>
+						<div><input id="remoteListenToken"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div style="color: rgba(255, 255, 255, 0.5); margin: 30px 0 80px 0">
+			Press <span class="shortcut">F11</span> to switch to fullscreen.
+		</div>
+
+		<? createIndex() ?>
+	</div>
+</div>
+
+<div id="main">
+	<? createSlides() ?>
+</div>
+
+<div id="footer">
+	<svg id="bottomSpacer" xmlns="http://www.w3.org/2000/svg">
+		<path d="M 2,50 2,150" style="stroke: #ccc; stroke-dasharray: 4 12; stroke-linecap: round; stroke-width: 4" />
+	</svg>
+</div>
+
+<script>
+'use strict';
+INCLUDE slides.inc.js
+</script>
+
+</body>
+</html>

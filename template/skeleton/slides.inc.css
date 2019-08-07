@@ -1,0 +1,85 @@
+body { background: #eee; font-family: sans-serif; font-size: 20px; height: 100%; margin: 0; padding: 0 }
+input { font-family: sans-serif; font-size: 20px }
+
+/* Normal view */
+div#main { padding: 0 0 0 0 }
+div#footer { text-align: center }
+div#footer > svg { height: 200px; vertical-align: middle; width: 4px }
+
+/* Main content, slides */
+div#main > div.slide { background: white; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); height: 600px; margin: 20px auto; overflow: hidden; position: relative; text-align: center; width: 1000px }
+div#main > div.slide > .layer { left: 0; position: absolute; top: 0 }
+div#main > div.slide > div.slideNumber { bottom: 10px; color: #999; font-size: 12px; position: absolute; right: 10px; text-align: right }
+div#main > div.slide.selected { box-shadow: 0 0 14px rgba(0, 0, 0, 0.3) }
+div#main > div.slide.black { background: black }
+div#main > div.slide > img.full { height: 600px; object-fit: contain; width: 1000px }
+div#main > div.slide.cover > img.full { object-fit: cover }
+
+/* Index button */
+svg#indexButton { cursor: pointer; position: fixed; right: 20px; top: 20px; z-index: 110 }
+svg#indexButton > path { fill: black; stroke: rgba(255, 255, 255, 0.4); stroke-width: 1 }
+body.openIndex svg#indexButton { background: none; box-shadow: none; color: white }
+body.openIndex svg#indexButton > path { fill: white; stroke: none }
+
+/* Index cover */
+div#index { background: rgba(0, 0, 0, 0.9); display: none; height: 100%; left: 0; overflow-x: hidden; overflow-y: auto; position: fixed; text-align: center; top: 0; width: 100%; z-index: 100 }
+body.openIndex { overflow: hidden }
+body.openIndex div#index { display: block }
+
+/* Content on the index cover */
+div#indexContent { color: white; font-size: 16px; margin: 50px auto 100px auto; max-width: 800px; padding: 0 20px; text-align: left }
+div#indexContent > div.topic { color: white; font-size: 25px; font-weight: bold; margin: 60px 0 20px 0 }
+div#indexContent > div.subTopic { color: white; font-size: 20px; font-weight: bold; margin: 20px 0 10px 0 }
+div#indexContent > div.slideRow > div { background: rgba(255, 255, 255, 0.4); color: white; cursor: pointer; display: inline-block; font-size: 16px; font-weight: bold; height: 40px; margin: 0 10px 10px 0; overflow: hidden; padding: 10px 0; position: relative; text-align: center; vertical-align: top; width: 100px }
+div#indexContent > div.slideRow > div:hover { background: rgba(255, 255, 255, 0.5) }
+div#indexContent > div.slideRow > div > div { bottom: 4px; color: white; font-size: 12px; font-weight: bold; left: 0; line-height: 20px; position: absolute; text-align: center; width: 100% }
+
+div#indexContent div.largeButtonHeader { color: rgba(255, 255, 255, 0.5); margin: 0 0 5px 0 }
+div#indexContent div.largeButton { border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 4px; color: rgba(255, 255, 255, 0.5); cursor: pointer; display: inline-block; height: 100px; margin-right: 6px; position: relative; text-align: center; vertical-align: top; width: 120px }
+div#indexContent div.largeButton > svg.smallIcon { background: rgba(255, 255, 255, 0.15); border-radius: 15px; margin: 10px 0 8px 0; padding: 5px; vertical-align: middle }
+div#indexContent div.largeButton > svg.bigIcon { background: rgba(255, 255, 255, 0.15); border-radius: 20px; margin: 17px 0 10px 0; padding: 5px; vertical-align: middle }
+div#indexContent span.shortcut { background: rgba(255, 255, 255, 0.2); border-radius: 12px; font-weight: 800; padding: 2px 10px }
+
+/* Normal and presentation mode buttons */
+div#indexContent div#normalModeButton.selected { background: rgba(51, 153, 255, 0.1); border-color: #39f; color: #39f }
+div#indexContent div#normalModeButton.selected > svg.bigIcon { background: linear-gradient(0deg, rgba(36,107,179,1) 0%, rgba(51,153,255,1) 100%) }
+div#indexContent div#presentationModeButton.selected { background: rgba(51, 204, 51, 0.1); border-color: #3c3; color: #3c3 }
+div#indexContent div#presentationModeButton.selected > svg.bigIcon { background: linear-gradient(0deg, rgba(36,143,36,1) 0%, rgba(51,204,51,1) 100%) }
+
+/* Remote send/listen buttons */
+div#indexContent div#remoteSendToken { font-weight: 800; line-height: 20px; padding: 4px 0 }
+div#indexContent div#remoteListen input { background: none; border: none; border-radius: 2px; color: rgba(255, 255, 255, 0.5); font-size: 16px; font-weight: 800; line-height: 20px; padding: 4px 0; text-align: center; width: 100% }
+div#indexContent div#remoteSend.selected { background: rgba(51, 153, 255, 0.1); border-color: #39f; color: #39f }
+div#indexContent div#remoteSend.selected > svg.smallIcon { background: #39f }
+div#indexContent div#remoteSend.selected > span { color: white }
+div#indexContent div#remoteListen.selected { background: rgba(255, 153, 51, 0.1); border-color: #f93; color: #f93 }
+div#indexContent div#remoteListen.selected > svg.smallIcon { background: #f93 }
+div#indexContent div#remoteListen.selected input { color: white }
+div#indexContent div#remoteListen.editToken > svg.smallIcon { background: #f93 }
+div#indexContent div#remoteListen.editToken { color: #f93 }
+div#indexContent div#remoteListen.editToken input { color: white }
+div#indexContent div#remoteSend.selected div#remoteSendToken { color: white }
+
+/* Remote send/listen mode */
+body.remoteSend svg#indexButton > path { fill: #39f; stroke: none }
+body.remoteListen svg#indexButton > path { fill: #f93; stroke: none }
+body.remoteSend:not(.presentation) div#main > div.slide.selected > div.slideNumber { background: #39f; border-radius: 20px; color: white; font-size: 20px; font-weight: bold; height: 40px; line-height: 40px; text-align: center; width: 40px }
+
+/* Presentation mode */
+body.presentation div#main { background: black; height: 100%; overflow: hidden; padding: 0 }
+body.presentation div#main > div.slide { box-shadow: none; display: none; margin: 0 0 }
+body.presentation div#main > div.slide > div.slideNumber { display: none }
+body.presentation div#main > div.slide.selected { display: block }
+body.presentation div#footer { display: none }
+
+/* Print mode */
+@media print {
+	@page { margin: 2cm 1cm; padding: 0; size: A4 landscape }
+	body { background: none }
+	svg#indexButton { display: none }
+	div#main { padding: 0 }
+	div#footer { display: none }
+	div#main > div.slide { border: 1px solid black !important; border-radius: 0 !important; box-shadow: none !important; margin: 0 auto; page-break-before: always }
+	div#main > div.slide:first-child { page-break-before: auto }
+	div#main > div.slide > div.slideNumber { color: black }
+}
