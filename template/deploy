@@ -433,7 +433,6 @@ function runHTMLRule(name, rule) {
 						includeUntil(pos - 7);
 						var subIndent = currentIndent();
 						var file = readUntil('\n').trim();
-						console.log('include js', folder, file);
 						includeFile(path.join(folder, file), subIndent);
 						includedPos = pos - 1;
 						continue;

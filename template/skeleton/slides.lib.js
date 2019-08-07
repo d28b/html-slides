@@ -1,5 +1,106 @@
 const xml = require('./xml.lib.js');
 
+var htmlTitle = 'Presentation';
+var progressiveWebAppHeader = statFile('./pwa/manifest.json').isFile ? '<link href="pwa/manifest.json" rel="manifest">' : '';
+
+var slideNumber = 0;
+var list = [];
+
+function title(title) {
+	htmlTitle = title;
+	list.push({slideHandler: slideHandler, indexHandler, indexHandler});
+
+	function slideHandler() { }
+
+	function indexHandler(state) {
+		finishSlideRow(state);
+		output.push('<div class="title">' + title + '</div>\n');
+	}
+}
+
+function topic(title) {
+	list.push({slideHandler: slideHandler, indexHandler, indexHandler});
+
+	function slideHandler() { }
+
+	function indexHandler(state) {
+		finishSlideRow(state);
+		output.push('<div class="topic">' + title + '</div>\n');
+	}
+}
+
+function subTopic(title) {
+	list.push({slideHandler: slideHandler, indexHandler, indexHandler});
+
+	function slideHandler() { }
+
+	function indexHandler(state) {
+		finishSlideRow(state);
+		output.push('<div class="subTopic">' + title + '</div>\n');
+	}
+}
+
+function slide(file, title, className) {
+	slideNumber += 1;
+	var number = slideNumber;
+	var id = 'slide-' + number;
+	if (! title) title = '';
+	var fullPath = path.join(folder, file);
+	list.push({slideHandler: slideHandler, indexHandler, indexHandler});
+
+	function slideHandler() {
+		var parsedPath = path.parse(fullPath);
+		var jsFullPath = path.join(parsedPath.dir, parsedPath.name + '.js');
+
+		output.push('<div class="slide' + (className ? ' ' + className : '') + '" id="' + id + '">\n');
+		if (parsedPath.ext == '.html') htmlFile(fullPath);
+		else if (parsedPath.ext == '.svg') svgFile(fullPath);
+		else if (parsedPath.ext == '.mp4') videoFile(fullPath);
+		else if (parsedPath.ext == '.webm') videoFile(fullPath);
+		else if (parsedPath.ext == '.ogg') videoFile(fullPath);
+		else if (parsedPath.ext == '.png') imageFile(fullPath);
+		else if (parsedPath.ext == '.jpg') imageFile(fullPath);
+		else if (parsedPath.ext == '.jpeg') imageFile(fullPath);
+		else output.push('<div>Unknown file extension ' + parsedPath.ext + '.</div>\n');
+		jsFile(jsFullPath);
+		output.push('\t<div class="slideNumber">' + number + '</div>\n');
+		output.push('</div>\n');
+	}
+
+	function indexHandler(state) {
+		startSlideRow(state);
+		output.push('\t<div onclick="event.stopPropagation(); moveToSlideWithId(\'' + id + '\'); openIndex(false)">' + title + '<div>' + number + '</div></div>\n');
+	}
+}
+
+function startSlideRow(state) {
+	if (state.row) return;
+	output.push('<div class="slideRow">\n');
+	state.row = true;
+}
+
+function finishSlideRow(state) {
+	if (! state.row) return;
+	output.push('</div>\n');
+	state.row = false;
+}
+
+function createSlides() {
+	for (var i = 0; i < list.length; i++) {
+		var item = list[i];
+		item.slideHandler();
+	}
+}
+
+function createIndex() {
+	var state = {row: false};
+	for (var i = 0; i < list.length; i++) {
+		var item = list[i];
+		item.indexHandler(state);
+	}
+	finishSlideRow(state);
+}
+
 function htmlFile(fullPath) {
 	output.push('\t<? include ../' + fullPath + ' ?>\n');
 }
@@ -34,26 +135,29 @@ function svgFile(fullPath) {
 	svg.traverseNodes(checkNode);
 
 	// Add it to the output
-	//svg.stringifyWithWhiteSpace(output, '\t');
 	svg.stringify(output, '\t');
 
 	function checkNode(node, parents) {
-		if (node.attributes.id != null) {
-			if (node.attributes.id.match(/^(text|tspan|rect|path|g|circle|defs|svg|a|polygon|image)\d{1,4}$/)) delete node.attributes['id'];
+		//delete node.attributes['xml:space'];
+
+		// Remove default IDs
+		if (node.attributes.id != null && node.attributes.id.match(/^(text|tspan|rect|path|g|circle|defs|svg|a|polygon|image)\d{1,4}$/))
+			delete node.attributes['id'];
+
+		// Remove inkscape-specific attributes
+		for (var key in node.attributes) {
+			var key9 = key.substr(0, 9);
+			if (key9 == 'sodipodi:' || key9 == 'inkscape:') delete node.attributes[key];
 		}
 
-		delete node.attributes['xml:space'];
-		delete node.attributes['sodipodi:role'];
-		delete node.attributes['sodipodi:absref'];
-		delete node.attributes['sodipodi:nodetypes'];
-		delete node.attributes['inkscape:connector-curvature'];
-
+		// Fix hrefs
 		if (node.attributes['xlink:href']) {
 			var folder = path.dirname(fullPath);
 			var link = node.attributes['xlink:href'];
 			node.attributes['xlink:href'] = path.join(folder, link);
 		}
 
+		// Clean the style
 		if (node.attributes.style != null) {
 			var style = {};
 			var styles = node.attributes.style.split(/;/);
@@ -110,87 +214,4 @@ function jsFile(fullPath) {
 	output.push('\t\tINCLUDE ../' + fullPath + '\n');
 	output.push('\t})();\n');
 	output.push('\t</script>\n');
-}
-
-var slideNumber = 0;
-var list = [];
-
-function topic(title) {
-	list.push({slideHandler: slideHandler, indexHandler, indexHandler});
-
-	function slideHandler() { }
-
-	function indexHandler(state) {
-		finishSlideRow(state);
-		output.push('<div class="topic">' + title + '</div>\n');
-	}
-}
-
-function subTopic(title) {
-	list.push({slideHandler: slideHandler, indexHandler, indexHandler});
-
-	function slideHandler() { }
-
-	function indexHandler(state) {
-		finishSlideRow(state);
-		output.push('<div class="subTopic">' + title + '</div>\n');
-	}
-}
-
-function slide(file, title, className) {
-	slideNumber += 1;
-	var number = slideNumber;
-	var id = 'slide-' + number;
-	var fullPath = path.join(folder, file);
-	list.push({slideHandler: slideHandler, indexHandler, indexHandler});
-
-	function slideHandler() {
-		var parsedPath = path.parse(fullPath);
-		var jsFullPath = path.join(parsedPath.dir, parsedPath.name + '.js');
-
-		output.push('<div class="slide' + (className ? ' ' + className : '') + '" id="' + id + '">\n');
-		if (parsedPath.ext == '.html') htmlFile(fullPath);
-		else if (parsedPath.ext == '.svg') svgFile(fullPath);
-		else if (parsedPath.ext == '.mp4') videoFile(fullPath);
-		else if (parsedPath.ext == '.png') imageFile(fullPath);
-		else if (parsedPath.ext == '.jpg') imageFile(fullPath);
-		else if (parsedPath.ext == '.jpeg') imageFile(fullPath);
-		else output.push('<div>Unknown file extension ' + parsedPath.ext + '.</div>\n');
-		jsFile(jsFullPath);
-		output.push('\t<div class="slideNumber">' + number + '</div>\n');
-		output.push('</div>\n');
-	}
-
-	function indexHandler(state) {
-		startSlideRow(state);
-		output.push('\t<div onclick="event.stopPropagation(); moveToSlideWithId(\'' + id + '\'); openIndex(false)">' + title + '<div>' + number + '</div></div>\n');
-	}
-}
-
-function startSlideRow(state) {
-	if (state.row) return;
-	output.push('<div class="slideRow">\n');
-	state.row = true;
-}
-
-function finishSlideRow(state) {
-	if (! state.row) return;
-	output.push('</div>\n');
-	state.row = false;
-}
-
-function createSlides() {
-	for (var i = 0; i < list.length; i++) {
-		var item = list[i];
-		item.slideHandler();
-	}
-}
-
-function createIndex() {
-	var state = {row: false};
-	for (var i = 0; i < list.length; i++) {
-		var item = list[i];
-		item.indexHandler(state);
-	}
-	finishSlideRow(state);
 }

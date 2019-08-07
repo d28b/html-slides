@@ -1,5 +1,6 @@
 var main = document.getElementById('main');
 var bottomSpacer = document.getElementById('bottomSpacer');
+var focusedSince = 0;
 
 document.body.onkeydown = function(event) {
 	var inputFocused = document.activeElement.tagName == 'INPUT' || document.activeElement.tagName == 'TEXTAREA';
@@ -9,6 +10,15 @@ document.body.onkeydown = function(event) {
 		event.preventDefault();
 		return;
 	}
+};
+
+document.onfocus = function(event) {
+	focusedSince = new Date().getTime();
+	document.body.classList.add('focus');
+};
+
+document.onblur = function(event) {
+	document.body.classList.remove('focus');
 };
 
 // Index and settings
@@ -28,6 +38,13 @@ function openIndex(open) {
 indexButton.onclick = function(event) {
 	event.preventDefault();
 	event.stopPropagation();
+
+	// Ignore the first click if the document just got focus
+	if (focusedSince + 200 > new Date().getTime()) {
+		focusedSince = 0;
+		return;
+	}
+
 	openIndex(! isIndexOpen());
 };
 
@@ -167,8 +184,10 @@ function Remote() {
 	var isSubmitting = false;
 
 	this.sendState = function(key, value) {
+		if (myState[key] == value) return;
 		myState.revision = new Date().getTime();
 		myState[key] = value;
+		localStorage.setItem('state', JSON.stringify(myState));
 		needsSubmission = true;
 		submit();
 	};
@@ -238,27 +257,50 @@ function Remote() {
 
 	function process(revision, text) {
 		if (revision <= receivedState.revision) return;
-		if (! text) return;
 
+		var state = parseState(text);
+		if (! state) return;
+
+		state.revision = revision;
+		receivedState = state;
+		if (role != 'listen') return;
+		notifyListeners();
+	}
+
+	window.onstorage = function(event) {
+		console.log(event);
+		if (event.key == 'state') return mergeState(event.newValue);
+	};
+
+	this.mergeLocalState = function() {
+		mergeState(localStorage.getItem('state'));
+	};
+
+	function mergeState(text) {
+		var state = parseState(text);
+		if (! state) return;
+		if (state.revision < receivedState.revision) return;
+		receivedState = state;
+		notifyListeners();
+	}
+
+	function parseState(text) {
+		if (! text) return;
 		try {
-			var data = JSON.parse(text);
-			if (data == null) return;
-			if (typeof(data) != 'object') return;
-			data.revision = revision;
+			var state = JSON.parse(text);
+			if (state == null) return;
+			if (typeof(state) != 'object') return;
+			return state;
 		} catch (ignore) {
 			return;
 		}
-
-		receivedState = data;
-		if (role != 'listen') return;
-		//moveToSlideWithId(receivedState.slide, 'remote');
-		notifyListeners();
 	}
 
 	var stateListeners = [];
 
 	this.addStateListener = function(handler) {
 		stateListeners.push(handler);
+		handler(receivedState);
 	};
 
 	this.removeStateListener = function(handler) {
@@ -300,8 +342,7 @@ function moveToSlide(slide, source) {
 	currentSlide = slide;
 	currentSlide.classList.add('selected');
 	controller.onCurrentSlideChanged(source, previousSlide);
-	remote.sendState('slide', slide.id); //onCurrentSlideChanged(source);
-	localStorage.setItem('slide', slide.id);
+	remote.sendState('slide', slide.id);
 	return true;
 }
 
@@ -575,5 +616,5 @@ function PresentationMode() {
 	};
 }
 
-// Switch to the last slide
-moveToSlideWithId(localStorage.getItem('slide'));
+// Start with the previously saved local state
+remote.mergeLocalState();

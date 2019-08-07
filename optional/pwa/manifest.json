@@ -1,6 +1,6 @@
 {
-	"short_name": "HTML Slides",
-	"name": "HTML Presentation Slides",
+	"short_name": "Short title",
+	"name": "Title of this presentation",
 	"icons": [{
 		"src": "launcher-icon-192.png",
 		"sizes": "192x192",
@@ -11,6 +11,6 @@
 		"type": "image/png"
 		}],
 	"background_color": "#3771c8",
-	"start_url": "index.html",
+	"start_url": "../index.html",
 	"display": "standalone"
 }
