@@ -1,8 +1,8 @@
 var running = false;
 var shouldRun = false;
 
-var ball = new Ball(document.getElementById('animationBall'));
-var floor = new Floor(document.getElementById('animationFloor'));
+var ball = new Ball(document.getElementById('simulationBall'), document.getElementById('simulationHits'));
+var floor = new Floor(document.getElementById('simulationFloor'));
 
 slide.onSlideAppears = function() {
 	shouldRun = true;
@@ -26,12 +26,13 @@ function run() {
 	requestAnimationFrame(run);
 }
 
-function Ball(element) {
+function Ball(element, hits) {
 	var x = Math.random() * 960;
 	var y = Math.random() * 300;
 	var dx = Math.random() * 10;
 	var dy = Math.random() * 10;
 
+	var ceilingHits = 0;
 	var hue = Math.random() * 360;
 	updateColor();
 
@@ -60,6 +61,9 @@ function Ball(element) {
 			hue += 10 + Math.random() * 30;
 			if (hue >= 360) hue -= 360;
 			updateColor();
+
+			ceilingHits += 1;
+			hits.textContent = ceilingHits;
 		}
 
 		if (y < 0) {

@@ -433,6 +433,7 @@ function runHTMLRule(name, rule) {
 						includeUntil(pos - 7);
 						var subIndent = currentIndent();
 						var file = readUntil('\n').trim();
+						console.log('include js', folder, file);
 						includeFile(path.join(folder, file), subIndent);
 						includedPos = pos - 1;
 						continue;
@@ -935,6 +936,7 @@ function createDefaultContext(context) {
 	context.logDarkGray = logDarkGray;
 	context.logBlack = logBlack;
 	context.fileWasModified = function(file) { statCache.invalidate(file); };
+	context.statFile = function(file) { return statCache.stat(file); };
 	context.require = require;
 	return vm.createContext(context);
 }

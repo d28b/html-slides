@@ -1,15 +1,7 @@
 const xml = require('./xml.lib.js');
 
 function htmlFile(fullPath) {
-	// Add the source
-	rule.addDependency(fullPath);
-
-	// Read
-	var content = fs.readFileSync(fullPath, {encoding: 'utf8'});
-	if (content == null) return;
-
-	// Add it to the output
-	output.push('\t' + content.replace(/\n/g, '\n\t').trim() + '\n');
+	output.push('\t<? include ../' + fullPath + ' ?>\n');
 }
 
 function svgFile(fullPath) {
@@ -105,20 +97,17 @@ function imageFile(fullPath) {
 }
 
 function jsFile(fullPath) {
-	// Add the source
+	// Add the dependency no matter if the file exists
 	rule.addDependency(fullPath);
 
-	// Read
-	try {
-		var content = fs.readFileSync(fullPath, {encoding: 'utf8'});
-		if (content == null) return;
-	} catch (ignore) { return; }
+	// Check if the file exits
+	if (! statFile(fullPath).isFile) return;
 
 	// Add it to the output
 	output.push('\t<script>\n');
 	output.push('\t(function() {\n');
 	output.push('\t\tvar slide = document.currentScript.parentElement;\n');
-	output.push('\t\t' + content.replace(/\n/g, '\n\t\t').trim() + '\n');
+	output.push('\t\tINCLUDE ../' + fullPath + '\n');
 	output.push('\t})();\n');
 	output.push('\t</script>\n');
 }

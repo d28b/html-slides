@@ -71,6 +71,7 @@ body.presentation div#main > div.slide { box-shadow: none; display: none; margin
 body.presentation div#main > div.slide > div.slideNumber { display: none }
 body.presentation div#main > div.slide.selected { display: block }
 body.presentation div#footer { display: none }
+body.presentation div.annotation { display: none }
 
 /* Print mode */
 @media print {

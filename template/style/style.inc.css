@@ -8,6 +8,8 @@ h3 { font-size: 20px; font-weight: bold; margin: 10px 0 }
 p { margin: 10px 0 }
 div.bigText { font-size: 30px }
 div.smallText { font-size: 16px; line-height: 20px }
+a { color: #3771c8; text-decoration: none }
+a:hover { text-decoration: underline }
 
 div.wide { margin: 0 auto; width: 900px }
 div.narrow { margin: 0 auto; width: 600px }
