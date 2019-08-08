@@ -24,8 +24,8 @@ MathJax follows pretty much the LaTeX equation syntax. Inline equations are writ
 
 ```html
 <p>
-	The norm of the vector \(v = \left( \begin{array}{c} x \\ y \end{array} \right) \) can be calculated as follows:
-	$$ \left| v \right| = \sqrt{ x^2 + y^2 } $$
+  The norm of the vector \(v = \left( \begin{array}{c} x \\ y \end{array} \right) \) can be calculated as follows:
+  $$ \left| v \right| = \sqrt{ x^2 + y^2 } $$
 </p>
 ```
 
