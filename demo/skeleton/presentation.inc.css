@@ -7,8 +7,7 @@ div#footer { text-align: center }
 div#footer > svg { height: 200px; vertical-align: middle; width: 4px }
 
 /* Main content, slides */
-div#main > div.slide { background: white; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); height: 600px; margin: 20px auto; overflow: hidden; position: relative; text-align: center; width: 1000px }
-div#main > div.slide > .layer { left: 0; position: absolute; top: 0 }
+div#main > div.slide { background: white; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); height: 600px; margin: 20px auto; overflow: hidden; position: relative; width: 1000px }
 div#main > div.slide > div.slideNumber { bottom: 10px; color: #999; font-size: 12px; position: absolute; right: 10px; text-align: right }
 div#main > div.slide.selected { box-shadow: 0 0 14px rgba(0, 0, 0, 0.3) }
 div#main > div.slide.black { background: black }
@@ -71,7 +70,7 @@ body.remoteSend:not(.presentation) div#main > div.slide.selected > div.slideNumb
 /* Presentation mode */
 body.presentation div#main { background: black; height: 100%; overflow: hidden; padding: 0 }
 body.presentation div#main > div.slide { box-shadow: none; display: none; margin: 0 0 }
-body.presentation div#main > div.slide > div.slideNumber { display: none }
+/*body.presentation div#main > div.slide > div.slideNumber { display: none } */
 body.presentation div#main > div.slide.selected { display: block }
 body.presentation div#footer { display: none }
 body.presentation div.annotation { display: none }

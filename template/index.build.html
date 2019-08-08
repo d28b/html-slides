@@ -1,25 +1,11 @@
-<? import skeleton/slides.lib.js ?><?
+<? import skeleton/presentation.lib.js ?><?
 
-title('HTML Presentation Slides');
+title('Your presentation title');
 
-topic('The standard stuff');
 slide('slides/title.inc.html', 'Title');
-slide('slides/browsers.inc.html', 'Web browsers');
-slide('slides/text-images.inc.svg', 'Images');
-slide('slides/vectors.inc.svg', 'Diagrams');
-slide('slides/animations.inc.svg', 'Animations');
-slide('slides/videos.inc.html', 'Videos', 'black');
+slide('slides/intro.inc.html', 'Introduction');
+slide('slides/system.inc.svg', 'System');
+slide('slides/measurements.inc.html', 'Results');
+slide('slides/next-steps.inc.html', 'Next steps');
 
-topic('There is more ...');
-slide('slides/more.inc.html', 'More');
-slide('slides/iframe.inc.html', 'Websites');
-slide('slides/simulations.inc.html', 'Simulations');
-slide('slides/3d.inc.html', '3D');
-slide('slides/interactive.inc.html', 'Interactive');
-
-topic('Present and publish');
-slide('slides/local.inc.html', 'Local');
-slide('slides/publish.inc.html', 'Publish');
-slide('slides/conclusion.inc.html', 'Conclusion');
-
-?><? include skeleton/slides.inc.html ?>
+?><? include skeleton/presentation.inc.html ?>

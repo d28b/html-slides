@@ -48,15 +48,6 @@ indexButton.onclick = function(event) {
 	openIndex(! isIndexOpen());
 };
 
-var ignoreIndexBackgroundClickUntil = 0;
-
-index.onclick = function(event) {
-	if (new Date().getTime() < ignoreIndexBackgroundClickUntil) return;
-	event.preventDefault();
-	event.stopPropagation();
-	openIndex(false);
-};
-
 function indexHandleKey(event, inputFocused, hasModifier) {
 	if (hasModifier) return;
 
@@ -83,6 +74,13 @@ function indexHandleKey(event, inputFocused, hasModifier) {
 	}
 
 	return false;
+}
+
+function onIndexSlideClick(indexSlide) {
+	var id = indexSlide.id;
+	if (id.substr(0, 6) != 'index-') return;
+	moveToSlideWithId(id.substr(6));
+	openIndex(false);
 }
 
 // Remote
@@ -139,7 +137,6 @@ function Remote() {
 	};
 
 	remoteListenToken.onblur = function(event) {
-		ignoreIndexBackgroundClickUntil = new Date().getTime() + 200;
 		if (listenToken.length < 6) setRole('');
 	};
 

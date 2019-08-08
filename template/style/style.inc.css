@@ -1,26 +1,59 @@
-/* Generic slides */
-body { font-family: Lato }
-input { font-family: Lato }
+/* Layout */
 
-h1 { font-size: 30px; font-weight: 800; margin: 50px 0; text-align: center }
-h2 { font-size: 20px; font-weight: 800; margin: 20px 0 }
-h3 { font-size: 20px; font-weight: bold; margin: 10px 0 }
+div.slide > div.text { left: 0; padding: 0 100px; position: absolute; top: 0; width: 800px }
+div.slide > div.text.left { padding: 0 50px }
+div.slide > div.text.right { left: auto; padding: 0 50px; right: 0 }
+
+div.slide > div.text.w400 { width: 300px }
+div.slide > div.text.w500 { width: 400px }
+div.slide > div.text.w600 { width: 500px }
+div.slide > div.text.w700 { width: 600px }
+div.slide > div.text.w800 { width: 700px }
+
+div.slide > img.left { height: 600px; left: 0; object-fit: cover; position: absolute; top: 0; width: 1000px }
+div.slide > img.right { height: 600px; object-fit: cover; position: absolute; right: 0; top: 0; width: 1000px }
+
+div.slide > img.w200 { width: 200px }
+div.slide > img.w300 { width: 300px }
+div.slide > img.w400 { width: 400px }
+div.slide > img.w500 { width: 500px }
+div.slide > img.w600 { width: 600px }
+
+div.slide div.centered { text-align: center }
+
+/* Text */
+
+h1 { font-size: 30px; font-weight: bold; line-height: 40px; margin: 50px 0 }
+h2 { font-size: 25px; font-weight: bold; margin: 30px 0 10px 0 }
+h3 { font-size: 20px; font-weight: bold; margin: 30px 0 10px 0 }
 p { margin: 10px 0 }
-div.bigText { font-size: 30px }
-div.smallText { font-size: 16px; line-height: 20px }
 a { color: #3771c8; text-decoration: none }
 a:hover { text-decoration: underline }
 
-div.wide { margin: 0 auto; width: 900px }
-div.narrow { margin: 0 auto; width: 600px }
-div.columns { display: flex; justify-content: center }
-div.columns > div { border-left: 2px dotted black; display: inline-block; flex-grow: 1; padding: 40px 20px; vertical-align: top; width: 100px }
-div.columns > div:first-child { border-left: none }
+ul { list-style-type: square; padding: 0 0 0 20px }
+li { margin: 10px 0 }
 
-table.text { border-bottom: 1px solid black; border-collapse: collapse; margin: 20px auto }
-table.text td { border-top: 1px solid black; padding: 10px 20px }
+div.slide div.columns { display: flex; justify-content: center }
+div.slide div.columns > div { border-left: 2px dotted black; display: inline-block; flex-grow: 1; padding: 40px 20px; vertical-align: top; width: 100px }
+div.slide div.columns > div:first-child { border-left: none }
+
+/* Tables */
+
+div.slide table.lines { border-bottom: 1px solid black; border-collapse: collapse; margin: 20px 0 }
+div.slide table.lines th { border-top: 1px solid black; font-weight: bold; padding: 10px 20px; text-align: left }
+div.slide table.lines td { border-top: 1px solid black; padding: 10px 20px; text-align: left }
+div.slide div.centered > table.lines { margin: 20px auto }
+
+div.slide table.shades { border-spacing: 0; margin: 20px 0 }
+div.slide table.shades th { background: #ddd; font-weight: bold; padding: 10px 20px; text-align: left }
+div.slide table.shades td { padding: 10px 20px; text-align: left }
+div.slide table.shades tr:nth-child(2n+1) td { background: #eee }
+div.slide div.centered > table.shades { margin: 20px auto }
 
 /* Fonts */
+
+body { font-family: Lato }
+input { font-family: Lato }
 
 @font-face {
 	font-family: "Lato";
@@ -49,3 +82,16 @@ table.text td { border-top: 1px solid black; padding: 10px 20px }
 	font-weight: 800;
 	src: url(style/LatoLatin-Black.woff) format('woff'), url(style/LatoLatin-Black.woff2) format('woff2')
 	}
+
+/* Footnotes */
+
+div.slide > div.footnote { bottom: 10px; color: #999; font-size: 12px; left: 10px; position: absolute; right: 30px; text-align: center }
+div.slide > div.footnote.left { right: 500px; text-align: left }
+div.slide > div.footnote.right { left: 500px; text-align: right }
+
+/* Notes */
+
+div.slide div.notes { background-color: #ee9c; border-top-left-radius: 4px; border-top-right-radius: 4px; bottom: 0; box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); left: 200px; padding: 20px; position: absolute; right: 200px }
+div.slide div.notes.right { left: 600px; right: 40px }
+div.slide div.notes.left { left: 40px; right: 600px }
+body.presentation div.slide div.notes { display: none }

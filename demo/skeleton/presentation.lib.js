@@ -69,7 +69,7 @@ function slide(file, title, className) {
 
 	function indexHandler(state) {
 		startSlideRow(state);
-		output.push('\t<div onclick="event.stopPropagation(); moveToSlideWithId(\'' + id + '\'); openIndex(false)">' + title + '<div>' + number + '</div></div>\n');
+		output.push('\t<div id="index-' + id + '" onclick="onIndexSlideClick(this)">' + title + '<div>' + number + '</div></div>\n');
 	}
 }
 
