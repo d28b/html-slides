@@ -1,10 +1,14 @@
 const xml = require('./xml.lib.js');
 
+var htmlHeader = '';
 var htmlTitle = 'Presentation';
-var progressiveWebAppHeader = statFile('./pwa/manifest.json').isFile ? '<link href="pwa/manifest.json" rel="manifest">' : '';
 
 var slideNumber = 0;
 var list = [];
+
+function header(text) {
+	htmlHeader += text + '\n';
+}
 
 function title(title) {
 	htmlTitle = title;

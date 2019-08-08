@@ -20,7 +20,6 @@ The `template` folder contains the following files and folders:
 - **`index.html` is the generated presentation.**
 - `style` contains the CSS style file (`style.inc.css`) and fonts. You can adjust the default fonts and colors in here.
 - `skeleton` contains the HTML, CSS and JavaScript code to turn your slides into a presentation. You don't need to modify anything in here.
-- `pwa` (optional) contains resources required to turn your presentation into a [progressive web app](https://en.wikipedia.org/wiki/Progressive_web_applications). This is not necessary for a simple presentation.
 
 ## Slides
 
@@ -289,3 +288,8 @@ input.oninput = function() {
     remote.sendState('fancySlideText', input.value);
 };
 ```
+
+## More
+
+- [Adding equations with MathJax](more/mathjax/)
+- [Creating a progressive web app (PWA)](more/pwa/)

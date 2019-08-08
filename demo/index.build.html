@@ -1,5 +1,9 @@
 <? import skeleton/presentation.lib.js ?><?
 
+header('<meta content="This is a demo presentation created using html-slides." name="description">');
+header('<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>');
+header('<link href="pwa/manifest.json" rel="manifest">');
+
 title('HTML Presentation Slides');
 
 topic('The standard stuff');
@@ -14,6 +18,7 @@ topic('There is more ...');
 slide('slides/more.inc.html', 'More');
 slide('slides/iframe.inc.html', 'Websites');
 slide('slides/simulations.inc.html', 'Simulations');
+slide('slides/maths.inc.html', 'Equations');
 slide('slides/3d.inc.html', '3D');
 slide('slides/interactive.inc.html', 'Interactive');
 

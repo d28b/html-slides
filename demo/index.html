@@ -4,9 +4,10 @@
 <head>
 	<meta charset="utf-8">
 	<meta content="yes" name="mobile-web-app-capable">
+	<meta content="This is a demo presentation created using html-slides." name="description">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
 	<link href="pwa/manifest.json" rel="manifest">
 	<title>HTML Presentation Slides</title>
-	<meta content="Create presentation slides using HTML, JavaScript, CSS, and SVG, and show them in any browser." name="description">
 	<style>
 		body { background: #eee; font-family: sans-serif; font-size: 20px; height: 100%; margin: 0; padding: 0 }
 		input { font-family: sans-serif; font-size: 20px }
@@ -102,7 +103,7 @@
 
 		/* Text */
 
-		h1 { font-size: 30px; font-weight: bold; line-height: 40px; margin: 50px 0 }
+		h1 { font-size: 30px; font-weight: bold; line-height: 45px; margin: 80px 0 0 0 }
 		h2 { font-size: 25px; font-weight: bold; margin: 30px 0 10px 0 }
 		h3 { font-size: 20px; font-weight: bold; margin: 30px 0 10px 0 }
 		p { margin: 10px 0 }
@@ -238,14 +239,15 @@
 			<div id="index-slide-7" onclick="onIndexSlideClick(this)">More<div>7</div></div>
 			<div id="index-slide-8" onclick="onIndexSlideClick(this)">Websites<div>8</div></div>
 			<div id="index-slide-9" onclick="onIndexSlideClick(this)">Simulations<div>9</div></div>
-			<div id="index-slide-10" onclick="onIndexSlideClick(this)">3D<div>10</div></div>
-			<div id="index-slide-11" onclick="onIndexSlideClick(this)">Interactive<div>11</div></div>
+			<div id="index-slide-10" onclick="onIndexSlideClick(this)">Equations<div>10</div></div>
+			<div id="index-slide-11" onclick="onIndexSlideClick(this)">3D<div>11</div></div>
+			<div id="index-slide-12" onclick="onIndexSlideClick(this)">Interactive<div>12</div></div>
 		</div>
 		<div class="topic">Present and publish</div>
 		<div class="slideRow">
-			<div id="index-slide-12" onclick="onIndexSlideClick(this)">Local<div>12</div></div>
-			<div id="index-slide-13" onclick="onIndexSlideClick(this)">Publish<div>13</div></div>
-			<div id="index-slide-14" onclick="onIndexSlideClick(this)">Conclusion<div>14</div></div>
+			<div id="index-slide-13" onclick="onIndexSlideClick(this)">Local<div>13</div></div>
+			<div id="index-slide-14" onclick="onIndexSlideClick(this)">Publish<div>14</div></div>
+			<div id="index-slide-15" onclick="onIndexSlideClick(this)">Conclusion<div>15</div></div>
 		</div>
 	</div>
 </div>
@@ -326,7 +328,7 @@
 		<div class="slideNumber">5</div>
 	</div>
 	<div class="slide black" id="slide-6">
-		<div style="color: white; font-size: 30px; font-weight: bold; line-height: 50px; margin-top: 35px">And videos.</div>
+		<h1 style="color: white; margin: 40px 0 0 0">And videos.</h1>
 
 		<video controls height="480" style="margin-top: 5px" width="640">
 			<source src="slides/tacoma.mp4" type="video/mp4">
@@ -339,7 +341,7 @@
 		<div class="slideNumber">7</div>
 	</div>
 	<div class="slide" id="slide-8">
-		<div style="font-size: 30px; font-weight: bold; line-height: 50px; margin-top: 35px">You can integrate websites.</div>
+		<h1 style="margin: 40px 0 0 0">You can integrate websites.</h1>
 		<iframe height="500" src="about:blank" style="border: none; margin-top: 15px" width="1000"></iframe>
 		<script>
 		(function() {
@@ -358,7 +360,7 @@
 		<div class="slideNumber">8</div>
 	</div>
 	<div class="slide" id="slide-9">
-		<div style="font-size: 30px; font-weight: bold; line-height: 40px; margin-top: 80px">Run live simulations.</div>
+		<h1>Run live simulations.</h1>
 		<div style="font-size: 20px; margin-top: 10px">Ceiling hits: <span id="simulationHits">0</span></div>
 
 		<div id="simulationBall" style="background: #39f; border-radius: 20px; height: 40px; left: 0; position: absolute; top: 0; width: 40px"></div>
@@ -472,7 +474,23 @@
 		<div class="slideNumber">9</div>
 	</div>
 	<div class="slide" id="slide-10">
-		<div style="font-size: 30px; font-weight: bold; line-height: 40px; margin-top: 80px">Show 3D models.</div>
+		<h1 style="margin-bottom:40px">And show the corresponding math.</h1>
+
+		<p>At each time step, the ball position \(p\) is updated as follows:</p>
+		<p>$$ p_{n+1} = p_{n} + v_n $$</p>
+
+		<p>The velocity \(v\) undergoes friction \(f\) and gravity \(g\):</p>
+		<p>$$ v_{n+1} = f v_{n} + \left( \begin{array}{c} 0 \\ g \end{array} \right) $$</p>
+
+		<p>For this simulation, we chose:</p>
+		<p>$$ f = 0.995 $$</p>
+		<p>$$ g = -0.1 $$</p>
+
+		<div class="footnote">Equations are rendered using <a href="https://www.mathjax.org" target="_blank">MathJax</a>.</div>
+		<div class="slideNumber">10</div>
+	</div>
+	<div class="slide" id="slide-11">
+		<h1>Show 3D models.</h1>
 
 		<canvas height="450" id="3dCanvas" style="left: 0; position: absolute; top: 150px" width="1000">Your browser doesn't appear to support the canvas element.</canvas>
 
@@ -1219,10 +1237,10 @@
 			}
 		})();
 		</script>
-		<div class="slideNumber">10</div>
+		<div class="slideNumber">11</div>
 	</div>
-	<div class="slide" id="slide-11">
-		<div style="font-size: 30px; font-weight: bold; line-height: 40px; margin-top: 80px">Or do interactive stuff.</div>
+	<div class="slide" id="slide-12">
+		<h1>Or do interactive stuff.</h1>
 
 		<div style="color: #999; font-size: 16px; margin-top: 100px">Type a word</div>
 		<div style="margin-top: 4px">
@@ -1271,22 +1289,22 @@
 			}
 		})();
 		</script>
-		<div class="slideNumber">11</div>
-	</div>
-	<div class="slide" id="slide-12">
-		<div style="font-size: 30px; font-weight: bold; line-height: 50px; margin-top: 200px">You can run your HTML slides<br>from your local computer.</div>
-		<div style="font-size: 20px; line-height: 30px; margin-top: 100px">Everything is inside one folder.<br>Just double-click on <b>index.html</b>.</div>
 		<div class="slideNumber">12</div>
 	</div>
 	<div class="slide" id="slide-13">
-		<div style="font-size: 30px; font-weight: bold; line-height: 50px; margin-top: 200px">Or publish them on the web.</div>
-		<div style="font-size: 20px; line-height: 30px; margin-top: 100px">Just copy the whole folder onto a HTTP server.</div>
+		<div style="font-size: 30px; font-weight: bold; line-height: 50px; margin-top: 200px">You can run your HTML presentation<br>from your local computer.</div>
+		<div style="font-size: 20px; line-height: 30px; margin-top: 100px">Everything is inside one folder.<br>Just double-click on <b>index.html</b>.</div>
 		<div class="slideNumber">13</div>
 	</div>
 	<div class="slide" id="slide-14">
-		<div style="font-size: 20px; font-weight: bold; margin-top: 150px"><img src="pwa/launcher-icon.svg" style="vertical-align: middle" width="50"></div>
-		<div style="font-size: 30px; line-height: 50px; margin-top: 50px">To create your own HTML slides,<br>download the template from GitHub:<br><a href="https://github.com/d28b/html-slides" target="_blank">https://github.com/d28b/html-slides</a></div>
+		<div style="font-size: 30px; font-weight: bold; line-height: 50px; margin-top: 200px">Or publish it on the web.</div>
+		<div style="font-size: 20px; line-height: 30px; margin-top: 100px">Just copy the whole folder onto a HTTP server.</div>
 		<div class="slideNumber">14</div>
+	</div>
+	<div class="slide" id="slide-15">
+		<div style="font-size: 20px; font-weight: bold; margin-top: 150px"><img src="pwa/launcher-icon.svg" style="vertical-align: middle" width="50"></div>
+		<div style="font-size: 30px; line-height: 50px; margin-top: 50px">To create your own HTML presentation,<br>download the template from GitHub:<br><a href="https://github.com/d28b/html-slides" target="_blank">https://github.com/d28b/html-slides</a></div>
+		<div class="slideNumber">15</div>
 	</div>
 </div>
 
