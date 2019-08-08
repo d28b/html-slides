@@ -24,9 +24,9 @@ The `template` folder contains the following files and folders:
 
 ## Slides
 
-A slide is typically created by writing a few lines of HTML code, or by drawing an SVG file. For for video-only or image-only slides, the skeleton provides predefined HTML code.
+A slide is typically a file with a few lines of HTML code, or a SVG file. For for video-only or image-only slides, the skeleton provides predefined HTML code.
 
-The slide index file `index.build.html` looks as follows:
+The `index.build.html` file contains the title and slide sequence of the presentation:
 
 ```javascript
 <? import skeleton/presentation.lib.js ?><?
@@ -42,11 +42,11 @@ slide('slides/next-steps.inc.html', 'Next steps');
 ?><? include skeleton/presentation.inc.html ?>
 ```
 
-The first and last line import the skeleton, and must remain as-is. The center part contains the title of the presentation, and one line per slide. Each slide takes the following parameters:
+The first and last line import the presentation skeleton, and must remain as-is. Each slide takes the following parameters:
 
-1. File (required)
-2. Title shown on the slide index (optional)
-3. Style (optional)
+1. Slide file
+2. Title shown on the slide index *(optional)*
+3. Style *(optional)*
 
 The file extension determines the type of slide:
 
@@ -66,9 +66,9 @@ A simple HTML slide (`slides/slide-name.inc.html`) with bullet points look as fo
     <h1>Slide title</h1>
 
     <ul>
-	    <li>This is bullet 1</li>
-	    <li>This is bullet 2</li>
-	    <li>This is bullet 3</li>
+        <li>This is bullet 1</li>
+        <li>This is bullet 2</li>
+        <li>This is bullet 3</li>
     </ul>
 </div>
 
@@ -77,13 +77,13 @@ A simple HTML slide (`slides/slide-name.inc.html`) with bullet points look as fo
 
 The slide shows an image ([img tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img)) on the right side (400 pixels), and uses the remaining 600 pixels on the left for the slide title ([h1 tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/h1)) and the bullet points ([ul tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ul), [ol tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ol), [li tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/li)).
 
-The template contains examples for positioning text and images, inserting tables, or adding notes for the presenter.
+The template contains examples for positioning text and images, and inserting tables.
 
 ### SVG slides
 
 The SVG format (`slides/slide-name.inc.svg`) is suitable for slides with vector graphics, such as diagrams or schematics. Such slides can be drawn using [Inkscape](https://inkscape.org) or any other software capable of saving or exporting SVG files.
 
-The SVG document (page) must be 1000 x 600 pixels in size (`width="1000" height="600"`). The SVG code undergoes some some cleanup while importing. In particular, Inkscape-specific information and default IDs (e.g., *rect1098*) are removed.
+The SVG document (page) must be 1000 x 600 pixels in size (`width="1000" height="600"`). The SVG code undergoes some cleanup while importing. In particular, Inkscape-specific information and default IDs (e.g., *rect1098*) are removed.
 
 ## Building the slides with *deploy*
 
@@ -93,11 +93,11 @@ To rebuild the presentation (`index.html`), open a terminal window (command line
 
 The script keeps looking for changes, and rebuilds `index.html` when necessary. To quit it, press `Ctrl-C` in the terminal window.
 
-The deploy script crudely checks the HTML code. In particular, it warns if tags are not properly closed.
+The deploy script crudely checks your HTML code. In particular, it warns if tags are not properly closed.
 
 ### Uploading the slides
 
-The deploy script will optionally upload the slides onto a server. For that, create a script called `upload-server` next to `deploy` with the upload commands.
+The deploy script will upload the slides onto a server, if desired. For that, create a script called `upload-server` next to `deploy` with the upload commands.
 
 A typical [rsync](https://linux.die.net/man/1/rsync) upload script looks as follows:
 
@@ -105,22 +105,22 @@ A typical [rsync](https://linux.die.net/man/1/rsync) upload script looks as foll
 #! /bin/sh
 
 rsync -avL \\
-	  --timeout 10 \\
-	  --delete \\
-	  --exclude '*.inc*' \\
-	  --exclude '*.lib*' \\
-	  --exclude '*.build*' \\
-	  --exclude '*.orig' \\
-	  --exclude 'deploy' \\
-	  --exclude 'upload-*' \\
-	  . username@server:/path/to/http/root
+      --timeout 10 \\
+      --delete \\
+      --exclude '*.inc*' \\
+      --exclude '*.lib*' \\
+      --exclude '*.build*' \\
+      --exclude '*.orig' \\
+      --exclude 'deploy' \\
+      --exclude 'upload-*' \\
+      . username@server:/path/to/http/root
 ```
 
-Once the file is saved, make it executable:
+Save the file, and make it executable:
 
 	chmod 755 upload-server
 
-and launch the deploy script as follows:
+To deploy and upload the slides, you may now type:
 
 	./deploy server
 
@@ -128,9 +128,9 @@ and launch the deploy script as follows:
 
 ### Presentation
 
-To start the presentation, press `F11` to enable fullscreen, and `p` to switch to *presentation mode*. Use the left/right arrow keys (or `Page Up` / `Page Down`) on the keyboard to move to the previous / next slide. On mobile devices, you can swipe left/right to move to the previous/next slide.
+To start the presentation, press `F11` to enable fullscreen, and `p` to switch to *presentation mode*. Use the left/right arrow keys (or `Page Up` / `Page Down`) on the keyboard to move to the previous / next slide. On mobile devices, you can swipe left/right.
 
-The menu button (three stripes) in the upper right corner open the slide index. Clicking on any slide switches to that slide.
+The menu button in the upper right corner (three stripes) opens the slide index. Clicking on any slide switches to that slide.
 
 If you activate another window (or iframe within the slides) during the presentation, the menu button turns red to indicate that the arrow keys (to move to the next slide) don't work. Clicking that red button will focus the presentation again, and make the arrow keys work.
 
@@ -144,18 +144,16 @@ When you connect a projector as an external screen, you can display the presenta
 
 For that, open the same presentation in two separate browser windows (of the same browser). Place one window on the main screen, and the other window on the external screen (in fullscreen mode). The two windows will always show the same slide.
 
-Note that interactive content may not be synchronized.
+Note that interactive content may not always be synchronized.
 
 ### Remote control
 
-A presentation instance can act as remote control for another instance. This requires an internet connection, as the control messages are sent through a server (https://viereck.ch/remote/).
+A presentation running on a laptop may be remotely controlled by a mobile phone. This requires an internet connection, as the control messages are sent through a server (https://viereck.ch/remote/).
 
-This can be used to move to the next slide with a mobile phone, for instance:
+To set this up:
 
-- Launch the presentation on your mobile phone. Click on the menu button, and enable **Send**. Take note of the send token. The menu button will turn blue.
-- Launch the same presentation on your laptop. Click on the menu button, and enable **Listen**. Type the send token from the mobile phone. The menu button will turn orange.
-
-The presentation on the laptop is now remote controlled by the mobile phone.
+1. Launch the presentation on your mobile phone. Click on the menu button, and enable **Send**. Take note of the send token. The menu button will turn blue.
+2. Launch the same presentation on your laptop. Click on the menu button, and enable **Listen**. Type the send token from the mobile phone. The menu button will turn orange.
 
 ## Advanced topics
 
@@ -174,7 +172,7 @@ Web browsers support a variety of [video formats](https://developer.mozilla.org/
 
 Similarly, audio files are inserted using the [*audio* tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio).
 
-A slide with a fullscreen video can be created from the slide index:
+A slide with a fullscreen video can simply be created from the slide index:
 
 ```javascript
 slide('slides/video.mp4', 'Video', 'black');
@@ -206,7 +204,7 @@ slide('...');
 ?><? include skeleton/presentation.inc.html ?>
 ```
 
-Topics and subtopics only appear on the slide index. They have no effect on the slides.
+Topics and subtopics only appear on the slide index. They have no effect on the slides or the presentation flow.
 
 ### Slides with JavaScript
 
@@ -219,12 +217,12 @@ var counter = document.getElementById('fancySlideCounter');
 var count = 0;
 
 slide.onSlideAppears = function() {
-	count += 1;
-	counter.textContent = 'This slide has appeared ' + count + ' times so far.';
+    count += 1;
+    counter.textContent = 'This slide has appeared ' + count + ' times so far.';
 };
 
 slide.onSlideDisappears = function() {
-	// ...
+    // ...
 };
 ```
 
@@ -234,15 +232,15 @@ To avoid variable and function name clashes, the slide's JavaScript code is plac
 
 ```html
 <div class="slide">
-	<!-- The slide's HTML or SVG content -->
+    <!-- The slide's HTML or SVG content -->
 
-	<script>
-	(function() {
-		var slide = document.currentScript.parentElement;
+    <script>
+    (function() {
+        var slide = document.currentScript.parentElement;
 
-		// The slide's JavaScript code
-	})();
-	</script>
+        // The slide's JavaScript code
+    })();
+    </script>
 </div>
 ```
 
@@ -253,7 +251,7 @@ Slides can still communicate with each other through the `window` object:
 var fancyState = ...;
 
 window.getFancyState = function() {
-	return fancyState;
+    return fancyState;
 };
 
 // In slide B
@@ -273,21 +271,21 @@ The following example uses `sendState` and a state listener to synchronize the c
 var input = document.getElementById('fancySlideInput');
 
 slide.onSlideAppears = function() {
-	remote.addStateListener(onStateChanged);
+    remote.addStateListener(onStateChanged);
 };
 
 slide.onSlideDisappears = function() {
-	remote.removeStateListener(onStateChanged);
+    remote.removeStateListener(onStateChanged);
 };
 
 // Receive a state update
 function onStateChanged(state) {
     if (! state.fancySlide) return;
-	input.value = state.fancySlideText;
+    input.value = state.fancySlideText;
 }
 
 // Send a state update when the text changes
 input.oninput = function() {
-	remote.sendState('fancySlideText', input.value);
+    remote.sendState('fancySlideText', input.value);
 };
 ```
