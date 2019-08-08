@@ -1,6 +1,6 @@
 # Equations with MathJax
 
-[MathJax](https://www.mathjax.org) allows you to write LaTeX-style equations in your HTML code.
+[MathJax](https://www.mathjax.org) allows you to add LaTeX-style equations to your slides.
 
 ## Loading MathJax from the CDN
 
@@ -20,7 +20,7 @@ header('<script src="MathJax/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
 
 ## Writing equations
 
-MathJax follows pretty much the LaTeX equation syntax. Inline equations are written like `\( equation \)`, and paragraph equations like `$$ equation $$`. Equations can appear anywhere in the text. MathJax will
+MathJax follows pretty much the LaTeX equation syntax. Inline equations are written `\( equation \)`, and `$$ equation $$` will turn into paragraph equations:
 
 ```html
 <p>
@@ -28,3 +28,5 @@ MathJax follows pretty much the LaTeX equation syntax. Inline equations are writ
 	$$ \left| v \right| = \sqrt{ x^2 + y^2 } $$
 </p>
 ```
+
+Equations can appear anywhere on the slides. MathJax will format them when the presentation is loaded.
