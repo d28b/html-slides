@@ -321,7 +321,7 @@ function Remote() {
 // Current slide
 
 var currentSlide = main.firstElementChild;
-currentSlide.classList.add('selected');
+setSlideSelected(true);
 
 function moveToSlideWithId(id, source) {
 	if (! id) return false;
@@ -335,12 +335,21 @@ function moveToSlide(slide, source) {
 	if (! slide) return false;
 	if (currentSlide == slide) return;
 	var previousSlide = currentSlide;
-	currentSlide.classList.remove('selected');
+	setSlideSelected(false);
 	currentSlide = slide;
-	currentSlide.classList.add('selected');
+	setSlideSelected(true);
 	controller.onCurrentSlideChanged(source, previousSlide);
 	remote.sendState('slide', slide.id);
 	return true;
+}
+
+function setSlideSelected(selected) {
+	// Slide
+	currentSlide.classList.toggle('selected', selected);
+
+	// Index slide
+	var indexSlide = document.getElementById('index-' + currentSlide.id);
+	if (indexSlide) indexSlide.classList.toggle('selected', selected);
 }
 
 remote.addStateListener(function(state) {

@@ -43,8 +43,9 @@
 		div#indexContent > div.title { color: white; font-size: 25px; font-weight: bold; margin: 60px 0 20px 0 }
 		div#indexContent > div.topic { color: white; font-size: 20px; font-weight: bold; margin: 20px 0 10px 0 }
 		div#indexContent > div.subTopic { color: white; font-size: 16px; font-weight: bold; margin: 20px 0 10px 0 }
-		div#indexContent > div.slideRow > div { background: rgba(255, 255, 255, 0.4); color: white; cursor: pointer; display: inline-block; font-size: 16px; font-weight: bold; height: 40px; margin: 0 10px 10px 0; overflow: hidden; padding: 10px 0; position: relative; text-align: center; vertical-align: top; width: 100px }
-		div#indexContent > div.slideRow > div:hover { background: rgba(255, 255, 255, 0.5) }
+		div#indexContent > div.slideRow > div { background: rgba(255, 255, 255, 0.3); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 3px; color: white; cursor: pointer; display: inline-block; font-size: 16px; font-weight: bold; height: 40px; margin: 0 10px 10px 0; overflow: hidden; padding: 10px 0; position: relative; text-align: center; vertical-align: top; width: 100px }
+		div#indexContent > div.slideRow > div.selected { background: rgba(51, 153, 255, 0.3); border-color: #39f }
+		div#indexContent > div.slideRow > div:not(.selected):hover { background: rgba(255, 255, 255, 0.4); border: 1px solid rgba(255, 255, 255, 0.6) }
 		div#indexContent > div.slideRow > div > div { bottom: 4px; color: white; font-size: 12px; font-weight: bold; left: 0; line-height: 20px; position: absolute; text-align: center; width: 100% }
 
 		div#indexContent div.largeButtonHeader { color: rgba(255, 255, 255, 0.5); margin: 0 0 5px 0 }
@@ -55,9 +56,9 @@
 
 		/* Normal and presentation mode buttons */
 		div#indexContent div#normalModeButton.selected { background: rgba(51, 153, 255, 0.1); border-color: #39f; color: #39f }
-		div#indexContent div#normalModeButton.selected > svg.bigIcon { background: linear-gradient(0deg, rgba(36,107,179,1) 0%, rgba(51,153,255,1) 100%) }
+		div#indexContent div#normalModeButton.selected > svg.bigIcon { background: linear-gradient(0deg, rgba(36, 107, 179, 1) 0%, rgba(51, 153, 255, 1) 100%) }
 		div#indexContent div#presentationModeButton.selected { background: rgba(51, 204, 51, 0.1); border-color: #3c3; color: #3c3 }
-		div#indexContent div#presentationModeButton.selected > svg.bigIcon { background: linear-gradient(0deg, rgba(36,143,36,1) 0%, rgba(51,204,51,1) 100%) }
+		div#indexContent div#presentationModeButton.selected > svg.bigIcon { background: linear-gradient(0deg, rgba(36, 143, 36, 1) 0%, rgba(51, 204, 51, 1) 100%) }
 
 		/* Remote send/listen buttons */
 		div#indexContent div#remoteSendToken { font-weight: 800; line-height: 20px; padding: 4px 0 }
@@ -113,6 +114,21 @@
 		ul { list-style-type: square; padding: 0 0 0 20px }
 		li { margin: 10px 0 }
 
+		/* Footnotes */
+
+		div.slide > div.footnote { bottom: 10px; color: #999; font-size: 12px; left: 10px; position: absolute; right: 30px; text-align: center }
+		div.slide > div.footnote.left { right: 500px; text-align: left }
+		div.slide > div.footnote.right { left: 500px; text-align: right }
+
+		/* Notes */
+
+		div.slide div.notes { background-color: #ee9c; border-top-left-radius: 4px; border-top-right-radius: 4px; bottom: 0; box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); left: 200px; padding: 20px; position: absolute; right: 200px }
+		div.slide div.notes.right { left: 600px; right: 40px }
+		div.slide div.notes.left { left: 40px; right: 600px }
+		body.presentation div.slide div.notes { display: none }
+
+		div.slide div.notes div.key {background: #885; border-radius: 5px; color: white; display: inline-block; font-size: 16px; font-weight: bold; line-height: 20px; padding: 1px 6px; vertical-align: top}
+
 		/* Fonts */
 
 		body { font-family: Lato }
@@ -145,19 +161,6 @@
 			font-weight: 800;
 			src: url(style/LatoLatin-Black.woff) format('woff'), url(style/LatoLatin-Black.woff2) format('woff2')
 			}
-
-		/* Footnotes */
-
-		div.slide > div.footnote { bottom: 10px; color: #999; font-size: 12px; left: 10px; position: absolute; right: 30px; text-align: center }
-		div.slide > div.footnote.left { right: 500px; text-align: left }
-		div.slide > div.footnote.right { left: 500px; text-align: right }
-
-		/* Notes */
-
-		div.slide div.notes { background-color: #ee9c; border-top-left-radius: 4px; border-top-right-radius: 4px; bottom: 0; box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); left: 200px; padding: 20px; position: absolute; right: 200px }
-		div.slide div.notes.right { left: 600px; right: 40px }
-		div.slide div.notes.left { left: 40px; right: 600px }
-		body.presentation div.slide div.notes { display: none }
 	</style>
 </head>
 <body>
@@ -259,7 +262,7 @@
 		<div style="font-size: 20px; margin-top: 50px">Thomas Lochmatter, 2019</div>
 
 		<div class="notes">
-			Press <div style="background: #444; border-radius: 5px; color: white; display: inline-block; font-size: 16px; font-weight: bold; line-height: 20px; padding: 1px 6px; vertical-align: top">F11</div> to go fullscreen, and <div style="background: #444; border-radius: 5px; color: white; display: inline-block; font-size: 16px; font-weight: bold; line-height: 20px; padding: 1px 6px; vertical-align: top">P</div> to switch to presentation mode. More settings are available through the menu in the upper right corner.
+			Press <div class="key">F11</div> to go fullscreen, and <div class="key">P</div> to switch to presentation mode. <div class="key">Esc</div> opens the slide index and settings.
 		</div>
 		<div class="slideNumber">1</div>
 	</div>
@@ -1639,7 +1642,7 @@ function Remote() {
 // Current slide
 
 var currentSlide = main.firstElementChild;
-currentSlide.classList.add('selected');
+setSlideSelected(true);
 
 function moveToSlideWithId(id, source) {
 	if (! id) return false;
@@ -1653,12 +1656,21 @@ function moveToSlide(slide, source) {
 	if (! slide) return false;
 	if (currentSlide == slide) return;
 	var previousSlide = currentSlide;
-	currentSlide.classList.remove('selected');
+	setSlideSelected(false);
 	currentSlide = slide;
-	currentSlide.classList.add('selected');
+	setSlideSelected(true);
 	controller.onCurrentSlideChanged(source, previousSlide);
 	remote.sendState('slide', slide.id);
 	return true;
+}
+
+function setSlideSelected(selected) {
+	// Slide
+	currentSlide.classList.toggle('selected', selected);
+
+	// Index slide
+	var indexSlide = document.getElementById('index-' + currentSlide.id);
+	if (indexSlide) indexSlide.classList.toggle('selected', selected);
 }
 
 remote.addStateListener(function(state) {

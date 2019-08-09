@@ -44,7 +44,7 @@ div.slide table.lines th { border-top: 1px solid black; font-weight: bold; paddi
 div.slide table.lines td { border-top: 1px solid black; padding: 10px 20px; text-align: left }
 div.slide div.centered > table.lines { margin: 20px auto }
 
-div.slide table.shades { border-spacing: 0; margin: 20px 0 }
+div.slide table.shades { border-bottom: 2px solid #ddd; border-spacing: 0; margin: 20px 0 }
 div.slide table.shades th { background: #ddd; font-weight: bold; padding: 10px 20px; text-align: left }
 div.slide table.shades td { padding: 10px 20px; text-align: left }
 div.slide table.shades tr:nth-child(2n+1) td { background: #eee }
