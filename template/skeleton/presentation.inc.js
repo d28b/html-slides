@@ -1,5 +1,5 @@
-var main = document.getElementById('main');
-var bottomSpacer = document.getElementById('bottomSpacer');
+// Document focus and key handling
+
 var focusedSince = 0;
 
 document.body.onkeydown = function(event) {
@@ -12,12 +12,14 @@ document.body.onkeydown = function(event) {
 	}
 };
 
-document.onfocus = function(event) {
+document.body.classList.toggle('focus', document.hasFocus());
+
+window.onfocus = function(event) {
 	focusedSince = new Date().getTime();
 	document.body.classList.add('focus');
 };
 
-document.onblur = function(event) {
+window.onblur = function(event) {
 	document.body.classList.remove('focus');
 };
 
@@ -320,6 +322,7 @@ function Remote() {
 
 // Current slide
 
+var main = document.getElementById('main');
 var currentSlide = main.firstElementChild;
 setSlideSelected(true);
 
@@ -511,6 +514,8 @@ function NormalMode() {
 	};
 
 	// Resizing
+	var bottomSpacer = document.getElementById('bottomSpacer');
+
 	onresize = function(event) {
 		var space = Math.round(innerHeight - 640);
 		bottomSpacer.style.height = space + 'px';
