@@ -1,15 +1,15 @@
 # HTML Presentation Slides
 
-**html-slides** is a template to create presentation slides that run directly inside a web browser. To see such slides in action, have a look at the [demo slides](https://d28b.github.io/html-slides/demo/).
+**html-slides** is a template to create presentation slides that run directly inside a web browser. To see such slides in action, have a look at the [demo slideshow](https://d28b.github.io/html-slides/demo/).
 
 **Presentation features**
 
 - Slide roll mode
 - Presentation mode
 - Slide index
-- Runs locally, without internet access
+- Ready for offline use
 - Remote control from a mobile device
-- Slide printing
+- Slides may be printed
 
 **Slide features**
 
