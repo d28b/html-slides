@@ -2,6 +2,21 @@
 
 **html-slides** is a template to create presentation slides that run directly inside a web browser. To see such slides in action, have a look at the [demo slides](https://d28b.github.io/html-slides/demo/).
 
+Presentation features:
+
+- Slide roll mode
+- Presentation mode
+- Runs locally, without internet access
+- Remote control from a mobile device
+
+Slide features:
+
+- HTML slides with text, images, videos
+- SVG slides for diagrams and advanced graphics
+- Equations with MathJax
+- Interactive slides with JavaScript
+- 2D and 3D graphics with the HTML canvas element and JavaScript
+
 ## Prerequisites
 
 To build the presentation from your slides, [Node.js](https://nodejs.org) must be installed on the computer.
@@ -23,7 +38,7 @@ The `template` folder contains the following files and folders:
 
 ## Slides
 
-A slide is typically a file with a few lines of HTML code, or a SVG file. For for video-only or image-only slides, the skeleton provides predefined HTML code.
+A slide is typically a file with a few lines of HTML code, or a SVG file. For video-only or image-only slides, the skeleton provides predefined HTML code.
 
 The `index.build.html` file contains the title and slide sequence of the presentation:
 
