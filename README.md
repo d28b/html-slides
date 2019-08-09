@@ -10,7 +10,7 @@ The presentation can be shown with any of the major web browsers (Firefox, Chrom
 
 ## Getting started
 
-Download or clone this repository, and start creating your presentation inside the `template` folder. You don't need anything outside of this folder, and may rename or move it.
+Download or clone the [html-slides repository](https://github.com/d28b/html-slides), and start creating your presentation inside the `template` folder. You don't need anything outside of this folder, and may rename or move it.
 
 The `template` folder contains the following files and folders:
 
