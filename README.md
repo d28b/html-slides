@@ -6,6 +6,7 @@
 
 - Slide roll mode
 - Presentation mode
+- Slide index
 - Runs locally, without internet access
 - Remote control from a mobile device
 - Slide printing
