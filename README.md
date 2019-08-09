@@ -13,11 +13,12 @@
 **Slide features**
 
 - HTML slides with text, images, videos
-- SVG slides for diagrams and advanced graphics
+- SVG slides for diagrams, vector graphics and simple animations
 - Equations with MathJax
 - Inclusion of external websites or content
 - Advanced slides with JavaScript
 	- Interactive slides
+	- Advanced animations
 	- 3D models
 	- Live data, live diagrams
 
