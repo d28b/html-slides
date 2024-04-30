@@ -49,7 +49,8 @@ A slide is typically a file with a few lines of HTML code, or a SVG file. For vi
 The `index.build.html` file contains the title and slide sequence of the presentation:
 
 ```javascript
-<? import skeleton/presentation.lib.js ?><?
+<?
+use('skeleton/presentation.lib.js');
 
 title('Title of your presentation');
 
@@ -59,7 +60,8 @@ slide('slides/system.inc.svg', 'System');
 slide('slides/video.mp4', 'Video', 'black');
 slide('slides/next-steps.inc.html', 'Next steps');
 
-?><? include skeleton/presentation.inc.html ?>
+include('skeleton/presentation.inc.html');
+?>
 ```
 
 The first and last line import the presentation skeleton, and must remain as-is. Each slide takes the following parameters:
@@ -109,40 +111,11 @@ The SVG document (page) must be 1000 x 600 pixels in size (`width="1000" height=
 
 To rebuild the presentation (`index.html`), open a terminal window (command line) and run
 
-	./deploy
+	./deploy/run
 
 The script keeps looking for changes, and rebuilds `index.html` when necessary. To quit it, press `Ctrl-C` in the terminal window.
 
 The deploy script crudely checks your HTML code. In particular, it warns if tags are not properly closed.
-
-### Uploading the slides
-
-The deploy script will upload the slides onto a server, if desired. For that, create a script called `upload-server` next to `deploy` with the upload commands.
-
-A typical [rsync](https://linux.die.net/man/1/rsync) upload script looks as follows:
-
-```sh
-#! /bin/sh
-
-rsync -avL \\
-      --timeout 10 \\
-      --delete \\
-      --exclude '*.inc*' \\
-      --exclude '*.lib*' \\
-      --exclude '*.build*' \\
-      --exclude '*.orig' \\
-      --exclude 'deploy' \\
-      --exclude 'upload-*' \\
-      . username@server:/path/to/http/root
-```
-
-Save the file, and make it executable:
-
-	chmod 755 upload-server
-
-To deploy and upload the slides, you may now type:
-
-	./deploy server
 
 ## Using the slides
 
@@ -233,8 +206,8 @@ JavaScript files named `slides/slide-name.inc.js` are automatically inserted wit
 A simple slide script may look as follows:
 
 ```javascript
-var counter = document.getElementById('fancySlideCounter');
-var count = 0;
+const counter = document.getElementById('fancySlideCounter');
+let count = 0;
 
 slide.onSlideAppears = function() {
     count += 1;
@@ -256,7 +229,7 @@ To avoid variable and function name clashes, the slide's JavaScript code is plac
 
     <script>
     (function() {
-        var slide = document.currentScript.parentElement;
+        const slide = document.currentScript.parentElement;
 
         // The slide's JavaScript code
     })();
@@ -268,14 +241,14 @@ Slides can still communicate with each other through the `window` object:
 
 ```javascript
 // In slide A
-var fancyState = ...;
+let fancyState = ...;
 
 window.getFancyState = function() {
     return fancyState;
 };
 
 // In slide B
-var state = window.getFancyState();
+const state = window.getFancyState();
 ...
 ```
 
@@ -288,7 +261,7 @@ Interactive slides can synchronize their state with other instances through *rem
 The following example uses `sendState` and a state listener to synchronize the content of a text input:
 
 ```javascript
-var input = document.getElementById('fancySlideInput');
+const input = document.getElementById('fancySlideInput');
 
 slide.onSlideAppears = function() {
     remote.addStateListener(onStateChanged);
