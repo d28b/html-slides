@@ -1,9 +1,16 @@
-<? import skeleton/presentation.lib.js ?><?
-
+<?
+use('skeleton/presentation.lib.js');
 header('<meta content="This is a demo presentation created using html-slides." name="description">');
+
+// Mathjax
 header('<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>');
 header('<link href="pwa/manifest.json" rel="manifest">');
 
+// Leaflet
+header('<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">');
+header('<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>');
+
+// Content
 title('HTML Presentation Slides');
 
 topic('The standard stuff');
@@ -16,7 +23,7 @@ slide('slides/videos.inc.html', 'Videos', 'black');
 
 topic('There is more ...');
 slide('slides/more.inc.html', 'More');
-slide('slides/iframe.inc.html', 'Websites');
+slide('slides/map.inc.html', 'Maps');
 slide('slides/simulations.inc.html', 'Simulations');
 slide('slides/maths.inc.html', 'Equations');
 slide('slides/3d.inc.html', '3D');
@@ -27,4 +34,5 @@ slide('slides/local.inc.html', 'Local');
 slide('slides/publish.inc.html', 'Publish');
 slide('slides/conclusion.inc.html', 'Conclusion');
 
-?><? include skeleton/presentation.inc.html ?>
+include('skeleton/presentation.inc.html');
+?>

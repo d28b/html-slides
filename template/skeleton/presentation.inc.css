@@ -19,13 +19,15 @@ svg#indexButton { border-radius: 25px; cursor: pointer; position: fixed; right: 
 svg#indexButton > path { fill: black; stroke: rgba(255, 255, 255, 0.4); stroke-width: 1 }
 body.openIndex svg#indexButton { color: white }
 body.openIndex svg#indexButton > path { fill: white; stroke: none }
-body:not(.focus) svg#indexButton { background: red }
-body:not(.focus) svg#indexButton > path { fill: white; stroke: none }
 
 /* Index cover */
 div#index { background: rgba(0, 0, 0, 0.9); display: none; height: 100%; left: 0; overflow-x: hidden; overflow-y: auto; position: fixed; text-align: center; top: 0; width: 100%; z-index: 100 }
 body.openIndex { overflow: hidden }
 body.openIndex div#index { display: block }
+
+/* Focus corner */
+div.focusCorner { background: red; height: 40px; position: fixed; right: -20px; top: -20px; transform: rotate(45deg); width: 40px; z-index: 900 }
+body.focus div.focusCorner { display: none }
 
 /* Content on the index cover */
 div#indexContent { color: white; font-size: 16px; margin: 50px auto 100px auto; max-width: 800px; padding: 0 20px; text-align: left }

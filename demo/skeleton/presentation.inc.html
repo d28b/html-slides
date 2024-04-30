@@ -4,14 +4,20 @@
 <head>
 	<meta charset="utf-8">
 	<meta content="yes" name="mobile-web-app-capable">
-	<? htmlHeader ?>
+	<? htmlHeader() ?>
 	<title><? htmlTitle ?></title>
 	<style>
-		INCLUDE presentation.inc.css
-		INCLUDE ../style/style.inc.css
+	<?
+	include('presentation.inc.css');
+	include('../style/style.inc.css');
+	?>
 	</style>
 </head>
 <body>
+
+<? const svg = svgDefinitions() ?>
+
+<div class="focusCorner"></div>
 
 <svg height="50" id="indexButton" width="50">
 	<path d="m 13.5,13.5 22,0 0,4 -22,0 z m 0,9 22,0 0,4 -22,0 z m 0,9 22,0 0,4 -22,0 z" />
@@ -91,7 +97,7 @@
 
 <script>
 'use strict';
-INCLUDE presentation.inc.js
+<? includeJs('presentation.inc.js') ?>
 </script>
 
 </body>

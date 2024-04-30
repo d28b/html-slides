@@ -7,163 +7,150 @@
 	<meta content="This is a demo presentation created using html-slides." name="description">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
 	<link href="pwa/manifest.json" rel="manifest">
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+	<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 	<title>HTML Presentation Slides</title>
 	<style>
-		body { background: #eee; font-family: sans-serif; font-size: 20px; height: 100%; margin: 0; padding: 0 }
-		input { font-family: sans-serif; font-size: 20px }
+	body { background: #eee; font-family: sans-serif; font-size: 20px; height: 100%; margin: 0; padding: 0 }
+input { font-family: sans-serif; font-size: 20px }
 
-		/* Normal view */
-		div#main { padding: 0 0 0 0 }
-		div#footer { text-align: center }
-		div#footer > svg { height: 200px; vertical-align: middle; width: 4px }
+div#main { padding: 0 0 0 0 }
+div#footer { text-align: center }
+div#footer > svg { height: 200px; vertical-align: middle; width: 4px }
 
-		/* Main content, slides */
-		div#main > div.slide { background: white; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); height: 600px; margin: 20px auto; overflow: hidden; position: relative; width: 1000px }
-		div#main > div.slide > div.slideNumber { bottom: 10px; color: #999; font-size: 12px; position: absolute; right: 10px; text-align: right }
-		div#main > div.slide.selected { box-shadow: 0 0 14px rgba(0, 0, 0, 0.3) }
-		div#main > div.slide.black { background: black }
-		div#main > div.slide > img.full { height: 600px; object-fit: contain; width: 1000px }
-		div#main > div.slide.cover > img.full { object-fit: cover }
+div#main > div.slide { background: white; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); height: 600px; margin: 20px auto; overflow: hidden; position: relative; width: 1000px }
+div#main > div.slide > div.slideNumber { bottom: 10px; color: #999; font-size: 12px; position: absolute; right: 10px; text-align: right }
+div#main > div.slide.selected { box-shadow: 0 0 14px rgba(0, 0, 0, 0.3) }
+div#main > div.slide.black { background: black }
+div#main > div.slide > img.full { height: 600px; object-fit: contain; width: 1000px }
+div#main > div.slide.cover > img.full { object-fit: cover }
 
-		/* Index button */
-		svg#indexButton { border-radius: 25px; cursor: pointer; position: fixed; right: 20px; top: 20px; z-index: 110 }
-		svg#indexButton > path { fill: black; stroke: rgba(255, 255, 255, 0.4); stroke-width: 1 }
-		body.openIndex svg#indexButton { color: white }
-		body.openIndex svg#indexButton > path { fill: white; stroke: none }
-		body:not(.focus) svg#indexButton { background: red }
-		body:not(.focus) svg#indexButton > path { fill: white; stroke: none }
+svg#indexButton { border-radius: 25px; cursor: pointer; position: fixed; right: 20px; top: 20px; z-index: 110 }
+svg#indexButton > path { fill: black; stroke: rgba(255, 255, 255, 0.4); stroke-width: 1 }
+body.openIndex svg#indexButton { color: white }
+body.openIndex svg#indexButton > path { fill: white; stroke: none }
 
-		/* Index cover */
-		div#index { background: rgba(0, 0, 0, 0.9); display: none; height: 100%; left: 0; overflow-x: hidden; overflow-y: auto; position: fixed; text-align: center; top: 0; width: 100%; z-index: 100 }
-		body.openIndex { overflow: hidden }
-		body.openIndex div#index { display: block }
+div#index { background: rgba(0, 0, 0, 0.9); display: none; height: 100%; left: 0; overflow-x: hidden; overflow-y: auto; position: fixed; text-align: center; top: 0; width: 100%; z-index: 100 }
+body.openIndex { overflow: hidden }
+body.openIndex div#index { display: block }
 
-		/* Content on the index cover */
-		div#indexContent { color: white; font-size: 16px; margin: 50px auto 100px auto; max-width: 800px; padding: 0 20px; text-align: left }
-		div#indexContent > div.title { color: white; font-size: 25px; font-weight: bold; margin: 60px 0 20px 0 }
-		div#indexContent > div.topic { color: white; font-size: 20px; font-weight: bold; margin: 20px 0 10px 0 }
-		div#indexContent > div.subTopic { color: white; font-size: 16px; font-weight: bold; margin: 20px 0 10px 0 }
-		div#indexContent > div.slideRow > div { background: rgba(255, 255, 255, 0.3); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 3px; color: white; cursor: pointer; display: inline-block; font-size: 16px; font-weight: bold; height: 40px; margin: 0 10px 10px 0; overflow: hidden; padding: 10px 0; position: relative; text-align: center; vertical-align: top; width: 100px }
-		div#indexContent > div.slideRow > div.selected { background: rgba(51, 153, 255, 0.3); border-color: #39f }
-		div#indexContent > div.slideRow > div:not(.selected):hover { background: rgba(255, 255, 255, 0.4); border: 1px solid rgba(255, 255, 255, 0.6) }
-		div#indexContent > div.slideRow > div > div { bottom: 4px; color: white; font-size: 12px; font-weight: bold; left: 0; line-height: 20px; position: absolute; text-align: center; width: 100% }
+div.focusCorner { background: red; height: 40px; position: fixed; right: -20px; top: -20px; transform: rotate(45deg); width: 40px; z-index: 900 }
+body.focus div.focusCorner { display: none }
 
-		div#indexContent div.largeButtonHeader { color: rgba(255, 255, 255, 0.5); margin: 0 0 5px 0 }
-		div#indexContent div.largeButton { border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 4px; color: rgba(255, 255, 255, 0.5); cursor: pointer; display: inline-block; height: 100px; margin-right: 6px; position: relative; text-align: center; vertical-align: top; width: 120px }
-		div#indexContent div.largeButton > svg.smallIcon { background: rgba(255, 255, 255, 0.15); border-radius: 15px; margin: 10px 0 8px 0; padding: 5px; vertical-align: middle }
-		div#indexContent div.largeButton > svg.bigIcon { background: rgba(255, 255, 255, 0.15); border-radius: 20px; margin: 17px 0 10px 0; padding: 5px; vertical-align: middle }
-		div#indexContent span.shortcut { background: rgba(255, 255, 255, 0.2); border-radius: 12px; font-weight: 800; padding: 2px 10px }
+div#indexContent { color: white; font-size: 16px; margin: 50px auto 100px auto; max-width: 800px; padding: 0 20px; text-align: left }
+div#indexContent > div.title { color: white; font-size: 25px; font-weight: bold; margin: 60px 0 20px 0 }
+div#indexContent > div.topic { color: white; font-size: 20px; font-weight: bold; margin: 20px 0 10px 0 }
+div#indexContent > div.subTopic { color: white; font-size: 16px; font-weight: bold; margin: 20px 0 10px 0 }
+div#indexContent > div.slideRow > div { background: rgba(255, 255, 255, 0.3); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 3px; color: white; cursor: pointer; display: inline-block; font-size: 16px; font-weight: bold; height: 40px; margin: 0 10px 10px 0; overflow: hidden; padding: 10px 0; position: relative; text-align: center; vertical-align: top; width: 100px }
+div#indexContent > div.slideRow > div.selected { background: rgba(51, 153, 255, 0.3); border-color: #39f }
+div#indexContent > div.slideRow > div:not(.selected):hover { background: rgba(255, 255, 255, 0.4); border: 1px solid rgba(255, 255, 255, 0.6) }
+div#indexContent > div.slideRow > div > div { bottom: 4px; color: white; font-size: 12px; font-weight: bold; left: 0; line-height: 20px; position: absolute; text-align: center; width: 100% }
 
-		/* Normal and presentation mode buttons */
-		div#indexContent div#normalModeButton.selected { background: rgba(51, 153, 255, 0.1); border-color: #39f; color: #39f }
-		div#indexContent div#normalModeButton.selected > svg.bigIcon { background: linear-gradient(0deg, rgba(36, 107, 179, 1) 0%, rgba(51, 153, 255, 1) 100%) }
-		div#indexContent div#presentationModeButton.selected { background: rgba(51, 204, 51, 0.1); border-color: #3c3; color: #3c3 }
-		div#indexContent div#presentationModeButton.selected > svg.bigIcon { background: linear-gradient(0deg, rgba(36, 143, 36, 1) 0%, rgba(51, 204, 51, 1) 100%) }
+div#indexContent div.largeButtonHeader { color: rgba(255, 255, 255, 0.5); margin: 0 0 5px 0 }
+div#indexContent div.largeButton { border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 4px; color: rgba(255, 255, 255, 0.5); cursor: pointer; display: inline-block; height: 100px; margin-right: 6px; position: relative; text-align: center; vertical-align: top; width: 120px }
+div#indexContent div.largeButton > svg.smallIcon { background: rgba(255, 255, 255, 0.15); border-radius: 15px; margin: 10px 0 8px 0; padding: 5px; vertical-align: middle }
+div#indexContent div.largeButton > svg.bigIcon { background: rgba(255, 255, 255, 0.15); border-radius: 20px; margin: 17px 0 10px 0; padding: 5px; vertical-align: middle }
+div#indexContent span.shortcut { background: rgba(255, 255, 255, 0.2); border-radius: 12px; font-weight: 800; padding: 2px 10px }
 
-		/* Remote send/listen buttons */
-		div#indexContent div#remoteSendToken { font-weight: 800; line-height: 20px; padding: 4px 0 }
-		div#indexContent div#remoteListen input { background: none; border: none; border-radius: 2px; color: rgba(255, 255, 255, 0.5); font-size: 16px; font-weight: 800; line-height: 20px; padding: 4px 0; text-align: center; width: 100% }
-		div#indexContent div#remoteSend.selected { background: rgba(51, 153, 255, 0.1); border-color: #39f; color: #39f }
-		div#indexContent div#remoteSend.selected > svg.smallIcon { background: #39f }
-		div#indexContent div#remoteSend.selected > span { color: white }
-		div#indexContent div#remoteListen.selected { background: rgba(255, 153, 51, 0.1); border-color: #f93; color: #f93 }
-		div#indexContent div#remoteListen.selected > svg.smallIcon { background: #f93 }
-		div#indexContent div#remoteListen.selected input { color: white }
-		div#indexContent div#remoteListen.editToken > svg.smallIcon { background: #f93 }
-		div#indexContent div#remoteListen.editToken { color: #f93 }
-		div#indexContent div#remoteListen.editToken input { color: white }
-		div#indexContent div#remoteSend.selected div#remoteSendToken { color: white }
+div#indexContent div#normalModeButton.selected { background: rgba(51, 153, 255, 0.1); border-color: #39f; color: #39f }
+div#indexContent div#normalModeButton.selected > svg.bigIcon { background: linear-gradient(0deg, rgba(36, 107, 179, 1) 0%, rgba(51, 153, 255, 1) 100%) }
+div#indexContent div#presentationModeButton.selected { background: rgba(51, 204, 51, 0.1); border-color: #3c3; color: #3c3 }
+div#indexContent div#presentationModeButton.selected > svg.bigIcon { background: linear-gradient(0deg, rgba(36, 143, 36, 1) 0%, rgba(51, 204, 51, 1) 100%) }
 
-		/* Remote send/listen mode */
-		body.remoteSend svg#indexButton > path { fill: #39f; stroke: none }
-		body.remoteListen svg#indexButton > path { fill: #f93; stroke: none }
-		body.remoteSend:not(.presentation) div#main > div.slide.selected > div.slideNumber { background: #39f; border-radius: 20px; color: white; font-size: 20px; font-weight: bold; height: 40px; line-height: 40px; text-align: center; width: 40px }
+div#indexContent div#remoteSendToken { font-weight: 800; line-height: 20px; padding: 4px 0 }
+div#indexContent div#remoteListen input { background: none; border: none; border-radius: 2px; color: rgba(255, 255, 255, 0.5); font-size: 16px; font-weight: 800; line-height: 20px; padding: 4px 0; text-align: center; width: 100% }
+div#indexContent div#remoteSend.selected { background: rgba(51, 153, 255, 0.1); border-color: #39f; color: #39f }
+div#indexContent div#remoteSend.selected > svg.smallIcon { background: #39f }
+div#indexContent div#remoteSend.selected > span { color: white }
+div#indexContent div#remoteListen.selected { background: rgba(255, 153, 51, 0.1); border-color: #f93; color: #f93 }
+div#indexContent div#remoteListen.selected > svg.smallIcon { background: #f93 }
+div#indexContent div#remoteListen.selected input { color: white }
+div#indexContent div#remoteListen.editToken > svg.smallIcon { background: #f93 }
+div#indexContent div#remoteListen.editToken { color: #f93 }
+div#indexContent div#remoteListen.editToken input { color: white }
+div#indexContent div#remoteSend.selected div#remoteSendToken { color: white }
 
-		/* Presentation mode */
-		body.presentation div#main { background: black; height: 100%; overflow: hidden; padding: 0 }
-		body.presentation div#main > div.slide { box-shadow: none; display: none; margin: 0 0 }
-		/*body.presentation div#main > div.slide > div.slideNumber { display: none } */
-		body.presentation div#main > div.slide.selected { display: block }
-		body.presentation div#footer { display: none }
-		body.presentation div.annotation { display: none }
+body.remoteSend svg#indexButton > path { fill: #39f; stroke: none }
+body.remoteListen svg#indexButton > path { fill: #f93; stroke: none }
+body.remoteSend:not(.presentation) div#main > div.slide.selected > div.slideNumber { background: #39f; border-radius: 20px; color: white; font-size: 20px; font-weight: bold; height: 40px; line-height: 40px; text-align: center; width: 40px }
 
-		/* Print mode */
-		@media print {
-			@page { margin: 2cm 1cm; padding: 0; size: A4 landscape }
-			body { background: none }
-			svg#indexButton { display: none }
-			div#main { padding: 0 }
-			div#footer { display: none }
-			div#main > div.slide { border: 1px solid black !important; border-radius: 0 !important; box-shadow: none !important; margin: 0 auto; page-break-before: always }
-			div#main > div.slide:first-child { page-break-before: auto }
-			div#main > div.slide > div.slideNumber { color: black }
-		}
-		/* Layout */
+body.presentation div#main { background: black; height: 100%; overflow: hidden; padding: 0 }
+body.presentation div#main > div.slide { box-shadow: none; display: none; margin: 0 0 }
 
-		div.slide { text-align: center }
+body.presentation div#main > div.slide.selected { display: block }
+body.presentation div#footer { display: none }
+body.presentation div.annotation { display: none }
 
-		/* Text */
+@media print {
+	@page { margin: 2cm 1cm; padding: 0; size: A4 landscape }
+	body { background: none }
+	svg#indexButton { display: none }
+	div#main { padding: 0 }
+	div#footer { display: none }
+	div#main > div.slide { border: 1px solid black !important; border-radius: 0 !important; box-shadow: none !important; margin: 0 auto; page-break-before: always }
+	div#main > div.slide:first-child { page-break-before: auto }
+	div#main > div.slide > div.slideNumber { color: black }
+}
 
-		h1 { font-size: 30px; font-weight: bold; line-height: 45px; margin: 80px 0 0 0 }
-		h2 { font-size: 25px; font-weight: bold; margin: 30px 0 10px 0 }
-		h3 { font-size: 20px; font-weight: bold; margin: 30px 0 10px 0 }
-		p { margin: 10px 0 }
-		a { color: #3771c8; text-decoration: none }
-		a:hover { text-decoration: underline }
+div.slide { text-align: center }
 
-		ul { list-style-type: square; padding: 0 0 0 20px }
-		li { margin: 10px 0 }
+h1 { font-size: 30px; font-weight: bold; line-height: 45px; margin: 80px 0 0 0 }
+h2 { font-size: 25px; font-weight: bold; margin: 30px 0 10px 0 }
+h3 { font-size: 20px; font-weight: bold; margin: 30px 0 10px 0 }
+p { margin: 10px 0 }
+a { color: #3771c8; text-decoration: none }
+a:hover { text-decoration: underline }
 
-		/* Footnotes */
+ul { list-style-type: square; padding: 0 0 0 20px }
+li { margin: 10px 0 }
 
-		div.slide > div.footnote { bottom: 10px; color: #999; font-size: 12px; left: 10px; position: absolute; right: 30px; text-align: center }
-		div.slide > div.footnote.left { right: 500px; text-align: left }
-		div.slide > div.footnote.right { left: 500px; text-align: right }
+div.slide > div.footnote { bottom: 10px; color: #999; font-size: 12px; left: 10px; position: absolute; right: 30px; text-align: center }
+div.slide > div.footnote.left { right: 500px; text-align: left }
+div.slide > div.footnote.right { left: 500px; text-align: right }
 
-		/* Notes */
+div.slide div.notes { background-color: #ee9c; border-top-left-radius: 4px; border-top-right-radius: 4px; bottom: 0; box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); left: 200px; padding: 20px; position: absolute; right: 200px }
+div.slide div.notes.right { left: 600px; right: 40px }
+div.slide div.notes.left { left: 40px; right: 600px }
+body.presentation div.slide div.notes { display: none }
 
-		div.slide div.notes { background-color: #ee9c; border-top-left-radius: 4px; border-top-right-radius: 4px; bottom: 0; box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); left: 200px; padding: 20px; position: absolute; right: 200px }
-		div.slide div.notes.right { left: 600px; right: 40px }
-		div.slide div.notes.left { left: 40px; right: 600px }
-		body.presentation div.slide div.notes { display: none }
+div.slide div.notes div.key {background: #885; border-radius: 5px; color: white; display: inline-block; font-size: 16px; font-weight: bold; line-height: 20px; padding: 1px 6px; vertical-align: top}
 
-		div.slide div.notes div.key {background: #885; border-radius: 5px; color: white; display: inline-block; font-size: 16px; font-weight: bold; line-height: 20px; padding: 1px 6px; vertical-align: top}
+body { font-family: Lato }
+input { font-family: Lato }
 
-		/* Fonts */
+@font-face {
+	font-family: "Lato";
+	font-style: normal;
+	font-weight: normal;
+	src: url(style/LatoLatin-Regular.woff) format('woff'), url(style/LatoLatin-Regular.woff2) format('woff2')
+	}
 
-		body { font-family: Lato }
-		input { font-family: Lato }
+@font-face {
+	font-family: "Lato";
+	font-style: normal;
+	font-weight: bold;
+	src: url(style/LatoLatin-Bold.woff) format('woff'), url(style/LatoLatin-Bold.woff2) format('woff2')
+	}
 
-		@font-face {
-			font-family: "Lato";
-			font-style: normal;
-			font-weight: normal;
-			src: url(style/LatoLatin-Regular.woff) format('woff'), url(style/LatoLatin-Regular.woff2) format('woff2')
-			}
+@font-face {
+	font-family: "Lato";
+	font-style: normal;
+	font-weight: 300;
+	src: url(style/LatoLatin-Light.woff) format('woff'), url(style/LatoLatin-Light.woff2) format('woff2')
+	}
 
-		@font-face {
-			font-family: "Lato";
-			font-style: normal;
-			font-weight: bold;
-			src: url(style/LatoLatin-Bold.woff) format('woff'), url(style/LatoLatin-Bold.woff2) format('woff2')
-			}
+@font-face {
+	font-family: "Lato";
+	font-style: normal;
+	font-weight: 800;
+	src: url(style/LatoLatin-Black.woff) format('woff'), url(style/LatoLatin-Black.woff2) format('woff2')
+	}
 
-		@font-face {
-			font-family: "Lato";
-			font-style: normal;
-			font-weight: 300;
-			src: url(style/LatoLatin-Light.woff) format('woff'), url(style/LatoLatin-Light.woff2) format('woff2')
-			}
-
-		@font-face {
-			font-family: "Lato";
-			font-style: normal;
-			font-weight: 800;
-			src: url(style/LatoLatin-Black.woff) format('woff'), url(style/LatoLatin-Black.woff2) format('woff2')
-			}
 	</style>
 </head>
 <body>
+
+<div class="focusCorner"></div>
 
 <svg height="50" id="indexButton" width="50">
 	<path d="m 13.5,13.5 22,0 0,4 -22,0 z m 0,9 22,0 0,4 -22,0 z m 0,9 22,0 0,4 -22,0 z" />
@@ -228,1087 +215,1099 @@
 		</div>
 
 		<div class="title">HTML Presentation Slides</div>
-		<div class="topic">The standard stuff</div>
-		<div class="slideRow">
-			<div id="index-slide-1" onclick="onIndexSlideClick(this)">Title<div>1</div></div>
-			<div id="index-slide-2" onclick="onIndexSlideClick(this)">Web browsers<div>2</div></div>
-			<div id="index-slide-3" onclick="onIndexSlideClick(this)">Images<div>3</div></div>
-			<div id="index-slide-4" onclick="onIndexSlideClick(this)">Diagrams<div>4</div></div>
-			<div id="index-slide-5" onclick="onIndexSlideClick(this)">Animations<div>5</div></div>
-			<div id="index-slide-6" onclick="onIndexSlideClick(this)">Videos<div>6</div></div>
-		</div>
-		<div class="topic">There is more ...</div>
-		<div class="slideRow">
-			<div id="index-slide-7" onclick="onIndexSlideClick(this)">More<div>7</div></div>
-			<div id="index-slide-8" onclick="onIndexSlideClick(this)">Websites<div>8</div></div>
-			<div id="index-slide-9" onclick="onIndexSlideClick(this)">Simulations<div>9</div></div>
-			<div id="index-slide-10" onclick="onIndexSlideClick(this)">Equations<div>10</div></div>
-			<div id="index-slide-11" onclick="onIndexSlideClick(this)">3D<div>11</div></div>
-			<div id="index-slide-12" onclick="onIndexSlideClick(this)">Interactive<div>12</div></div>
-		</div>
-		<div class="topic">Present and publish</div>
-		<div class="slideRow">
-			<div id="index-slide-13" onclick="onIndexSlideClick(this)">Local<div>13</div></div>
-			<div id="index-slide-14" onclick="onIndexSlideClick(this)">Publish<div>14</div></div>
-			<div id="index-slide-15" onclick="onIndexSlideClick(this)">Conclusion<div>15</div></div>
-		</div>
+<div class="topic">The standard stuff</div>
+<div class="slideRow">
+	<div id="index-slide-1" onclick="onIndexSlideClick(this)">Title<div>1</div></div>
+	<div id="index-slide-2" onclick="onIndexSlideClick(this)">Web browsers<div>2</div></div>
+	<div id="index-slide-3" onclick="onIndexSlideClick(this)">Images<div>3</div></div>
+	<div id="index-slide-4" onclick="onIndexSlideClick(this)">Diagrams<div>4</div></div>
+	<div id="index-slide-5" onclick="onIndexSlideClick(this)">Animations<div>5</div></div>
+	<div id="index-slide-6" onclick="onIndexSlideClick(this)">Videos<div>6</div></div>
+</div>
+<div class="topic">There is more ...</div>
+<div class="slideRow">
+	<div id="index-slide-7" onclick="onIndexSlideClick(this)">More<div>7</div></div>
+	<div id="index-slide-8" onclick="onIndexSlideClick(this)">Maps<div>8</div></div>
+	<div id="index-slide-9" onclick="onIndexSlideClick(this)">Simulations<div>9</div></div>
+	<div id="index-slide-10" onclick="onIndexSlideClick(this)">Equations<div>10</div></div>
+	<div id="index-slide-11" onclick="onIndexSlideClick(this)">3D<div>11</div></div>
+	<div id="index-slide-12" onclick="onIndexSlideClick(this)">Interactive<div>12</div></div>
+</div>
+<div class="topic">Present and publish</div>
+<div class="slideRow">
+	<div id="index-slide-13" onclick="onIndexSlideClick(this)">Local<div>13</div></div>
+	<div id="index-slide-14" onclick="onIndexSlideClick(this)">Publish<div>14</div></div>
+	<div id="index-slide-15" onclick="onIndexSlideClick(this)">Conclusion<div>15</div></div>
+</div>
+
 	</div>
 </div>
 
 <div id="main">
 	<div class="slide" id="slide-1">
-		<div style="margin-top: 150px"><img src="pwa/launcher-icon.svg" style="vertical-align: middle" width="100"></div>
-		<div style="font-size: 60px; font-weight: bold; margin-top: 50px">HTML Presentation Slides</div>
-		<div style="font-size: 20px; margin-top: 50px">Thomas Lochmatter, 2019</div>
+<div style="margin-top: 150px"><img src="pwa/launcher-icon.svg" style="vertical-align: middle" width="100"></div>
+	<div style="font-size: 60px; font-weight: bold; margin-top: 50px">HTML Presentation Slides</div>
+	<div style="font-size: 20px; margin-top: 50px">Thomas Lochmatter, 2019</div>
 
-		<div class="notes">
-			Press <div class="key">F11</div> to go fullscreen, and <div class="key">P</div> to switch to presentation mode. <div class="key">Esc</div> opens the slide index and settings.
-		</div>
+	<div class="notes">
+		Press <div class="key">F11</div> to go fullscreen, and <div class="key">P</div> to switch to presentation mode. <div class="key">Esc</div> opens the slide index and settings.
+	</div>
 		<div class="slideNumber">1</div>
-	</div>
-	<div class="slide" id="slide-2">
-		<div style="font-size: 30px; font-weight: bold; line-height: 50px; margin-top: 200px">Modern web browsers<br>have everything<br>to make great<br>presentations.</div>
+</div>
+<div class="slide" id="slide-2">
+<div style="font-size: 30px; font-weight: bold; line-height: 50px; margin-top: 200px">Modern web browsers<br>have everything<br>to make great<br>presentations.</div>
 		<div class="slideNumber">2</div>
-	</div>
-	<div class="slide" id="slide-3">
-	<svg height="600" version="1.1" width="1000" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-
-	  <image height="666.5" preserveAspectRatio="none" width="1000" x="0" xlink:href="slides/coffee.jpg" y="-33.25" />
-	  <rect height="80" rx="40" style="clip-rule:nonzero; color:#000000; color-interpolation:sRGB; color-interpolation-filters:linearRGB; color-rendering:auto; display:inline; enable-background:accumulate; fill:#ffffff; fill-opacity:1; fill-rule:nonzero; image-rendering:auto; isolation:auto; marker:none; mix-blend-mode:normal; opacity:0.8; overflow:visible; shape-rendering:auto; solid-color:#000000; solid-opacity:1; stroke:none; stroke-dasharray:none; stroke-dashoffset:0; stroke-linecap:butt; stroke-linejoin:miter; stroke-miterlimit:4; stroke-opacity:1; stroke-width:2; text-rendering:auto; vector-effect:none; visibility:visible" width="600" x="200" y="440" />
-	  <text style="fill:#000000; font-size:30px; font-weight:bold; line-height:40px; text-align:center; text-anchor:middle" x="500" xml:space="preserve" y="490"><tspan x="500" y="490">They can display text and images.</tspan></text>
-	  <text style="fill:#ffffff; fill-opacity:0.8; font-size:12px; line-height:18px; text-align:center; text-anchor:middle" x="500" xml:space="preserve" y="586"><tspan x="500" y="586">Image by Wikipedia/Popo_le_Chien, CC-BY-SA 4.0</tspan></text>
+</div>
+<div class="slide" id="slide-3">
+<svg height="600" version="1.1" viewBox="0 0 1000 600" width="1000" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+		<image height="666.5" preserveAspectRatio="none" width="1000" x="0" xlink:href="slides/coffee.jpg" y="-33.25" />
+		<rect height="80" rx="40" style="clip-rule: nonzero; color: #000000; color-interpolation: sRGB; color-interpolation-filters: linearRGB; color-rendering: auto; display: inline; enable-background: accumulate; fill: #ffffff; fill-opacity: 1; fill-rule: nonzero; image-rendering: auto; isolation: auto; marker: none; mix-blend-mode: normal; opacity: 0.8; overflow: visible; shape-rendering: auto; solid-color: #000000; solid-opacity: 1; stroke: none; stroke-dasharray: none; stroke-dashoffset: 0; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 4; stroke-opacity: 1; stroke-width: 2; text-rendering: auto; vector-effect: none; visibility: visible" width="600" x="200" y="440" />
+		<text style="fill: #000000; font-family: Lato; font-size: 30px; font-weight: bold; line-height: 40px; text-align: center; text-anchor: middle" x="500" xml:space="preserve" y="490"><tspan x="500" y="490">They can display text and images.</tspan></text>
+		<text style="fill: #ffffff; fill-opacity: 0.8; font-family: Lato; font-size: 12px; line-height: 18px; text-align: center; text-anchor: middle" x="500" xml:space="preserve" y="586"><tspan x="500" y="586">Image by Wikipedia/Popo_le_Chien, CC-BY-SA 4.0</tspan></text>
 	</svg>	<div class="slideNumber">3</div>
-	</div>
-	<div class="slide" id="slide-4">
-	<svg height="600" version="1.1" width="1000" xmlns="http://www.w3.org/2000/svg">
-
-	  <path d="m 604.06914,470.18381 c -47.95951,7e-5 -100.05977,-27.625 -119.96906,-69.7526 -18.76262,-1.57608 -35.72136,-15.54646 -41.79873,-33.75972 -10.4331,-31.26724 -10.22769,-66.82757 -35.18939,-91.50269 -11.2251,-11.09598 18.88116,-12.38679 26.05345,-10.46484 13.66033,3.66019 20.20215,19.23125 30.60888,32.99307 14.05542,18.58664 19.76786,25.95257 30.93384,6.6127 9.11045,-15.77955 15.50953,-19.05901 25.25133,-27.0844 13.19645,-10.87131 0.95275,-7.94462 7.13549,-18.65337 4.84562,-8.3928 29.93168,-14.95942 48.1393,-14.95942 16.1774,0 12.5353,-4.75137 12.5353,-14.23205 0,-21.47419 37.70314,-21.69274 37.70291,-7e-5 0,10.67071 -6.01139,14.45892 11.08473,14.23204 17.1146,-0.22731 42.89572,5.51146 49.06093,16.18971 5.20705,9.01923 -4.99486,12.31659 9.89967,20.91607 14.89475,8.59949 15.18401,18.35733 23.8731,3.39991 11.44598,-19.703 41.57297,-25.6992 60.38935,-10.81002 29.93236,23.68517 31.74307,70.93237 9.91824,100.98206 -16.75048,23.06316 -44.63945,35.15144 -69.91786,43.48766 -32.05544,35.72119 -64.60542,52.40603 -115.71148,52.40596 z m 142.18501,-81.10284 c 33.91116,-10.39516 51.8146,-53.70291 37.03503,-86.59058 -7.13056,-15.86653 -27.10733,-28.73455 -42.10695,-17.13587 -8.03289,6.21131 -20.68053,19.72471 -15.5083,30.00963 11.03913,21.95217 13.68896,46.85397 9.05517,70.69547 -1.0339,5.31948 8.71765,3.88196 11.52505,3.02135 z" style="fill:#abc837; fill-opacity:1; stroke-width:0.41006926" />
-	  <text style="fill:#000000; font-size:30px; font-weight:bold; line-height:40px; text-align:center; text-anchor:middle" x="500" xml:space="preserve" y="90"><tspan x="500" y="90">Vector graphics and diagrams.</tspan></text>
-	  <rect height="316" style="fill:#5aa02c" width="80" x="220" y="214" />
-	  <rect height="219" style="fill:#4f8d27" width="80" x="340" y="311" />
-	  <rect height="194" style="fill:#4b8524" width="80" x="460" y="336" />
-	  <rect height="138" style="fill:#3d6c1e" width="80" x="580" y="392" />
-	  <rect height="122" style="fill:#38631b" width="80" x="700" y="408" />
-	  <text style="fill:#ffffff; font-size:20px; font-weight:bold; line-height:40px; text-align:start; text-anchor:start" transform="rotate(-90)" x="-518" xml:space="preserve" y="285"><tspan x="-518" y="285">Turkey</tspan></text>
-	  <text style="fill:#000000; font-size:20px; font-weight:bold; line-height:40px; text-align:center; text-anchor:middle" x="260" xml:space="preserve" y="204"><tspan x="260" y="204">3.16 kg</tspan></text>
-	  <text style="fill:#ffffff; font-size:20px; font-weight:bold; line-height:40px; text-align:start; text-anchor:start" transform="rotate(-90)" x="-518" xml:space="preserve" y="405"><tspan x="-518" y="405">United Kingdom</tspan></text>
-	  <text style="fill:#ffffff; font-size:20px; font-weight:bold; line-height:40px; text-align:start; text-anchor:start" transform="rotate(-90)" x="-518" xml:space="preserve" y="525"><tspan x="-518" y="525">Ireland</tspan></text>
-	  <text style="fill:#ffffff; font-size:20px; font-weight:bold; line-height:40px; text-align:start; text-anchor:start" transform="rotate(-90)" x="-518" xml:space="preserve" y="645"><tspan x="-518" y="645">Russia</tspan></text>
-	  <text style="fill:#ffffff; font-size:20px; font-weight:bold; line-height:40px; text-align:start; text-anchor:start" transform="rotate(-90)" x="-518" xml:space="preserve" y="765"><tspan x="-518" y="765">Marocco</tspan></text>
-	  <text style="fill:#627320; fill-opacity:1; font-size:20px; font-weight:bold; line-height:30px; text-align:end; text-anchor:end" x="780" xml:space="preserve" y="194"><tspan x="780" y="194">Annual per capita tea consumption</tspan><tspan style="fill:#627320; fill-opacity:1; font-weight:normal" x="780" y="224">as of 2016</tspan></text>
-	  <text style="fill:#000000; font-size:20px; font-weight:bold; line-height:40px; text-align:center; text-anchor:middle" x="380" xml:space="preserve" y="301"><tspan x="380" y="301">2.19 kg</tspan></text>
-	  <text style="fill:#000000; font-size:20px; font-weight:bold; line-height:40px; text-align:center; text-anchor:middle" x="500" xml:space="preserve" y="326"><tspan x="500" y="326">1.94 kg</tspan></text>
-	  <text style="fill:#000000; font-size:20px; font-weight:bold; line-height:40px; text-align:center; text-anchor:middle" x="620" xml:space="preserve" y="382"><tspan x="620" y="382">1.38 kg</tspan></text>
-	  <text style="fill:#000000; font-size:20px; font-weight:bold; line-height:40px; text-align:center; text-anchor:middle" x="740" xml:space="preserve" y="398"><tspan x="740" y="398">1.22 kg</tspan></text>
-	  <rect height="10" style="fill:#000000" width="640" x="180" y="530" />
+</div>
+<div class="slide" id="slide-4">
+<svg height="600" version="1.1" viewBox="0 0 1000 600" width="1000" xmlns="http://www.w3.org/2000/svg">
+		<path d="m 604.06914,470.18381 c -47.95951,7e-5 -100.05977,-27.625 -119.96906,-69.7526 -18.76262,-1.57608 -35.72136,-15.54646 -41.79873,-33.75972 -10.4331,-31.26724 -10.22769,-66.82757 -35.18939,-91.50269 -11.2251,-11.09598 18.88116,-12.38679 26.05345,-10.46484 13.66033,3.66019 20.20215,19.23125 30.60888,32.99307 14.05542,18.58664 19.76786,25.95257 30.93384,6.6127 9.11045,-15.77955 15.50953,-19.05901 25.25133,-27.0844 13.19645,-10.87131 0.95275,-7.94462 7.13549,-18.65337 4.84562,-8.3928 29.93168,-14.95942 48.1393,-14.95942 16.1774,0 12.5353,-4.75137 12.5353,-14.23205 0,-21.47419 37.70314,-21.69274 37.70291,-7e-5 0,10.67071 -6.01139,14.45892 11.08473,14.23204 17.1146,-0.22731 42.89572,5.51146 49.06093,16.18971 5.20705,9.01923 -4.99486,12.31659 9.89967,20.91607 14.89475,8.59949 15.18401,18.35733 23.8731,3.39991 11.44598,-19.703 41.57297,-25.6992 60.38935,-10.81002 29.93236,23.68517 31.74307,70.93237 9.91824,100.98206 -16.75048,23.06316 -44.63945,35.15144 -69.91786,43.48766 -32.05544,35.72119 -64.60542,52.40603 -115.71148,52.40596 z m 142.18501,-81.10284 c 33.91116,-10.39516 51.8146,-53.70291 37.03503,-86.59058 -7.13056,-15.86653 -27.10733,-28.73455 -42.10695,-17.13587 -8.03289,6.21131 -20.68053,19.72471 -15.5083,30.00963 11.03913,21.95217 13.68896,46.85397 9.05517,70.69547 -1.0339,5.31948 8.71765,3.88196 11.52505,3.02135 z" style="fill: #abc837; fill-opacity: 1; stroke-width: 0.41006926" />
+		<text style="fill: #000000; font-family: Lato; font-size: 30px; font-weight: bold; line-height: 40px; text-align: center; text-anchor: middle" x="500" xml:space="preserve" y="90"><tspan x="500" y="90">Vector graphics and diagrams.</tspan></text>
+		<rect height="316" style="fill: #5aa02c" width="80" x="220" y="214" />
+		<rect height="219" style="fill: #4f8d27" width="80" x="340" y="311" />
+		<rect height="194" style="fill: #4b8524" width="80" x="460" y="336" />
+		<rect height="138" style="fill: #3d6c1e" width="80" x="580" y="392" />
+		<rect height="122" style="fill: #38631b" width="80" x="700" y="408" />
+		<text style="fill: #ffffff; font-family: Lato; font-size: 20px; font-weight: bold; line-height: 40px; text-align: start; text-anchor: start" transform="rotate(-90)" x="-518" xml:space="preserve" y="285"><tspan x="-518" y="285">Turkey</tspan></text>
+		<text style="fill: #000000; font-family: Lato; font-size: 20px; font-weight: bold; line-height: 40px; text-align: center; text-anchor: middle" x="260" xml:space="preserve" y="204"><tspan x="260" y="204">3.16 kg</tspan></text>
+		<text style="fill: #ffffff; font-family: Lato; font-size: 20px; font-weight: bold; line-height: 40px; text-align: start; text-anchor: start" transform="rotate(-90)" x="-518" xml:space="preserve" y="405"><tspan x="-518" y="405">United Kingdom</tspan></text>
+		<text style="fill: #ffffff; font-family: Lato; font-size: 20px; font-weight: bold; line-height: 40px; text-align: start; text-anchor: start" transform="rotate(-90)" x="-518" xml:space="preserve" y="525"><tspan x="-518" y="525">Ireland</tspan></text>
+		<text style="fill: #ffffff; font-family: Lato; font-size: 20px; font-weight: bold; line-height: 40px; text-align: start; text-anchor: start" transform="rotate(-90)" x="-518" xml:space="preserve" y="645"><tspan x="-518" y="645">Russia</tspan></text>
+		<text style="fill: #ffffff; font-family: Lato; font-size: 20px; font-weight: bold; line-height: 40px; text-align: start; text-anchor: start" transform="rotate(-90)" x="-518" xml:space="preserve" y="765"><tspan x="-518" y="765">Marocco</tspan></text>
+		<text style="fill: #627320; fill-opacity: 1; font-family: Lato; font-size: 20px; font-weight: bold; line-height: 30px; text-align: end; text-anchor: end" x="780" xml:space="preserve" y="194"><tspan x="780" y="194">Annual per capita tea consumption</tspan><tspan style="fill: #627320; fill-opacity: 1; font-weight: normal" x="780" y="224">as of 2016</tspan></text>
+		<text style="fill: #000000; font-family: Lato; font-size: 20px; font-weight: bold; line-height: 40px; text-align: center; text-anchor: middle" x="380" xml:space="preserve" y="301"><tspan x="380" y="301">2.19 kg</tspan></text>
+		<text style="fill: #000000; font-family: Lato; font-size: 20px; font-weight: bold; line-height: 40px; text-align: center; text-anchor: middle" x="500" xml:space="preserve" y="326"><tspan x="500" y="326">1.94 kg</tspan></text>
+		<text style="fill: #000000; font-family: Lato; font-size: 20px; font-weight: bold; line-height: 40px; text-align: center; text-anchor: middle" x="620" xml:space="preserve" y="382"><tspan x="620" y="382">1.38 kg</tspan></text>
+		<text style="fill: #000000; font-family: Lato; font-size: 20px; font-weight: bold; line-height: 40px; text-align: center; text-anchor: middle" x="740" xml:space="preserve" y="398"><tspan x="740" y="398">1.22 kg</tspan></text>
+		<rect height="10" style="fill: #000000" width="640" x="180" y="530" />
 	</svg>	<div class="slideNumber">4</div>
-	</div>
-	<div class="slide" id="slide-5">
-	<svg height="600" version="1.1" width="1000" xmlns="http://www.w3.org/2000/svg">
+</div>
+<div class="slide" id="slide-5">
+<svg height="600" version="1.1" viewBox="0 0 1000 600" width="1000" xmlns="http://www.w3.org/2000/svg">
+		<path d="m 359.63201,347.9587 c -39.57479,2e-5 -82.56635,-22.79533 -98.99494,-57.5578 -15.48237,-1.30053 -29.47621,-12.82848 -34.4911,-27.85755 -8.60905,-25.80081 -8.43961,-55.14415 -29.0373,-75.50531 -9.26254,-9.15612 15.58022,-10.22124 21.49857,-8.63536 11.27211,3.02033 16.67021,15.8691 25.25759,27.22499 11.59806,15.3372 16.31185,21.4153 25.52567,5.45658 7.51766,-13.02081 12.79803,-15.72695 20.83673,-22.34927 10.88928,-8.97064 0.78613,-6.55563 5.88792,-15.39219 3.99847,-6.92548 24.69877,-12.34411 39.72315,-12.34411 13.3491,0 10.34379,-3.92063 10.34379,-11.74387 0,-17.71981 31.11151,-17.90019 31.11131,-2e-5 0,8.80516 -4.9604,11.93108 9.14679,11.74387 14.1225,-0.18734 35.39635,4.54788 40.48362,13.35928 4.29677,7.44237 -4.12156,10.16329 8.16896,17.25933 12.29072,7.09603 12.52936,15.14795 19.69939,2.80547 9.4449,-16.25834 34.30476,-21.20621 49.83148,-8.92009 24.69937,19.54432 26.19347,58.53131 8.18426,83.32743 -13.82201,19.031 -36.83516,29.00594 -57.69416,35.88475 -26.45121,29.47605 -53.3105,43.24389 -95.48173,43.24387 z m 117.32692,-66.92369 c 27.9825,-8.57781 42.7559,-44.31411 30.56024,-71.45199 -5.88394,-13.09266 -22.36822,-23.71091 -34.74544,-14.14006 -6.62852,5.12542 -17.06498,16.27626 -12.79704,24.7631 9.1092,18.11429 11.29577,38.6625 7.47211,58.33582 -0.85315,4.38949 7.1935,3.20329 9.51013,2.49313 z" style="fill: #ccc">
+			<animateTransform attributeName="transform" attributeType="XML" calcMode="linear" dur="10s" repeatCount="indefinite" type="translate" values="0 0; 280 0; 280 0; 0 0; 0 0" />
+			<animate attributeName="fill" attributeType="CSS" calcMode="linear" dur="10s" repeatCount="indefinite" values="#ccc;#eee;#ccc;#ccc;#ccc;#eee;#ccc;#ccc;#ccc" />
+		</path>
+		<rect height="40" id="horizontalRuler" style="fill: #e6e6e6" width="1000" x="0" y="-60" />
+		<rect height="600" id="verticalRuler" style="fill: #e6e6e6" width="40" x="-60" y="0" />
+		<rect height="100" id="blackColor" style="fill: #000000" width="100" x="480" y="-320" />
+		<rect height="100" id="grayColor" style="fill: #999999" width="100" x="480" y="-200" />
+		<rect height="100" id="blueColor" style="fill: #4c99e6" width="100" x="240" y="-320" />
+		<rect height="100" id="greenColor" style="fill: #99e64c" width="100" x="120" y="-200" />
+		<rect height="100" id="violetColor" style="fill: #994ce6" width="100" x="240" y="-200" />
+		<rect height="100" id="orangeColor" style="fill: #e6994c" width="100" x="120" y="-320" />
+		<rect height="100" id="darkBlueColor" style="fill: #1760a9" width="100" x="360" y="-320" />
+		<rect height="100" id="darkVioletColor" style="fill: #6018a8" width="100" x="360" y="-200" />
+		<rect height="100" id="darkGreenColor" style="fill: #60a818" width="100" x="0" y="-200" />
+		<rect height="100" id="darkOrangeColor" style="fill: #a86018" width="100" x="0" y="-320" />
+		<path d="m 499.63201,347.9587 c -39.57479,2e-5 -82.56635,-22.79533 -98.99494,-57.5578 -15.48237,-1.30053 -29.47621,-12.82848 -34.4911,-27.85755 -8.60905,-25.80081 -8.43961,-55.14415 -29.0373,-75.50531 -9.26254,-9.15612 15.58022,-10.22124 21.49857,-8.63536 11.27211,3.02033 16.67021,15.8691 25.25759,27.22499 11.59806,15.3372 16.31185,21.4153 25.52567,5.45658 7.51766,-13.02081 12.79803,-15.72695 20.83673,-22.34927 10.88928,-8.97064 0.78613,-6.55563 5.88792,-15.39219 3.99847,-6.92548 24.69877,-12.34411 39.72315,-12.34411 13.3491,0 10.34379,-3.92063 10.34379,-11.74387 0,-17.71981 31.11151,-17.90019 31.11131,-2e-5 0,8.80516 -4.9604,11.93108 9.14679,11.74387 14.1225,-0.18734 35.39635,4.54788 40.48362,13.35928 4.29677,7.44237 -4.12156,10.16329 8.16896,17.25933 12.29072,7.09603 12.52936,15.14795 19.69939,2.80547 9.4449,-16.25834 34.30476,-21.20621 49.83148,-8.92009 24.69937,19.54432 26.19347,58.53131 8.18426,83.32743 -13.82201,19.031 -36.83516,29.00594 -57.69416,35.88475 -26.45121,29.47605 -53.3105,43.24389 -95.48173,43.24387 z m 117.32692,-66.92369 c 27.9825,-8.57781 42.7559,-44.31411 30.56024,-71.45199 -5.88394,-13.09266 -22.36822,-23.71091 -34.74544,-14.14006 -6.62852,5.12542 -17.06498,16.27626 -12.79704,24.7631 9.1092,18.11429 11.29577,38.6625 7.47211,58.33582 -0.85315,4.38949 7.1935,3.20329 9.51013,2.49313 z" style="fill: #5aa02c">
+			<animate attributeName="fill" attributeType="CSS" calcMode="linear" dur="10s" repeatCount="indefinite" values="#5aa02c;#2c5aa0;#2c5aa0;#5aa02c;#5aa02c" />
+		</path>
+		<text style="fill: #000000; font-family: Lato; font-size: 30px; font-weight: bold; line-height: 40px; text-align: center; text-anchor: middle" x="500" xml:space="preserve" y="490"><tspan x="500" y="490">Animated vector graphics.</tspan></text>
+	</svg><script>
+	(function() {
+		const slide = document.currentScript.parentElement;
+	var svg = slide.getElementsByTagName('svg')[0];
 
-	  <path d="m 359.63201,347.9587 c -39.57479,2e-5 -82.56635,-22.79533 -98.99494,-57.5578 -15.48237,-1.30053 -29.47621,-12.82848 -34.4911,-27.85755 -8.60905,-25.80081 -8.43961,-55.14415 -29.0373,-75.50531 -9.26254,-9.15612 15.58022,-10.22124 21.49857,-8.63536 11.27211,3.02033 16.67021,15.8691 25.25759,27.22499 11.59806,15.3372 16.31185,21.4153 25.52567,5.45658 7.51766,-13.02081 12.79803,-15.72695 20.83673,-22.34927 10.88928,-8.97064 0.78613,-6.55563 5.88792,-15.39219 3.99847,-6.92548 24.69877,-12.34411 39.72315,-12.34411 13.3491,0 10.34379,-3.92063 10.34379,-11.74387 0,-17.71981 31.11151,-17.90019 31.11131,-2e-5 0,8.80516 -4.9604,11.93108 9.14679,11.74387 14.1225,-0.18734 35.39635,4.54788 40.48362,13.35928 4.29677,7.44237 -4.12156,10.16329 8.16896,17.25933 12.29072,7.09603 12.52936,15.14795 19.69939,2.80547 9.4449,-16.25834 34.30476,-21.20621 49.83148,-8.92009 24.69937,19.54432 26.19347,58.53131 8.18426,83.32743 -13.82201,19.031 -36.83516,29.00594 -57.69416,35.88475 -26.45121,29.47605 -53.3105,43.24389 -95.48173,43.24387 z m 117.32692,-66.92369 c 27.9825,-8.57781 42.7559,-44.31411 30.56024,-71.45199 -5.88394,-13.09266 -22.36822,-23.71091 -34.74544,-14.14006 -6.62852,5.12542 -17.06498,16.27626 -12.79704,24.7631 9.1092,18.11429 11.29577,38.6625 7.47211,58.33582 -0.85315,4.38949 7.1935,3.20329 9.51013,2.49313 z" style="fill:#ccc">
-	     <animateTransform attributeName="transform" attributeType="XML" calcMode="linear" dur="10s" repeatCount="indefinite" type="translate" values="0 0; 280 0; 280 0; 0 0; 0 0" />
-	                          <animate attributeName="fill" attributeType="CSS" calcMode="linear" dur="10s" repeatCount="indefinite" values="#ccc;#eee;#ccc;#ccc;#ccc;#eee;#ccc;#ccc;#ccc" />
-	     </path>
+	slide.onSlideAppears = function() {
+		svg.unpauseAnimations();
+	};
 
-	  <path d="m 499.63201,347.9587 c -39.57479,2e-5 -82.56635,-22.79533 -98.99494,-57.5578 -15.48237,-1.30053 -29.47621,-12.82848 -34.4911,-27.85755 -8.60905,-25.80081 -8.43961,-55.14415 -29.0373,-75.50531 -9.26254,-9.15612 15.58022,-10.22124 21.49857,-8.63536 11.27211,3.02033 16.67021,15.8691 25.25759,27.22499 11.59806,15.3372 16.31185,21.4153 25.52567,5.45658 7.51766,-13.02081 12.79803,-15.72695 20.83673,-22.34927 10.88928,-8.97064 0.78613,-6.55563 5.88792,-15.39219 3.99847,-6.92548 24.69877,-12.34411 39.72315,-12.34411 13.3491,0 10.34379,-3.92063 10.34379,-11.74387 0,-17.71981 31.11151,-17.90019 31.11131,-2e-5 0,8.80516 -4.9604,11.93108 9.14679,11.74387 14.1225,-0.18734 35.39635,4.54788 40.48362,13.35928 4.29677,7.44237 -4.12156,10.16329 8.16896,17.25933 12.29072,7.09603 12.52936,15.14795 19.69939,2.80547 9.4449,-16.25834 34.30476,-21.20621 49.83148,-8.92009 24.69937,19.54432 26.19347,58.53131 8.18426,83.32743 -13.82201,19.031 -36.83516,29.00594 -57.69416,35.88475 -26.45121,29.47605 -53.3105,43.24389 -95.48173,43.24387 z m 117.32692,-66.92369 c 27.9825,-8.57781 42.7559,-44.31411 30.56024,-71.45199 -5.88394,-13.09266 -22.36822,-23.71091 -34.74544,-14.14006 -6.62852,5.12542 -17.06498,16.27626 -12.79704,24.7631 9.1092,18.11429 11.29577,38.6625 7.47211,58.33582 -0.85315,4.38949 7.1935,3.20329 9.51013,2.49313 z" style="fill:#5aa02c"> <animate attributeName="fill" attributeType="CSS" calcMode="linear" dur="10s" repeatCount="indefinite" values="#5aa02c;#2c5aa0;#2c5aa0;#5aa02c;#5aa02c" /></path>
-	  <text style="fill:#000000; font-size:30px; font-weight:bold; line-height:40px; text-align:center; text-anchor:middle" x="500" xml:space="preserve" y="490"><tspan x="500" y="490">Animated vector graphics.</tspan></text>
+	slide.onSlideDisappears = function() {
+		svg.pauseAnimations();
+	};
 
-	</svg>	<script>
-		(function() {
-			var slide = document.currentScript.parentElement;
-			var svg = slide.getElementsByTagName('svg')[0];
+	})();
+	</script>	<div class="slideNumber">5</div>
+</div>
+<div class="slide black" id="slide-6">
+<h1 style="color: white; margin: 40px 0 0 0">And videos.</h1>
 
-			slide.onSlideAppears = function() {
-				svg.unpauseAnimations();
-			};
-
-			slide.onSlideDisappears = function() {
-				svg.pauseAnimations();
-			};
-		})();
-		</script>
-		<div class="slideNumber">5</div>
-	</div>
-	<div class="slide black" id="slide-6">
-		<h1 style="color: white; margin: 40px 0 0 0">And videos.</h1>
-
-		<video controls height="480" style="margin-top: 5px" width="640">
-			<source src="slides/tacoma.mp4" type="video/mp4">
-			<a href="slides/tacoma.mp4">Play video with external player</a>
-		</video>
+	<video controls height="480" style="margin-top: 5px" width="640">
+		<source src="slides/tacoma.mp4" type="video/mp4">
+		<a href="slides/tacoma.mp4">Play video with external player</a>
+	</video>
 		<div class="slideNumber">6</div>
-	</div>
-	<div class="slide" id="slide-7">
-		<div style="font-size: 30px; font-weight: bold; line-height: 50px; margin-top: 250px">But with your slides in the web browser<br>you can do much more.</div>
+</div>
+<div class="slide" id="slide-7">
+<div style="font-size: 30px; font-weight: bold; line-height: 50px; margin-top: 250px">But with your slides in the web browser<br>you can do much more.</div>
 		<div class="slideNumber">7</div>
-	</div>
-	<div class="slide" id="slide-8">
-		<h1 style="margin: 40px 0 0 0">You can integrate websites.</h1>
-		<iframe height="500" src="about:blank" style="border: none; margin-top: 15px" width="1000"></iframe>
-		<script>
-		(function() {
-			var slide = document.currentScript.parentElement;
-			var iframe = slide.getElementsByTagName('iframe')[0];
+</div>
+<div class="slide" id="slide-8">
+<h1 style="background: white; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.4); left: 200px; line-height: 60px; margin-top: 0; position: absolute; right: 200px; top: 0; z-index: 900">You can integrate maps.</h1>
+	<div style="height: 600px"></div>
+	<script>
+	(function() {
+		const slide = document.currentScript.parentElement;
+	const mapDiv = slide.getElementsByTagName('div')[0];
+	const map = L.map(mapDiv).setView([51.51, -0.11], 13);
 
-			slide.onSlideAppears = function() {
-				iframe.src = 'https://www.meteoblue.com/en/weather/week/zurich_switzerland_2657896';
-			};
+	L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+	}).addTo(map);
 
-			slide.onSlideDisappears = function() {
-				iframe.src = 'about:blank';
-			};
-		})();
-		</script>
-		<div class="slideNumber">8</div>
-	</div>
-	<div class="slide" id="slide-9">
-		<h1>Run live simulations.</h1>
-		<div style="font-size: 20px; margin-top: 10px">Ceiling hits: <span id="simulationHits">0</span></div>
+	L.marker([51.5, -0.09]).addTo(map)
+	    .bindPopup('Our headquarters')
+	    .openPopup();
 
-		<div id="simulationBall" style="background: #39f; border-radius: 20px; height: 40px; left: 0; position: absolute; top: 0; width: 40px"></div>
-		<div id="simulationFloor" style="background: #444; height: 40px; left: 0; position: absolute; top: 585px; width: 1000px"></div>
-		<script>
-		(function() {
-			var slide = document.currentScript.parentElement;
-			var running = false;
-			var shouldRun = false;
+	})();
+	</script>	<div class="slideNumber">8</div>
+</div>
+<div class="slide" id="slide-9">
+<h1>Run live simulations.</h1>
+	<div style="font-size: 20px; margin-top: 10px">Ceiling hits: <span id="simulationHits">0</span></div>
 
-			var ball = new Ball(document.getElementById('simulationBall'), document.getElementById('simulationHits'));
-			var floor = new Floor(document.getElementById('simulationFloor'));
+	<div id="simulationBall" style="background: #39f; border-radius: 20px; height: 40px; left: 0; position: absolute; top: 0; width: 40px"></div>
+	<div id="simulationFloor" style="background: #444; height: 40px; left: 0; position: absolute; top: 585px; width: 1000px"></div>
+	<script>
+	(function() {
+		const slide = document.currentScript.parentElement;
+	var running = false;
+	var shouldRun = false;
 
-			slide.onSlideAppears = function() {
-				shouldRun = true;
-				if (running) return;
-				running = true;
-				run();
-			};
+	var ball = new Ball(document.getElementById('simulationBall'), document.getElementById('simulationHits'));
+	var floor = new Floor(document.getElementById('simulationFloor'));
 
-			slide.onSlideDisappears = function() {
-				shouldRun = false;
-			};
+	slide.onSlideAppears = function() {
+		shouldRun = true;
+		if (running) return;
+		running = true;
+		run();
+	};
 
-			function run() {
-				if (! shouldRun) {
-					running = false;
-					return;
-				}
+	slide.onSlideDisappears = function() {
+		shouldRun = false;
+	};
 
-				ball.step();
-				floor.step();
-				requestAnimationFrame(run);
+	function run() {
+		if (! shouldRun) {
+			running = false;
+			return;
+		}
+
+		ball.step();
+		floor.step();
+		requestAnimationFrame(run);
+	}
+
+	function Ball(element, hits) {
+		var x = Math.random() * 960;
+		var y = Math.random() * 300;
+		var dx = Math.random() * 10;
+		var dy = Math.random() * 10;
+
+		var ceilingHits = 0;
+		var hue = Math.random() * 360;
+		updateColor();
+
+		this.step = function() {
+			dx *= 0.995;
+			dy *= 0.995;
+			dy -= 0.1;
+
+			x += dx;
+			y += dy;
+
+			if (x < 0) {
+				x = -x;
+				dx = -dx;
 			}
 
-			function Ball(element, hits) {
-				var x = Math.random() * 960;
-				var y = Math.random() * 300;
-				var dx = Math.random() * 10;
-				var dy = Math.random() * 10;
+			if (x > 960) {
+				x = 2 * 960 - x;
+				dx = -dx;
+			}
 
-				var ceilingHits = 0;
-				var hue = Math.random() * 360;
+			if (y > 550) {
+				y = 2 * 550 - y;
+				dy = -dy;
+
+				hue += 10 + Math.random() * 30;
+				if (hue >= 360) hue -= 360;
 				updateColor();
 
-				this.step = function() {
-					dx *= 0.995;
-					dy *= 0.995;
-					dy -= 0.1;
-
-					x += dx;
-					y += dy;
-
-					if (x < 0) {
-						x = -x;
-						dx = -dx;
-					}
-
-					if (x > 960) {
-						x = 2 * 960 - x;
-						dx = -dx;
-					}
-
-					if (y > 550) {
-						y = 2 * 550 - y;
-						dy = -dy;
-
-						hue += 10 + Math.random() * 30;
-						if (hue >= 360) hue -= 360;
-						updateColor();
-
-						ceilingHits += 1;
-						hits.textContent = ceilingHits;
-					}
-
-					if (y < 0) {
-						y = -y;
-						dy = -dy - 0.2;
-						dx *= 0.95;
-
-						var factor = Math.random();
-						dy += factor * 6;
-						dx += (x - 500) * 0.05 * factor;
-						floor.activate();
-					}
-
-					element.style.left = x + 'px';
-					element.style.top = (550 - y) + 'px';
-				};
-
-				function updateColor() {
-					element.style.background = 'hsl(' + hue + ', 80%, 50%)';
-				}
+				ceilingHits += 1;
+				hits.textContent = ceilingHits;
 			}
 
-			function Floor(element) {
-				var activated = 0.01;
+			if (y < 0) {
+				y = -y;
+				dy = -dy - 0.2;
+				dx *= 0.95;
 
-				this.activate = function() {
-					activated = 1;
-				};
-
-				this.step = function() {
-					if (activated == 0) return;
-					activated = Math.max(0, activated - 0.05);
-					element.style.background = 'hsl(40, 30%, ' + (30 + activated * 20) + '%)';
-				};
+				var factor = Math.random();
+				dy += factor * 6;
+				dx += (x - 500) * 0.05 * factor;
+				floor.activate();
 			}
-		})();
-		</script>
-		<div class="slideNumber">9</div>
-	</div>
-	<div class="slide" id="slide-10">
-		<h1 style="margin-bottom:40px">And show the corresponding math.</h1>
 
-		<p>At each time step, the ball position \(p\) is updated as follows:</p>
-		<p>$$ p_{n+1} = p_{n} + v_n $$</p>
+			element.style.left = x + 'px';
+			element.style.top = (550 - y) + 'px';
+		};
 
-		<p>The velocity \(v\) undergoes friction \(f\) and gravity \(g\):</p>
-		<p>$$ v_{n+1} = f v_{n} + \left( \begin{array}{c} 0 \\ g \end{array} \right) $$</p>
+		function updateColor() {
+			element.style.background = 'hsl(' + hue + ', 80%, 50%)';
+		}
+	}
 
-		<p>For this simulation, we chose:</p>
-		<p>$$ f = 0.995 $$</p>
-		<p>$$ g = -0.1 $$</p>
+	function Floor(element) {
+		var activated = 0.01;
 
-		<div class="footnote">Equations are rendered using <a href="https://www.mathjax.org" target="_blank">MathJax</a>.</div>
+		this.activate = function() {
+			activated = 1;
+		};
+
+		this.step = function() {
+			if (activated == 0) return;
+			activated = Math.max(0, activated - 0.05);
+			element.style.background = 'hsl(40, 30%, ' + (30 + activated * 20) + '%)';
+		};
+	}
+
+	})();
+	</script>	<div class="slideNumber">9</div>
+</div>
+<div class="slide" id="slide-10">
+<h1 style="margin-bottom:40px">And show the corresponding math.</h1>
+
+	<p>At each time step, the ball position \(p\) is updated as follows:</p>
+	<p>$$ p_{n+1} = p_{n} + v_n $$</p>
+
+	<p>The velocity \(v\) undergoes friction \(f\) and gravity \(g\):</p>
+	<p>$$ v_{n+1} = f v_{n} + \left( \begin{array}{c} 0 \\ g \end{array} \right) $$</p>
+
+	<p>For this simulation, we chose:</p>
+	<p>$$ f = 0.995 $$</p>
+	<p>$$ g = -0.1 $$</p>
+
+	<div class="footnote">Equations are rendered using <a href="https://www.mathjax.org" target="_blank">MathJax</a>.</div>
 		<div class="slideNumber">10</div>
-	</div>
-	<div class="slide" id="slide-11">
-		<h1>Show 3D models.</h1>
+</div>
+<div class="slide" id="slide-11">
+<h1>Show 3D models.</h1>
 
-		<canvas height="450" id="3dCanvas" style="left: 0; position: absolute; top: 150px" width="1000">Your browser doesn't appear to support the canvas element.</canvas>
+	<canvas height="450" id="3dCanvas" style="left: 0; position: absolute; top: 150px" width="1000">Your browser doesn't appear to support the canvas element.</canvas>
 
-		<svg height="450" style="left: 0; position: absolute; top: 150px" width="1000" xmlns="http://www.w3.org/2000/svg">
-			<text style="fill: #444; text-anchor: end" x="309" y="156">Select from</text>
-			<text style="fill: #444; text-anchor: end" x="309" y="181">3 stylish colors</text>
-			<rect height="30" id="3dBlue" rx="2" style="cursor: pointer; fill: #0066ff" width="30" x="199" y="200" />
-			<rect height="30" id="3dViolet" rx="2" style="cursor: pointer; fill: #9900cc" width="30" x="239" y="200" />
-			<rect height="30" id="3dGreen" rx="2" style="cursor: pointer; fill: #009900" width="30" x="279" y="200" />
+	<svg height="450" style="left: 0; position: absolute; top: 150px" width="1000" xmlns="http://www.w3.org/2000/svg">
+		<text style="fill: #444; text-anchor: end" x="309" y="156">Select from</text>
+		<text style="fill: #444; text-anchor: end" x="309" y="181">3 stylish colors</text>
+		<rect height="30" id="3dBlue" rx="2" style="cursor: pointer; fill: #0066ff" width="30" x="199" y="200" />
+		<rect height="30" id="3dViolet" rx="2" style="cursor: pointer; fill: #9900cc" width="30" x="239" y="200" />
+		<rect height="30" id="3dGreen" rx="2" style="cursor: pointer; fill: #009900" width="30" x="279" y="200" />
 
-			<text style="fill: #444" x="701" y="46">Removable cover</text>
-			<path d="m 630.5,50.5 10,-10 54,0" style="fill: none; stroke: #999; stroke-width: 1" />
+		<text style="fill: #444" x="701" y="46">Removable cover</text>
+		<path d="m 630.5,50.5 10,-10 54,0" style="fill: none; stroke: #999; stroke-width: 1" />
 
-			<text style="fill: #444" x="700" y="206">Display, clip,</text>
-			<text style="fill: #444" x="700" y="231">and power plug</text>
+		<text style="fill: #444" x="700" y="206">Display, clip,</text>
+		<text style="fill: #444" x="700" y="231">and power plug</text>
 
-			<text style="fill: #444" x="700" y="371">Solid stand</text>
-			<path d="m 500.5,345.5 0,20 194,0" style="fill: none; stroke: #999; stroke-width: 1" />
-		</svg>
-		<script>
-		(function() {
-			var slide = document.currentScript.parentElement;
-			function Matrix4(elements) {
-				this.elements = elements;
+		<text style="fill: #444" x="700" y="371">Solid stand</text>
+		<path d="m 500.5,345.5 0,20 194,0" style="fill: none; stroke: #999; stroke-width: 1" />
+	</svg>
+	<script>
+	(function() {
+		const slide = document.currentScript.parentElement;
+	function Matrix4(elements) {
+		this.elements = elements;
+	}
+
+	Matrix4.createIdentity = function() {
+		return new Matrix4([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
+	}
+
+	Matrix4.createRotationX = function(a) {
+		var c = Math.cos(a);
+		var s = Math.sin(a);
+		return new Matrix4([
+			1, 0, 0, 0,
+			0, c, -s, 0,
+			0, s, c, 0,
+			0, 0, 0, 1
+			]);
+	};
+
+	Matrix4.createRotationY = function(a) {
+		var c = Math.cos(a);
+		var s = Math.sin(a);
+		return new Matrix4([
+			c, 0, s, 0,
+			0, 1, 0, 0,
+			-s, 0, c, 0,
+			0, 0, 0, 1
+			]);
+	};
+
+	Matrix4.createRotationZ = function(a) {
+		var c = Math.cos(a);
+		var s = Math.sin(a);
+		return new Matrix4([
+			c, -s, 0, 0,
+			s, c, 0, 0,
+			0, 0, 1, 0,
+			0, 0, 0, 1
+			]);
+	};
+
+	Matrix4.createTranslation = function(v) {
+		return new Matrix4([
+			1, 0, 0, v[0],
+			0, 1, 0, v[1],
+			0, 0, 1, v[2],
+			0, 0, 0, 1
+			]);
+	};
+
+	Matrix4.prototype.e = function(x, y) {
+		return this.elements[y * 4 + x];
+	};
+
+	Matrix4.prototype.row = function(y) {
+		return this.elements.slice(y * 4, y * 4 + 4);
+	};
+
+	Matrix4.prototype.column = function(x) {
+		return [this.elements[x], this.elements[4 + x], this.elements[8 + x], this.elements[12 + x]];
+	};
+
+	Matrix4.prototype.diagonal = function() {
+		return [this.elements[0], this.elements[5], this.elements[10], this.elements[15]];
+	};
+
+	Matrix4.prototype.equals = function(that, precision) {
+		if (! precision) precision = 0;
+		for (var i = 0; i < 16; i++)
+			if (Math.abs(this.elements[i] - that.elements[i]) > precision)
+				return false;
+		return true;
+	};
+
+	Matrix4.prototype.clone = function() {
+		var elements = Array.from(this.elements);
+		return new Matrix4(elements);
+	};
+
+	Matrix4.prototype.times = function(matrix) {
+		var result = new Array(16);
+		for (var y = 0; y < 4; y++) {
+			for (var x = 0; x < 4; x++) {
+				var i = y * 4 + x;
+				result[i] = 0;
+				for (var n = 0; n < 4; n++)
+					result[i] += this.elements[y * 4 + n] * matrix.elements[(n * 4) + x];
+			}
+		}
+		return new Matrix4(result);
+	};
+
+	Matrix4.prototype.timesVector = function(a) {
+		var result = new Array(4);
+		for (var i = 0; i < 4; i++) {
+			result[i] = 0;
+			for (var n = 0; n < 4; n++)
+				result[i] += this.elements[i * 4 + n] * a[n];
+		}
+		return result;
+	};
+
+	Matrix4.prototype.vectorTimes = function(a) {
+		var result = new Array(4);
+		for (var i = 0; i < 4; i++) {
+			result[i] = 0;
+			for (var n = 0; n < 4; n++)
+				result[i] += a[n] * this.elements[(n * 4) + i];
+		}
+		return result;
+	};
+
+	Matrix4.prototype.transposed = function() {
+		var result = new Array(16);
+		for (var y = 0; y < 4; y++)
+			for (var x = 0; x < 4; x++)
+				result[y * 4 + x] = this.elements[x * 4 + y];
+		return new Matrix4(result);
+	};
+
+	Matrix4.prototype.inversed = function() {
+		// Set inverse to the identity matrix
+		var current = this.clone();
+		var inverse = Matrix4.createIdentity();
+
+		// Gaussian elimination (part 1)
+		for (var i = 0; i < 4; i++) {
+			// Get the diagonal term
+			var d = current.elements[i * 4 + i];
+
+			// If it is 0, there must be at least one row with a non-zero element (otherwise, the matrix is not invertible)
+			if (d == 0) {
+				var r = i + 1;
+				while (r < 4 && current.elements[r * 4 + i] == 0) r++;
+				if (r == 4) return null;  // i is the rank
+				for (var c = 0; c < 4; c++) {
+					current.elements[i * 4 + c] += current.elements[r * 4 + c];
+					inverse.elements[i * 4 + c] += inverse.elements[r * 4 + c];
+				}
+				d = current.elements[i * 4 + i];
 			}
 
-			Matrix4.createIdentity = function() {
-				return new Matrix4([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
+			// Divide the row by the diagonal term
+			var inv = 1 / d;
+			for (var c = 0; c < 4; c++) {
+				current.elements[i * 4 + c] *= inv;
+				inverse.elements[i * 4 + c] *= inv;
 			}
 
-			Matrix4.createRotationX = function(a) {
-				var c = Math.cos(a);
-				var s = Math.sin(a);
-				return new Matrix4([
-					1, 0, 0, 0,
-					0, c, -s, 0,
-					0, s, c, 0,
-					0, 0, 0, 1
-					]);
-			};
-
-			Matrix4.createRotationY = function(a) {
-				var c = Math.cos(a);
-				var s = Math.sin(a);
-				return new Matrix4([
-					c, 0, s, 0,
-					0, 1, 0, 0,
-					-s, 0, c, 0,
-					0, 0, 0, 1
-					]);
-			};
-
-			Matrix4.createRotationZ = function(a) {
-				var c = Math.cos(a);
-				var s = Math.sin(a);
-				return new Matrix4([
-					c, -s, 0, 0,
-					s, c, 0, 0,
-					0, 0, 1, 0,
-					0, 0, 0, 1
-					]);
-			};
-
-			Matrix4.createTranslation = function(v) {
-				return new Matrix4([
-					1, 0, 0, v[0],
-					0, 1, 0, v[1],
-					0, 0, 1, v[2],
-					0, 0, 0, 1
-					]);
-			};
-
-			Matrix4.prototype.e = function(x, y) {
-				return this.elements[y * 4 + x];
-			};
-
-			Matrix4.prototype.row = function(y) {
-				return this.elements.slice(y * 4, y * 4 + 4);
-			};
-
-			Matrix4.prototype.column = function(x) {
-				return [this.elements[x], this.elements[4 + x], this.elements[8 + x], this.elements[12 + x]];
-			};
-
-			Matrix4.prototype.diagonal = function() {
-				return [this.elements[0], this.elements[5], this.elements[10], this.elements[15]];
-			};
-
-			Matrix4.prototype.equals = function(that, precision) {
-				if (! precision) precision = 0;
-				for (var i = 0; i < 16; i++)
-					if (Math.abs(this.elements[i] - that.elements[i]) > precision)
-						return false;
-				return true;
-			};
-
-			Matrix4.prototype.clone = function() {
-				var elements = Array.from(this.elements);
-				return new Matrix4(elements);
-			};
-
-			Matrix4.prototype.times = function(matrix) {
-				var result = new Array(16);
-				for (var y = 0; y < 4; y++) {
-					for (var x = 0; x < 4; x++) {
-						var i = y * 4 + x;
-						result[i] = 0;
-						for (var n = 0; n < 4; n++)
-							result[i] += this.elements[y * 4 + n] * matrix.elements[(n * 4) + x];
-					}
-				}
-				return new Matrix4(result);
-			};
-
-			Matrix4.prototype.timesVector = function(a) {
-				var result = new Array(4);
-				for (var i = 0; i < 4; i++) {
-					result[i] = 0;
-					for (var n = 0; n < 4; n++)
-						result[i] += this.elements[i * 4 + n] * a[n];
-				}
-				return result;
-			};
-
-			Matrix4.prototype.vectorTimes = function(a) {
-				var result = new Array(4);
-				for (var i = 0; i < 4; i++) {
-					result[i] = 0;
-					for (var n = 0; n < 4; n++)
-						result[i] += a[n] * this.elements[(n * 4) + i];
-				}
-				return result;
-			};
-
-			Matrix4.prototype.transposed = function() {
-				var result = new Array(16);
-				for (var y = 0; y < 4; y++)
-					for (var x = 0; x < 4; x++)
-						result[y * 4 + x] = this.elements[x * 4 + y];
-				return new Matrix4(result);
-			};
-
-			Matrix4.prototype.inversed = function() {
-				// Set inverse to the identity matrix
-				var current = this.clone();
-				var inverse = Matrix4.createIdentity();
-
-				// Gaussian elimination (part 1)
-				for (var i = 0; i < 4; i++) {
-					// Get the diagonal term
-					var d = current.elements[i * 4 + i];
-
-					// If it is 0, there must be at least one row with a non-zero element (otherwise, the matrix is not invertible)
-					if (d == 0) {
-						var r = i + 1;
-						while (r < 4 && current.elements[r * 4 + i] == 0) r++;
-						if (r == 4) return null;  // i is the rank
-						for (var c = 0; c < 4; c++) {
-							current.elements[i * 4 + c] += current.elements[r * 4 + c];
-							inverse.elements[i * 4 + c] += inverse.elements[r * 4 + c];
-						}
-						d = current.elements[i * 4 + i];
-					}
-
-					// Divide the row by the diagonal term
-					var inv = 1 / d;
+			// Divide all subsequent rows with a non-zero coefficient, and subtract the row
+			for (var r = i + 1; r < 4; r++) {
+				var p = current.elements[r * 4 + i];
+				if (p != 0) {
 					for (var c = 0; c < 4; c++) {
-						current.elements[i * 4 + c] *= inv;
-						inverse.elements[i * 4 + c] *= inv;
-					}
-
-					// Divide all subsequent rows with a non-zero coefficient, and subtract the row
-					for (var r = i + 1; r < 4; r++) {
-						var p = current.elements[r * 4 + i];
-						if (p != 0) {
-							for (var c = 0; c < 4; c++) {
-								current.elements[r * 4 + c] -= current.elements[i * 4 + c] * p;
-								inverse.elements[r * 4 + c] -= inverse.elements[i * 4 + c] * p;
-							}
-						}
-					}
-				}
-
-				// Gaussian elimination (part 2)
-				for (var i = 4 - 1; i >= 0; i--) {
-					for (var r = 0; r < i; r++) {
-						var d = current.elements[r * 4 + i];
-						for (var c = 0; c < 4; c++) {
-							current.elements[r * 4 + c] -= current.elements[i * 4 + c] * d;
-							inverse.elements[r * 4 + c] -= inverse.elements[i * 4 + c] * d;
-						}
-					}
-				}
-
-				return inverse;
-			};
-
-			Matrix4.prototype.toString = function() {
-				var i = 0;
-				var text = '';
-				for (var y = 0; y < 4; y++) {
-					for (var x = 0; x < 4; x++) {
-						text += digits4(this.elements[i]) + ' ';
-						i++;
-					}
-					if (y < 3) text += '\n';
-				}
-
-				return text;
-
-				function digits4(value) {
-					var neg = t < 0;
-					var t = '' + Math.round((neg ? -value : value) * 10000);
-					while (t.length < 5) t = '0' + t;
-					t = (neg ? '-' : '') + t.substr(0, t.length - 4) + '.' + t.substr(t.length -4);
-					while (t.length < 8) t = ' ' + t;
-					return t;
-				}
-			};
-
-			Matrix4.toString = function(matrices) {
-				var text = '';
-				for (var y = 0; y < 4; y++) {
-					for (var n = 0; n < matrices.length; n++) {
-						var matrix = matrices[n];
-						for (var x = 0; x < 4; x++)
-							text += digits4(matrix.elements[y * 4 +x]) + ' ';
-						if (n < matrices.length - 1) text += ' | ';
-					}
-					if (y < 3) text += '\n';
-				}
-
-				return text;
-
-				function digits4(value) {
-					var neg = value < 0;
-					var t = '' + Math.round((neg ? -value : value) * 10000);
-					while (t.length < 5) t = '0' + t;
-					t = (neg ? '-' : '') + t.substr(0, t.length - 4) + '.' + t.substr(t.length -4);
-					while (t.length < 8) t = ' ' + t;
-					return t;
-				}
-			};
-
-			Matrix4.prototype.determinant = function() {
-				var m = this;
-				return m.elements[0] * det3(1, 2, 3)
-					 - m.elements[1] * det3(0, 2, 3)
-					 + m.elements[2] * det3(0, 1, 3)
-					 - m.elements[3] * det3(0, 1, 2);
-
-				function det3(x0, x1, x2) {
-					return m.elements[4 + x0] * det2(x1, x2)
-						 - m.elements[4 + x1] * det2(x0, x2)
-						 + m.elements[4 + x2] * det2(x0, x1);
-				}
-
-				function det2(x0, x1) {
-					return m.elements[8 + x0] * m.elements[12 + x1]
-						 - m.elements[8 + x1] * m.elements[12 + x0];
-				}
-			};
-
-			Matrix4.prototype.translated = function(v) {
-				return Matrix4.createTranslation(v).times(this);
-			};
-
-			Matrix4.prototype.rotatedX = function(a) {
-				return Matrix4.createRotationX(a).times(this);
-			};
-
-			Matrix4.prototype.rotatedY = function(a) {
-				return Matrix4.createRotationY(a).times(this);
-			};
-
-			Matrix4.prototype.rotatedZ = function(a) {
-				return Matrix4.createRotationZ(a).times(this);
-			};
-
-			// Float32Array in column-major order
-			Matrix4.prototype.toGlArray = function() {
-				return new Float32Array([
-					this.elements[0], this.elements[4], this.elements[8], this.elements[12],
-					this.elements[1], this.elements[5], this.elements[9], this.elements[13],
-					this.elements[2], this.elements[6], this.elements[10], this.elements[14],
-					this.elements[3], this.elements[7], this.elements[11], this.elements[15]
-					]);
-			};
-
-			var Identity4 = Matrix4.createIdentity();
-			// Shape generation
-
-			function createRotationXExtrudedFacets(points, steps) {
-				var facets = new Float32Array(steps * points.length * 2 * 9);
-				var w = 0;
-
-				for (var i = 0; i < points.length; i++) {
-					var point = points[i];
-					var nextPoint = i + 1 == points.length ? points[0] : points[i + 1];
-					addRing(point, nextPoint);
-				}
-
-				function addRing(point0, point1) {
-					for (var i = 0; i < steps; i++) {
-						var a0 = (360 / steps * i) / 180 * Math.PI;
-						var c0 = Math.cos(a0);
-						var s0 = Math.sin(a0);
-
-						var a1 = (360 / steps * (i + 1)) / 180 * Math.PI;
-						var c1 = Math.cos(a1);
-						var s1 = Math.sin(a1);
-
-						// Rings
-						add(point0.x, point0.y * c0, point0.y * s0);
-						add(point0.x, point0.y * c1, point0.y * s1);
-						add(point1.x, point1.y * c0, point1.y * s0);
-
-						add(point1.x, point1.y * c0, point1.y * s0);
-						add(point0.x, point0.y * c1, point0.y * s1);
-						add(point1.x, point1.y * c1, point1.y * s1);
-					}
-				}
-
-				function add(x, y, z) {
-					facets[w++] = x;
-					facets[w++] = y;
-					facets[w++] = z;
-				}
-
-				return facets;
-			}
-
-			// Calculating surface normals
-
-			function normalsFromFacets(facets) {
-				var normals = new Float32Array(facets.length);
-				for (var i = 0; i < facets.length; i += 9) {
-					var vx = facets[i + 3] - facets[i + 0];
-					var vy = facets[i + 4] - facets[i + 1];
-					var vz = facets[i + 5] - facets[i + 2];
-					var wx = facets[i + 6] - facets[i + 0];
-					var wy = facets[i + 7] - facets[i + 1];
-					var wz = facets[i + 8] - facets[i + 2];
-					var nx = (vy * wz) - (vz * wy);
-					var ny = (vz * wx) - (vx * wz);
-					var nz = (vx * wy) - (vy * wx);
-					var d = Math.sqrt(nx * nx + ny * ny + nz * nz);
-					nx /= d;
-					ny /= d;
-					nz /= d;
-					normals[i + 0] = nx;
-					normals[i + 1] = ny;
-					normals[i + 2] = nz;
-					normals[i + 3] = nx;
-					normals[i + 4] = ny;
-					normals[i + 5] = nz;
-					normals[i + 6] = nx;
-					normals[i + 7] = ny;
-					normals[i + 8] = nz;
-				}
-
-				return normals;
-			}
-
-			// Facet reversal
-
-			function reverseFacetsInPlace(facets) {
-				for (var i = 0; i < facets.length; i += 9)
-					swap(i + 3, i + 6);
-
-				function swap(i0, i1) {
-					var x = facets[i0 + 0];
-					var y = facets[i0 + 1];
-					var z = facets[i0 + 2];
-					facets[i0 + 0] = facets[i1 + 0];
-					facets[i0 + 1] = facets[i1 + 1];
-					facets[i0 + 2] = facets[i1 + 2];
-					facets[i1 + 0] = x;
-					facets[i1 + 1] = y;
-					facets[i1 + 2] = z;
-				}
-			}
-
-			// Affine transformations
-
-			function transformFacets(facets, matrix) {
-				var newFacets = new Float32Array(facets.length);
-				for (var i = 0; i < facets.length; i += 3) {
-					var x = facets[i + 0];
-					var y = facets[i + 1];
-					var z = facets[i + 2];
-					newFacets[i + 0] = x * matrix.elements[0] + y * matrix.elements[1] + z * matrix.elements[2] + matrix.elements[3];
-					newFacets[i + 1] = x * matrix.elements[4] + y * matrix.elements[5] + z * matrix.elements[6] + matrix.elements[7];
-					newFacets[i + 2] = x * matrix.elements[8] + y * matrix.elements[9] + z * matrix.elements[10] + matrix.elements[11];
-				}
-				return newFacets;
-			}
-
-			function transformFacetsInPlace(facets, matrix) {
-				for (var i = 0; i < facets.length; i += 3) {
-					var x = facets[i + 0];
-					var y = facets[i + 1];
-					var z = facets[i + 2];
-					facets[i + 0] = x * matrix.elements[0] + y * matrix.elements[1] + z * matrix.elements[2] + matrix.elements[3];
-					facets[i + 1] = x * matrix.elements[4] + y * matrix.elements[5] + z * matrix.elements[6] + matrix.elements[7];
-					facets[i + 2] = x * matrix.elements[8] + y * matrix.elements[9] + z * matrix.elements[10] + matrix.elements[11];
-				}
-			}
-
-			// Loading from STL
-			function facetsFromBinarySTL(bytes) {
-				var dv = new DataView(bytes);
-
-				var count = dv.getInt32(80, true);
-				if (84 + count * 50 > bytes.byteLength) {
-					console.log('STL file with invalid facet count.');
-					return;
-				}
-
-				var facets = new Float32Array(count * 9);
-				var w = 0;
-
-				for (var i = 84; i < dv.byteLength; i += 50)
-					for (var n = 12; n < 48; n += 4)
-						facets[w++] = dv.getFloat32(i + n, true);
-
-				return facets;
-			}
-
-			// Saving to STL
-			function binarySTLFromFacets(facets, normals) {
-				if (! normals) normals = normalsFromFacets(facets);
-
-				var count = facets.length;
-				var countFacets = Math.floor(count / 9);
-				var buffer = new ArrayBuffer(84 + countFacets * 50);
-				var dv = new DataView(buffer);
-
-				dv.setInt32(80, countFacets, true);
-				var w = 84;
-
-				function add(value) {
-					dv.setFloat32(w, value, true);
-					w += 4;
-				}
-
-				for (var i = 0; i < count; i += 9) {
-					// Normal
-					for (var n = 0; n < 3; n++)
-						add(normals[i + n]);
-
-					// Vertices
-					for (var n = 0; n < 9; n++)
-						add(facets[i + n]);
-
-					// Attribute
-					w += 2;
-				}
-
-				return new Blob([new Uint8Array(buffer)], {type: 'binary/octet-stream'});
-			}
-			function GlDisplay(canvas) {
-				var display = this;
-				this.canvas = canvas;
-				var gl = canvas.getContext('webgl');
-				if (! gl) return;
-				this.gl = gl;
-
-				// Initialization
-				gl.clearColor(1.0, 1.0, 1.0, 1.0);
-				gl.enable(gl.DEPTH_TEST);
-				gl.depthFunc(gl.LEQUAL);
-
-				// Shader
-				var vertexShader =
-					'attribute highp vec3 aVertexPosition;' +
-					'attribute highp vec3 aVertexNormal;' +
-
-					'uniform highp mat4 uNormalMatrix;' +
-					'uniform mat4 uMVMatrix;' +
-					'uniform mat4 uPMatrix;' +
-
-					'varying highp vec3 vLighting;' +
-
-					'void main(void) {' +
-					'	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);' +
-
-					'	highp vec3 ambientLight = vec3(0.5, 0.5, 0.5);' +
-					'	highp vec3 directionalLightColor = vec3(0.7, 0.7, 0.7);' +
-					'	highp vec3 directionalVector = vec3(-0.3, 0.6, 0.8);' +
-
-					'	highp vec4 transformedNormal = uNormalMatrix * vec4(aVertexNormal, 1.0);' +
-					'	highp float directional = max(dot(transformedNormal.xyz, directionalVector), 0.0);' +
-					'	vLighting = ambientLight + (directionalLightColor * directional);' +
-					'}';
-
-				var fragmentShader =
-					'uniform highp vec4 uFrontColor;' +
-					'uniform highp vec4 uBackColor;' +
-					'varying highp vec3 vLighting;' +
-
-					'void main(void) {' +
-					'	highp vec4 color = gl_FrontFacing ? uFrontColor : uBackColor;' +
-					'	gl_FragColor = vec4(color.rgb * vLighting, color.a);' +
-					'}';
-
-				var shaderProgram = gl.createProgram();
-				addShader(gl.VERTEX_SHADER, vertexShader);
-				addShader(gl.FRAGMENT_SHADER, fragmentShader);
-
-				function addShader(type, source) {
-					var shader = gl.createShader(type);
-					gl.shaderSource(shader, source);
-					gl.compileShader(shader);
-					gl.attachShader(shaderProgram, shader);
-				}
-
-				gl.linkProgram(shaderProgram);
-				if (! gl.getProgramParameter(shaderProgram, gl.LINK_STATUS))
-					console.log('Unable to initialize the shader program: ' + gl.getProgramInfoLog(shaderProgram));
-				gl.useProgram(shaderProgram);
-
-				var vertexPositionAttribute = gl.getAttribLocation(shaderProgram, 'aVertexPosition');
-				gl.enableVertexAttribArray(vertexPositionAttribute);
-				var vertexNormalAttribute = gl.getAttribLocation(shaderProgram, 'aVertexNormal');
-				gl.enableVertexAttribArray(vertexNormalAttribute);
-
-				// View
-				var perspectiveMatrix = createPerspectiveMatrix(25, canvas.width / canvas.height, 0.1, 1000.0);
-				this.matrix = Matrix4.createTranslation([0.0, 0.0, -100.0]);
-
-				// Objects
-				var objects = [];
-
-				this.addObject = function(obj) {
-					obj.display = display;
-					if (! obj.facets) return;
-
-					obj.facetsBuffer = gl.createBuffer();
-					gl.bindBuffer(gl.ARRAY_BUFFER, obj.facetsBuffer);
-					gl.bufferData(gl.ARRAY_BUFFER, obj.facets, gl.STATIC_DRAW);
-
-					obj.normalsBuffer = gl.createBuffer();
-					gl.bindBuffer(gl.ARRAY_BUFFER, obj.normalsBuffer);
-					gl.bufferData(gl.ARRAY_BUFFER, obj.normals, gl.STATIC_DRAW);
-
-					objects.push(obj);
-					for (var i = 0; i < obj.onAdded.length; i++) obj.onAdded[i](obj);
-				};
-
-				this.removeObject = function(obj) {
-					obj.display = null;
-					if (! obj.facetsBuffer) return;
-
-					for (var i = 0; i < obj.onRemoved.length; i++) obj.onRemoved[i](obj);
-					gl.deleteBuffer(obj.facetsBuffer);
-					gl.deleteBuffer(obj.normalsBuffer);
-					obj.facetsBuffer = null;
-					obj.normalsBuffer = null
-					var index = objects.indexOf(obj);
-					if (index < 0) return;
-					objects.splice(index, 1);
-				};
-
-				// Drawing
-				this.redraw = redraw;
-
-				function redraw() {
-					gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-					if (objects.length <= 0) return;
-
-					// Configure the shader
-					var uPMatrix = gl.getUniformLocation(shaderProgram, 'uPMatrix');
-					gl.uniformMatrix4fv(uPMatrix, false, perspectiveMatrix.toGlArray());
-
-					var uMVMatrix = gl.getUniformLocation(shaderProgram, 'uMVMatrix');
-					var uNormalMatrix = gl.getUniformLocation(shaderProgram, 'uNormalMatrix');
-					var uFrontColor = gl.getUniformLocation(shaderProgram, 'uFrontColor');
-					var uBackColor = gl.getUniformLocation(shaderProgram, 'uBackColor');
-
-					// Draw objects
-					for (var i = 0; i < objects.length; i++) {
-						var obj = objects[i];
-						if (! obj.visible) continue;
-
-						var matrix = this.matrix.times(obj.matrix);
-
-						gl.uniform4fv(uFrontColor, obj.frontColor);
-						gl.uniform4fv(uBackColor, obj.backColor);
-						gl.uniformMatrix4fv(uMVMatrix, false, matrix.toGlArray());
-						gl.uniformMatrix4fv(uNormalMatrix, false, matrix.inversed().transposed().toGlArray());
-						//gl.uniformMatrix4fv(uNormalMatrix, false, matrix.transposed().toGlArray());
-
-						gl.bindBuffer(gl.ARRAY_BUFFER, obj.facetsBuffer);
-						gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
-
-						gl.bindBuffer(gl.ARRAY_BUFFER, obj.normalsBuffer);
-						gl.vertexAttribPointer(vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
-
-						gl.drawArrays(gl.TRIANGLES, 0, obj.count);
+						current.elements[r * 4 + c] -= current.elements[i * 4 + c] * p;
+						inverse.elements[r * 4 + c] -= inverse.elements[i * 4 + c] * p;
 					}
 				}
 			}
+		}
 
-			function GlObject(matrix, frontColor, backColor) {
-				this.facets = null;
-				this.normals = null;
-				this.count = 0;
-				this.frontColor = new Float32Array(frontColor);
-				this.backColor = new Float32Array(backColor);
-				this.matrix = matrix;
-				this.onAdded = [];
-				this.onRemoved = [];
-				this.visible = true;
-				this.display = null;
-
-				this.setFacets = function(facets) {
-					var display = this.display;
-					if (display) display.removeObject(this);
-					this.facets = facets;
-					this.normals = normalsFromFacets(facets);
-					this.count = facets.length / 3;
-					if (display) display.addObject(this);
-				};
-			}
-
-			// View matrices
-
-			function createPerspectiveMatrix(fovy, aspect, znear, zfar) {
-			    var ymax = znear * Math.tan(fovy * Math.PI / 360.0);
-			    var ymin = -ymax;
-			    var xmin = ymin * aspect;
-			    var xmax = ymax * aspect;
-
-			    return createFrustumMatrix(xmin, xmax, ymin, ymax, znear, zfar);
-			}
-
-			function createFrustumMatrix(left, right, bottom, top, znear, zfar) {
-			    var X = 2 * znear / (right - left);
-			    var Y = 2 * znear / (top - bottom);
-			    var A = (right + left) / (right - left);
-			    var B = (top + bottom) / (top - bottom);
-			    var C = -(zfar + znear) / (zfar - znear);
-			    var D = -2 * zfar * znear / (zfar - znear);
-
-			    return new Matrix4([
-					X, 0, A, 0,
-					0, Y, B, 0,
-					0, 0, C, D,
-					0, 0, -1, 0
-					]);
-			}
-
-			// Scene
-
-			var display = new GlDisplay(document.getElementById('3dCanvas'));
-
-			function addObject(color, matrix) {
-				var object = new GlObject(Identity4, color, [color[0] * 0.5, color[1] * 0.5, color[2] * 0.5, color[3]]);
-				object.matrix = matrix;
-				display.addObject(object);
-				return object;
-			}
-
-			var black = [0.2, 0.2, 0.2, 1.0];
-			var gray = [0.9, 0.9, 0.9, 1.0];
-			var blue = [0.0, 0.3, 1.0, 1.0];
-			var violet = [0.6, 0.0, 0.75, 1.0];
-			var green = [0.0, 0.75, 0.0, 1.0];
-
-			var zZero = -40;
-			var stand = addObject(black, z(56));
-			var middle = addObject(green, z(6));
-			var middleInside = addObject(black, z(6));
-			var cover = addObject(gray, zFlipped(6));
-			loadStl('slides/3d/cover.stl', [cover, stand]);
-			loadStl('slides/3d/special.stl', [middle]);
-			loadStl('slides/3d/specialInside.stl', [middleInside]);
-
-			function z(height) { return Matrix4.createTranslation([0, 0, zZero + height]); }
-			function zFlipped(height) { return Matrix4.createRotationX(Math.PI).translated([0, 0, zZero + height]); }
-
-			function loadStl(url, objects) {
-				var request = new XMLHttpRequest();
-				request.onload = function() {
-					if (request.status != 200) return;
-					var facets = facetsFromBinarySTL(request.response);
-					if (facets == null) return;
-
-					for (var i = 0; i < objects.length; i++)
-						objects[i].setFacets(facets);
-
-					display.redraw();
-				};
-				request.open('GET', url);
-				request.responseType = 'arraybuffer';
-				request.send();
-			}
-
-			// Color selection
-
-			document.getElementById('3dBlue').onclick = function(event) {
-				middle.frontColor = blue;
-			};
-
-			document.getElementById('3dViolet').onclick = function(event) {
-				middle.frontColor = violet;
-			};
-
-			document.getElementById('3dGreen').onclick = function(event) {
-				middle.frontColor = green;
-			};
-
-			// Animation
-
-			var running = false;
-			var shouldRun = false;
-			var angle = 3.4;
-
-			slide.onSlideAppears = function() {
-				shouldRun = true;
-				if (running) return;
-				running = true;
-				run();
-			};
-
-			slide.onSlideDisappears = function() {
-				shouldRun = false;
-			};
-
-			function run() {
-				if (! shouldRun) {
-					running = false;
-					return;
+		// Gaussian elimination (part 2)
+		for (var i = 4 - 1; i >= 0; i--) {
+			for (var r = 0; r < i; r++) {
+				var d = current.elements[r * 4 + i];
+				for (var c = 0; c < 4; c++) {
+					current.elements[r * 4 + c] -= current.elements[i * 4 + c] * d;
+					inverse.elements[r * 4 + c] -= inverse.elements[i * 4 + c] * d;
 				}
-
-				display.matrix = Matrix4.createRotationZ(angle).rotatedX(0.6 * Math.PI).translated([0.0, 0.0, -300.0]);
-				display.redraw();
-				angle += 0.008;
-				if (angle > Math.PI * 2) angle -= Math.PI * 2;
-				cover.matrix = zFlipped(6 - Math.max(0, Math.cos(angle) * 20));
-
-				requestAnimationFrame(run);
 			}
-		})();
-		</script>
-		<div class="slideNumber">11</div>
+		}
+
+		return inverse;
+	};
+
+	Matrix4.prototype.toString = function() {
+		var i = 0;
+		var text = '';
+		for (var y = 0; y < 4; y++) {
+			for (var x = 0; x < 4; x++) {
+				text += digits4(this.elements[i]) + ' ';
+				i++;
+			}
+			if (y < 3) text += '\n';
+		}
+
+		return text;
+
+		function digits4(value) {
+			var neg = t < 0;
+			var t = '' + Math.round((neg ? -value : value) * 10000);
+			while (t.length < 5) t = '0' + t;
+			t = (neg ? '-' : '') + t.substr(0, t.length - 4) + '.' + t.substr(t.length -4);
+			while (t.length < 8) t = ' ' + t;
+			return t;
+		}
+	};
+
+	Matrix4.toString = function(matrices) {
+		var text = '';
+		for (var y = 0; y < 4; y++) {
+			for (var n = 0; n < matrices.length; n++) {
+				var matrix = matrices[n];
+				for (var x = 0; x < 4; x++)
+					text += digits4(matrix.elements[y * 4 +x]) + ' ';
+				if (n < matrices.length - 1) text += ' | ';
+			}
+			if (y < 3) text += '\n';
+		}
+
+		return text;
+
+		function digits4(value) {
+			var neg = value < 0;
+			var t = '' + Math.round((neg ? -value : value) * 10000);
+			while (t.length < 5) t = '0' + t;
+			t = (neg ? '-' : '') + t.substr(0, t.length - 4) + '.' + t.substr(t.length -4);
+			while (t.length < 8) t = ' ' + t;
+			return t;
+		}
+	};
+
+	Matrix4.prototype.determinant = function() {
+		var m = this;
+		return m.elements[0] * det3(1, 2, 3)
+			 - m.elements[1] * det3(0, 2, 3)
+			 + m.elements[2] * det3(0, 1, 3)
+			 - m.elements[3] * det3(0, 1, 2);
+
+		function det3(x0, x1, x2) {
+			return m.elements[4 + x0] * det2(x1, x2)
+				 - m.elements[4 + x1] * det2(x0, x2)
+				 + m.elements[4 + x2] * det2(x0, x1);
+		}
+
+		function det2(x0, x1) {
+			return m.elements[8 + x0] * m.elements[12 + x1]
+				 - m.elements[8 + x1] * m.elements[12 + x0];
+		}
+	};
+
+	Matrix4.prototype.translated = function(v) {
+		return Matrix4.createTranslation(v).times(this);
+	};
+
+	Matrix4.prototype.rotatedX = function(a) {
+		return Matrix4.createRotationX(a).times(this);
+	};
+
+	Matrix4.prototype.rotatedY = function(a) {
+		return Matrix4.createRotationY(a).times(this);
+	};
+
+	Matrix4.prototype.rotatedZ = function(a) {
+		return Matrix4.createRotationZ(a).times(this);
+	};
+
+	// Float32Array in column-major order
+	Matrix4.prototype.toGlArray = function() {
+		return new Float32Array([
+			this.elements[0], this.elements[4], this.elements[8], this.elements[12],
+			this.elements[1], this.elements[5], this.elements[9], this.elements[13],
+			this.elements[2], this.elements[6], this.elements[10], this.elements[14],
+			this.elements[3], this.elements[7], this.elements[11], this.elements[15]
+			]);
+	};
+
+	var Identity4 = Matrix4.createIdentity();
+	// Shape generation
+
+	function createRotationXExtrudedFacets(points, steps) {
+		var facets = new Float32Array(steps * points.length * 2 * 9);
+		var w = 0;
+
+		for (var i = 0; i < points.length; i++) {
+			var point = points[i];
+			var nextPoint = i + 1 == points.length ? points[0] : points[i + 1];
+			addRing(point, nextPoint);
+		}
+
+		function addRing(point0, point1) {
+			for (var i = 0; i < steps; i++) {
+				var a0 = (360 / steps * i) / 180 * Math.PI;
+				var c0 = Math.cos(a0);
+				var s0 = Math.sin(a0);
+
+				var a1 = (360 / steps * (i + 1)) / 180 * Math.PI;
+				var c1 = Math.cos(a1);
+				var s1 = Math.sin(a1);
+
+				// Rings
+				add(point0.x, point0.y * c0, point0.y * s0);
+				add(point0.x, point0.y * c1, point0.y * s1);
+				add(point1.x, point1.y * c0, point1.y * s0);
+
+				add(point1.x, point1.y * c0, point1.y * s0);
+				add(point0.x, point0.y * c1, point0.y * s1);
+				add(point1.x, point1.y * c1, point1.y * s1);
+			}
+		}
+
+		function add(x, y, z) {
+			facets[w++] = x;
+			facets[w++] = y;
+			facets[w++] = z;
+		}
+
+		return facets;
+	}
+
+	// Calculating surface normals
+
+	function normalsFromFacets(facets) {
+		var normals = new Float32Array(facets.length);
+		for (var i = 0; i < facets.length; i += 9) {
+			var vx = facets[i + 3] - facets[i + 0];
+			var vy = facets[i + 4] - facets[i + 1];
+			var vz = facets[i + 5] - facets[i + 2];
+			var wx = facets[i + 6] - facets[i + 0];
+			var wy = facets[i + 7] - facets[i + 1];
+			var wz = facets[i + 8] - facets[i + 2];
+			var nx = (vy * wz) - (vz * wy);
+			var ny = (vz * wx) - (vx * wz);
+			var nz = (vx * wy) - (vy * wx);
+			var d = Math.sqrt(nx * nx + ny * ny + nz * nz);
+			nx /= d;
+			ny /= d;
+			nz /= d;
+			normals[i + 0] = nx;
+			normals[i + 1] = ny;
+			normals[i + 2] = nz;
+			normals[i + 3] = nx;
+			normals[i + 4] = ny;
+			normals[i + 5] = nz;
+			normals[i + 6] = nx;
+			normals[i + 7] = ny;
+			normals[i + 8] = nz;
+		}
+
+		return normals;
+	}
+
+	// Facet reversal
+
+	function reverseFacetsInPlace(facets) {
+		for (var i = 0; i < facets.length; i += 9)
+			swap(i + 3, i + 6);
+
+		function swap(i0, i1) {
+			var x = facets[i0 + 0];
+			var y = facets[i0 + 1];
+			var z = facets[i0 + 2];
+			facets[i0 + 0] = facets[i1 + 0];
+			facets[i0 + 1] = facets[i1 + 1];
+			facets[i0 + 2] = facets[i1 + 2];
+			facets[i1 + 0] = x;
+			facets[i1 + 1] = y;
+			facets[i1 + 2] = z;
+		}
+	}
+
+	// Affine transformations
+
+	function transformFacets(facets, matrix) {
+		var newFacets = new Float32Array(facets.length);
+		for (var i = 0; i < facets.length; i += 3) {
+			var x = facets[i + 0];
+			var y = facets[i + 1];
+			var z = facets[i + 2];
+			newFacets[i + 0] = x * matrix.elements[0] + y * matrix.elements[1] + z * matrix.elements[2] + matrix.elements[3];
+			newFacets[i + 1] = x * matrix.elements[4] + y * matrix.elements[5] + z * matrix.elements[6] + matrix.elements[7];
+			newFacets[i + 2] = x * matrix.elements[8] + y * matrix.elements[9] + z * matrix.elements[10] + matrix.elements[11];
+		}
+		return newFacets;
+	}
+
+	function transformFacetsInPlace(facets, matrix) {
+		for (var i = 0; i < facets.length; i += 3) {
+			var x = facets[i + 0];
+			var y = facets[i + 1];
+			var z = facets[i + 2];
+			facets[i + 0] = x * matrix.elements[0] + y * matrix.elements[1] + z * matrix.elements[2] + matrix.elements[3];
+			facets[i + 1] = x * matrix.elements[4] + y * matrix.elements[5] + z * matrix.elements[6] + matrix.elements[7];
+			facets[i + 2] = x * matrix.elements[8] + y * matrix.elements[9] + z * matrix.elements[10] + matrix.elements[11];
+		}
+	}
+
+	// Loading from STL
+	function facetsFromBinarySTL(bytes) {
+		var dv = new DataView(bytes);
+
+		var count = dv.getInt32(80, true);
+		if (84 + count * 50 > bytes.byteLength) {
+			console.log('STL file with invalid facet count.');
+			return;
+		}
+
+		var facets = new Float32Array(count * 9);
+		var w = 0;
+
+		for (var i = 84; i < dv.byteLength; i += 50)
+			for (var n = 12; n < 48; n += 4)
+				facets[w++] = dv.getFloat32(i + n, true);
+
+		return facets;
+	}
+
+	// Saving to STL
+	function binarySTLFromFacets(facets, normals) {
+		if (! normals) normals = normalsFromFacets(facets);
+
+		var count = facets.length;
+		var countFacets = Math.floor(count / 9);
+		var buffer = new ArrayBuffer(84 + countFacets * 50);
+		var dv = new DataView(buffer);
+
+		dv.setInt32(80, countFacets, true);
+		var w = 84;
+
+		function add(value) {
+			dv.setFloat32(w, value, true);
+			w += 4;
+		}
+
+		for (var i = 0; i < count; i += 9) {
+			// Normal
+			for (var n = 0; n < 3; n++)
+				add(normals[i + n]);
+
+			// Vertices
+			for (var n = 0; n < 9; n++)
+				add(facets[i + n]);
+
+			// Attribute
+			w += 2;
+		}
+
+		return new Blob([new Uint8Array(buffer)], {type: 'binary/octet-stream'});
+	}
+	function GlDisplay(canvas) {
+		var display = this;
+		this.canvas = canvas;
+		var gl = canvas.getContext('webgl');
+		if (! gl) return;
+		this.gl = gl;
+
+		// Initialization
+		gl.clearColor(1.0, 1.0, 1.0, 1.0);
+		gl.enable(gl.DEPTH_TEST);
+		gl.depthFunc(gl.LEQUAL);
+
+		// Shader
+		var vertexShader =
+			'attribute highp vec3 aVertexPosition;' +
+			'attribute highp vec3 aVertexNormal;' +
+
+			'uniform highp mat4 uNormalMatrix;' +
+			'uniform mat4 uMVMatrix;' +
+			'uniform mat4 uPMatrix;' +
+
+			'varying highp vec3 vLighting;' +
+
+			'void main(void) {' +
+			'	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);' +
+
+			'	highp vec3 ambientLight = vec3(0.5, 0.5, 0.5);' +
+			'	highp vec3 directionalLightColor = vec3(0.7, 0.7, 0.7);' +
+			'	highp vec3 directionalVector = vec3(-0.3, 0.6, 0.8);' +
+
+			'	highp vec4 transformedNormal = uNormalMatrix * vec4(aVertexNormal, 1.0);' +
+			'	highp float directional = max(dot(transformedNormal.xyz, directionalVector), 0.0);' +
+			'	vLighting = ambientLight + (directionalLightColor * directional);' +
+			'}';
+
+		var fragmentShader =
+			'uniform highp vec4 uFrontColor;' +
+			'uniform highp vec4 uBackColor;' +
+			'varying highp vec3 vLighting;' +
+
+			'void main(void) {' +
+			'	highp vec4 color = gl_FrontFacing ? uFrontColor : uBackColor;' +
+			'	gl_FragColor = vec4(color.rgb * vLighting, color.a);' +
+			'}';
+
+		var shaderProgram = gl.createProgram();
+		addShader(gl.VERTEX_SHADER, vertexShader);
+		addShader(gl.FRAGMENT_SHADER, fragmentShader);
+
+		function addShader(type, source) {
+			var shader = gl.createShader(type);
+			gl.shaderSource(shader, source);
+			gl.compileShader(shader);
+			gl.attachShader(shaderProgram, shader);
+		}
+
+		gl.linkProgram(shaderProgram);
+		if (! gl.getProgramParameter(shaderProgram, gl.LINK_STATUS))
+			console.log('Unable to initialize the shader program: ' + gl.getProgramInfoLog(shaderProgram));
+		gl.useProgram(shaderProgram);
+
+		var vertexPositionAttribute = gl.getAttribLocation(shaderProgram, 'aVertexPosition');
+		gl.enableVertexAttribArray(vertexPositionAttribute);
+		var vertexNormalAttribute = gl.getAttribLocation(shaderProgram, 'aVertexNormal');
+		gl.enableVertexAttribArray(vertexNormalAttribute);
+
+		// View
+		var perspectiveMatrix = createPerspectiveMatrix(25, canvas.width / canvas.height, 0.1, 1000.0);
+		this.matrix = Matrix4.createTranslation([0.0, 0.0, -100.0]);
+
+		// Objects
+		var objects = [];
+
+		this.addObject = function(obj) {
+			obj.display = display;
+			if (! obj.facets) return;
+
+			obj.facetsBuffer = gl.createBuffer();
+			gl.bindBuffer(gl.ARRAY_BUFFER, obj.facetsBuffer);
+			gl.bufferData(gl.ARRAY_BUFFER, obj.facets, gl.STATIC_DRAW);
+
+			obj.normalsBuffer = gl.createBuffer();
+			gl.bindBuffer(gl.ARRAY_BUFFER, obj.normalsBuffer);
+			gl.bufferData(gl.ARRAY_BUFFER, obj.normals, gl.STATIC_DRAW);
+
+			objects.push(obj);
+			for (var i = 0; i < obj.onAdded.length; i++) obj.onAdded[i](obj);
+		};
+
+		this.removeObject = function(obj) {
+			obj.display = null;
+			if (! obj.facetsBuffer) return;
+
+			for (var i = 0; i < obj.onRemoved.length; i++) obj.onRemoved[i](obj);
+			gl.deleteBuffer(obj.facetsBuffer);
+			gl.deleteBuffer(obj.normalsBuffer);
+			obj.facetsBuffer = null;
+			obj.normalsBuffer = null
+			var index = objects.indexOf(obj);
+			if (index < 0) return;
+			objects.splice(index, 1);
+		};
+
+		// Drawing
+		this.redraw = redraw;
+
+		function redraw() {
+			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+			if (objects.length <= 0) return;
+
+			// Configure the shader
+			var uPMatrix = gl.getUniformLocation(shaderProgram, 'uPMatrix');
+			gl.uniformMatrix4fv(uPMatrix, false, perspectiveMatrix.toGlArray());
+
+			var uMVMatrix = gl.getUniformLocation(shaderProgram, 'uMVMatrix');
+			var uNormalMatrix = gl.getUniformLocation(shaderProgram, 'uNormalMatrix');
+			var uFrontColor = gl.getUniformLocation(shaderProgram, 'uFrontColor');
+			var uBackColor = gl.getUniformLocation(shaderProgram, 'uBackColor');
+
+			// Draw objects
+			for (var i = 0; i < objects.length; i++) {
+				var obj = objects[i];
+				if (! obj.visible) continue;
+
+				var matrix = this.matrix.times(obj.matrix);
+
+				gl.uniform4fv(uFrontColor, obj.frontColor);
+				gl.uniform4fv(uBackColor, obj.backColor);
+				gl.uniformMatrix4fv(uMVMatrix, false, matrix.toGlArray());
+				gl.uniformMatrix4fv(uNormalMatrix, false, matrix.inversed().transposed().toGlArray());
+				//gl.uniformMatrix4fv(uNormalMatrix, false, matrix.transposed().toGlArray());
+
+				gl.bindBuffer(gl.ARRAY_BUFFER, obj.facetsBuffer);
+				gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+
+				gl.bindBuffer(gl.ARRAY_BUFFER, obj.normalsBuffer);
+				gl.vertexAttribPointer(vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
+
+				gl.drawArrays(gl.TRIANGLES, 0, obj.count);
+			}
+		}
+	}
+
+	function GlObject(matrix, frontColor, backColor) {
+		this.facets = null;
+		this.normals = null;
+		this.count = 0;
+		this.frontColor = new Float32Array(frontColor);
+		this.backColor = new Float32Array(backColor);
+		this.matrix = matrix;
+		this.onAdded = [];
+		this.onRemoved = [];
+		this.visible = true;
+		this.display = null;
+
+		this.setFacets = function(facets) {
+			var display = this.display;
+			if (display) display.removeObject(this);
+			this.facets = facets;
+			this.normals = normalsFromFacets(facets);
+			this.count = facets.length / 3;
+			if (display) display.addObject(this);
+		};
+	}
+
+	// View matrices
+
+	function createPerspectiveMatrix(fovy, aspect, znear, zfar) {
+	    var ymax = znear * Math.tan(fovy * Math.PI / 360.0);
+	    var ymin = -ymax;
+	    var xmin = ymin * aspect;
+	    var xmax = ymax * aspect;
+
+	    return createFrustumMatrix(xmin, xmax, ymin, ymax, znear, zfar);
+	}
+
+	function createFrustumMatrix(left, right, bottom, top, znear, zfar) {
+	    var X = 2 * znear / (right - left);
+	    var Y = 2 * znear / (top - bottom);
+	    var A = (right + left) / (right - left);
+	    var B = (top + bottom) / (top - bottom);
+	    var C = -(zfar + znear) / (zfar - znear);
+	    var D = -2 * zfar * znear / (zfar - znear);
+
+	    return new Matrix4([
+			X, 0, A, 0,
+			0, Y, B, 0,
+			0, 0, C, D,
+			0, 0, -1, 0
+			]);
+	}
+
+	// Scene
+
+	var display = new GlDisplay(document.getElementById('3dCanvas'));
+
+	function addObject(color, matrix) {
+		var object = new GlObject(Identity4, color, [color[0] * 0.5, color[1] * 0.5, color[2] * 0.5, color[3]]);
+		object.matrix = matrix;
+		display.addObject(object);
+		return object;
+	}
+
+	var black = [0.2, 0.2, 0.2, 1.0];
+	var gray = [0.9, 0.9, 0.9, 1.0];
+	var blue = [0.0, 0.3, 1.0, 1.0];
+	var violet = [0.6, 0.0, 0.75, 1.0];
+	var green = [0.0, 0.75, 0.0, 1.0];
+
+	var zZero = -40;
+	var stand = addObject(black, z(56));
+	var middle = addObject(green, z(6));
+	var middleInside = addObject(black, z(6));
+	var cover = addObject(gray, zFlipped(6));
+	loadStl('slides/3d/cover.stl', [cover, stand]);
+	loadStl('slides/3d/special.stl', [middle]);
+	loadStl('slides/3d/specialInside.stl', [middleInside]);
+
+	function z(height) { return Matrix4.createTranslation([0, 0, zZero + height]); }
+	function zFlipped(height) { return Matrix4.createRotationX(Math.PI).translated([0, 0, zZero + height]); }
+
+	function loadStl(url, objects) {
+		var request = new XMLHttpRequest();
+		request.onload = function() {
+			if (request.status != 200) return;
+			var facets = facetsFromBinarySTL(request.response);
+			if (facets == null) return;
+
+			for (var i = 0; i < objects.length; i++)
+				objects[i].setFacets(facets);
+
+			display.redraw();
+		};
+		request.open('GET', url);
+		request.responseType = 'arraybuffer';
+		request.send();
+	}
+
+	// Color selection
+
+	document.getElementById('3dBlue').onclick = function(event) {
+		middle.frontColor = blue;
+	};
+
+	document.getElementById('3dViolet').onclick = function(event) {
+		middle.frontColor = violet;
+	};
+
+	document.getElementById('3dGreen').onclick = function(event) {
+		middle.frontColor = green;
+	};
+
+	// Animation
+
+	var running = false;
+	var shouldRun = false;
+	var angle = 3.4;
+
+	slide.onSlideAppears = function() {
+		shouldRun = true;
+		if (running) return;
+		running = true;
+		run();
+	};
+
+	slide.onSlideDisappears = function() {
+		shouldRun = false;
+	};
+
+	function run() {
+		if (! shouldRun) {
+			running = false;
+			return;
+		}
+
+		display.matrix = Matrix4.createRotationZ(angle).rotatedX(0.6 * Math.PI).translated([0.0, 0.0, -300.0]);
+		display.redraw();
+		angle += 0.008;
+		if (angle > Math.PI * 2) angle -= Math.PI * 2;
+		cover.matrix = zFlipped(6 - Math.max(0, Math.cos(angle) * 20));
+
+		requestAnimationFrame(run);
+	}
+
+	})();
+	</script>	<div class="slideNumber">11</div>
+</div>
+<div class="slide" id="slide-12">
+<h1>Or do interactive stuff.</h1>
+
+	<div style="color: #999; font-size: 16px; margin-top: 100px">Type a word</div>
+	<div style="margin-top: 4px">
+		<input id="interactiveInput" style="background: #eee; border: none; border-radius: 4px; font-size: 30px; padding: 10px; text-align: center; width: 400px" value="giraffe">
 	</div>
-	<div class="slide" id="slide-12">
-		<h1>Or do interactive stuff.</h1>
 
-		<div style="color: #999; font-size: 16px; margin-top: 100px">Type a word</div>
-		<div style="margin-top: 4px">
-			<input id="interactiveInput" style="background: #eee; border: none; border-radius: 4px; font-size: 30px; padding: 10px; text-align: center; width: 400px" value="giraffe">
-		</div>
-
-		<div style="margin-top: 40px">
-			<div id="interactiveOutput" style="background: #444; border-radius: 4px; color: white; display: inline-block; font-size: 30px; padding: 10px; text-align: center; width: 400px">&nbsp;</div>
-		</div>
-		<div style="color: #999; font-size: 16px; margin-top: 4px">This is your word spelled backwards</div>
-		<script>
-		(function() {
-			var slide = document.currentScript.parentElement;
-			var input = document.getElementById('interactiveInput');
-			var output = document.getElementById('interactiveOutput');
-
-			input.oninput = function(event) {
-				remote.sendState('interactiveText', input.value);
-				updateFlipped();
-			};
-
-			slide.onSlideAppears = function() {
-				remote.addStateListener(onStateChanged);
-				input.selectionStart = 0;
-				input.selectionEnd = input.value.length;
-				input.oninput();
-			};
-
-			slide.onSlideDisappears = function() {
-				remote.removeStateListener(onStateChanged);
-			};
-
-			function onStateChanged(state) {
-				input.value = state.interactiveText || '';
-				updateFlipped();
-			}
-
-			function updateFlipped() {
-				var flipped = '';
-				var text = input.value;
-				for (var i = text.length; i > 0; i--)
-					flipped += text.substr(i - 1, 1);
-
-				if (! flipped.length) flipped = '\u00a0';
-				output.textContent = flipped;
-			}
-		})();
-		</script>
-		<div class="slideNumber">12</div>
+	<div style="margin-top: 40px">
+		<div id="interactiveOutput" style="background: #444; border-radius: 4px; color: white; display: inline-block; font-size: 30px; padding: 10px; text-align: center; width: 400px">&nbsp;</div>
 	</div>
-	<div class="slide" id="slide-13">
-		<div style="font-size: 30px; font-weight: bold; line-height: 50px; margin-top: 200px">You can run your HTML presentation<br>from your local computer.</div>
-		<div style="font-size: 20px; line-height: 30px; margin-top: 100px">Everything is inside one folder.<br>Just double-click on <b>index.html</b>.</div>
+	<div style="color: #999; font-size: 16px; margin-top: 4px">This is your word spelled backwards</div>
+	<script>
+	(function() {
+		const slide = document.currentScript.parentElement;
+	var input = document.getElementById('interactiveInput');
+	var output = document.getElementById('interactiveOutput');
+
+	input.oninput = function(event) {
+		remote.sendState('interactiveText', input.value);
+		updateFlipped();
+	};
+
+	slide.onSlideAppears = function() {
+		remote.addStateListener(onStateChanged);
+		input.selectionStart = 0;
+		input.selectionEnd = input.value.length;
+		input.oninput();
+	};
+
+	slide.onSlideDisappears = function() {
+		remote.removeStateListener(onStateChanged);
+	};
+
+	function onStateChanged(state) {
+		input.value = state.interactiveText || '';
+		updateFlipped();
+	}
+
+	function updateFlipped() {
+		var flipped = '';
+		var text = input.value;
+		for (var i = text.length; i > 0; i--)
+			flipped += text.substr(i - 1, 1);
+
+		if (! flipped.length) flipped = '\u00a0';
+		output.textContent = flipped;
+	}
+
+	})();
+	</script>	<div class="slideNumber">12</div>
+</div>
+<div class="slide" id="slide-13">
+<div style="font-size: 30px; font-weight: bold; line-height: 50px; margin-top: 200px">You can run your HTML presentation<br>from your local computer.</div>
+	<div style="font-size: 20px; line-height: 30px; margin-top: 100px">Everything is inside one folder.<br>Just double-click on <b>index.html</b>.</div>
 		<div class="slideNumber">13</div>
-	</div>
-	<div class="slide" id="slide-14">
-		<div style="font-size: 30px; font-weight: bold; line-height: 50px; margin-top: 200px">Or publish it on the web.</div>
-		<div style="font-size: 20px; line-height: 30px; margin-top: 100px">Just copy the whole folder onto a HTTP server.</div>
+</div>
+<div class="slide" id="slide-14">
+<div style="font-size: 30px; font-weight: bold; line-height: 50px; margin-top: 200px">Or publish it on the web.</div>
+	<div style="font-size: 20px; line-height: 30px; margin-top: 100px">Just copy the whole folder onto a HTTP server.</div>
 		<div class="slideNumber">14</div>
-	</div>
-	<div class="slide" id="slide-15">
-		<div style="font-size: 20px; font-weight: bold; margin-top: 150px"><img src="pwa/launcher-icon.svg" style="vertical-align: middle" width="50"></div>
-		<div style="font-size: 30px; line-height: 50px; margin-top: 50px">To create your own HTML presentation,<br>download the template from GitHub:<br><a href="https://github.com/d28b/html-slides" target="_blank">https://github.com/d28b/html-slides</a></div>
+</div>
+<div class="slide" id="slide-15">
+<div style="font-size: 20px; font-weight: bold; margin-top: 150px"><img src="pwa/launcher-icon.svg" style="vertical-align: middle" width="50"></div>
+	<div style="font-size: 30px; line-height: 50px; margin-top: 50px">To create your own HTML presentation,<br>download the template from GitHub:<br><a href="https://github.com/d28b/html-slides" target="_blank">https://github.com/d28b/html-slides</a></div>
 		<div class="slideNumber">15</div>
-	</div>
+</div>
+
 </div>
 
 <div id="footer">
@@ -1319,13 +1318,14 @@
 
 <script>
 'use strict';
+// Line 1 "/home/thomas/Desktop/html-slides/demo/skeleton/presentation.inc.js"
 // Document focus and key handling
 
-var focusedSince = 0;
+let focusedSince = 0;
 
 document.body.onkeydown = function(event) {
-	var inputFocused = document.activeElement.tagName == 'INPUT' || document.activeElement.tagName == 'TEXTAREA';
-	var hasModifier = event.getModifierState('Control') || event.getModifierState('Alt') || event.getModifierState('OS') || event.getModifierState('Meta');
+	const inputFocused = document.activeElement.tagName == 'INPUT' || document.activeElement.tagName == 'TEXTAREA';
+	const hasModifier = event.getModifierState('Control') || event.getModifierState('Alt') || event.getModifierState('OS') || event.getModifierState('Meta');
 
 	if (indexHandleKey(event, inputFocused, hasModifier) || controller.handleKey(event, inputFocused, hasModifier)) {
 		event.preventDefault();
@@ -1346,9 +1346,9 @@ window.onblur = function(event) {
 
 // Index and settings
 
-var index = document.getElementById('index');
-var indexContent = document.getElementById('indexContent');
-var indexButton = document.getElementById('indexButton');
+const index = document.getElementById('index');
+const indexContent = document.getElementById('indexContent');
+const indexButton = document.getElementById('indexButton');
 
 function isIndexOpen() {
 	return document.body.classList.contains('openIndex');
@@ -1400,7 +1400,7 @@ function indexHandleKey(event, inputFocused, hasModifier) {
 }
 
 function onIndexSlideClick(indexSlide) {
-	var id = indexSlide.id;
+	const id = indexSlide.id;
 	if (id.substr(0, 6) != 'index-') return;
 	moveToSlideWithId(id.substr(6));
 	openIndex(false);
@@ -1408,20 +1408,20 @@ function onIndexSlideClick(indexSlide) {
 
 // Remote
 
-var remote = new Remote();
+const remote = new Remote();
 
 function Remote() {
-	var remoteSend = document.getElementById('remoteSend');
-	var remoteSendToken = document.getElementById('remoteSendToken');
-	var remoteListen = document.getElementById('remoteListen');
-	var remoteListenConfirm = document.getElementById('remoteListenConfirm');
-	var remoteListenToken = document.getElementById('remoteListenToken');
+	const remoteSend = document.getElementById('remoteSend');
+	const remoteSendToken = document.getElementById('remoteSendToken');
+	const remoteListen = document.getElementById('remoteListen');
+	const remoteListenConfirm = document.getElementById('remoteListenConfirm');
+	const remoteListenToken = document.getElementById('remoteListenToken');
 
-	var role = 'start';
-	var listenToken = localStorage.getItem('listen to token') || '';
+	let role = 'start';
+	let listenToken = localStorage.getItem('listen to token') || '';
 	remoteListenToken.value = listenToken;
 
-	var myToken = localStorage.getItem('my token');
+	let myToken = localStorage.getItem('my token');
 	if (! myToken) {
 		myToken = randomToken(6);
 		localStorage.setItem('my token', myToken);
@@ -1429,7 +1429,7 @@ function Remote() {
 
 	remoteSendToken.textContent = myToken;
 
-	var myWriteKey = localStorage.getItem('my write key');
+	let myWriteKey = localStorage.getItem('my write key');
 	if (! myWriteKey) {
 		myWriteKey = randomToken(16);
 		localStorage.setItem('my write key', myWriteKey);
@@ -1492,16 +1492,16 @@ function Remote() {
 	}
 
 	function randomToken(len) {
-		var token = '';
-		for (var i = 0; i < len; i++) token += String.fromCharCode(97 + Math.floor(Math.random() * 26));
+		let token = '';
+		for (let i = 0; i < len; i++) token += String.fromCharCode(97 + Math.floor(Math.random() * 26));
 		return token;
 	}
 
 	// Sender
 
-	var myState = {revision: 0};
-	var needsSubmission = false;
-	var isSubmitting = false;
+	const myState = {revision: 0};
+	let needsSubmission = false;
+	let isSubmitting = false;
 
 	this.sendState = function(key, value) {
 		if (myState[key] == value) return;
@@ -1519,11 +1519,11 @@ function Remote() {
 		if (role != 'send') return;
 
 		isSubmitting = true;
-		var request = new XMLHttpRequest();
+		const request = new XMLHttpRequest();
 		request.responseType = 'text';
 
 		request.onload = function(event) {
-			var success = request.status == 200 || request.status == 204;
+			const success = request.status == 200 || request.status == 204;
 			if (! success) return request.onerror(event);
 			isSubmitting = false;
 			setTimeout(submit, 20);
@@ -1543,8 +1543,8 @@ function Remote() {
 
 	// Listener
 
-	var isReading = false;
-	var receivedState = {revision: 0, id: ''};
+	let isReading = false;
+	let receivedState = {revision: 0, id: ''};
 
 	function read() {
 		if (isReading) return;
@@ -1553,13 +1553,13 @@ function Remote() {
 		if (document.visibilityState == 'hidden') return;
 
 		isReading = true;
-		var request = new XMLHttpRequest();
+		const request = new XMLHttpRequest();
 		request.responseType = 'text';
 
 		request.onload = function(event) {
-			var success = request.status == 200 || request.status == 204;
+			const success = request.status == 200 || request.status == 204;
 			if (! success) return request.onerror(event);
-			var revision = parseInt(request.getResponseHeader('revision')) || 0;
+			const revision = parseInt(request.getResponseHeader('revision')) || 0;
 			process(revision, request.responseText);
 			isReading = false;
 			setTimeout(read, 1000);
@@ -1578,7 +1578,7 @@ function Remote() {
 	function process(revision, text) {
 		if (revision <= receivedState.revision) return;
 
-		var state = parseState(text);
+		const state = parseState(text);
 		if (! state) return;
 
 		state.revision = revision;
@@ -1597,7 +1597,7 @@ function Remote() {
 	};
 
 	function mergeState(text) {
-		var state = parseState(text);
+		const state = parseState(text);
 		if (! state) return;
 		if (state.revision < receivedState.revision) return;
 		receivedState = state;
@@ -1607,7 +1607,7 @@ function Remote() {
 	function parseState(text) {
 		if (! text) return;
 		try {
-			var state = JSON.parse(text);
+			const state = JSON.parse(text);
 			if (state == null) return;
 			if (typeof(state) != 'object') return;
 			return state;
@@ -1616,7 +1616,7 @@ function Remote() {
 		}
 	}
 
-	var stateListeners = [];
+	const stateListeners = [];
 
 	this.addStateListener = function(handler) {
 		stateListeners.push(handler);
@@ -1624,13 +1624,13 @@ function Remote() {
 	};
 
 	this.removeStateListener = function(handler) {
-		var index = stateListeners.indexOf(handler);
+		const index = stateListeners.indexOf(handler);
 		if (index >= 0) stateListeners.splice(index, 1);
 	};
 
 	function notifyListeners() {
-		for (var i = 0; i < stateListeners.length; i++)
-			stateListeners[i](receivedState);
+		for (const listener of stateListeners)
+			listener(receivedState);
 	}
 
 	document.onvisibilitychange = function(event) {
@@ -1643,14 +1643,14 @@ function Remote() {
 
 // Current slide
 
-var main = document.getElementById('main');
-var currentSlide = main.firstElementChild;
+const main = document.getElementById('main');
+let currentSlide = main.firstElementChild;
 setSlideSelected(true);
 
 function moveToSlideWithId(id, source) {
 	if (! id) return false;
 	if (currentSlide.id == id) return;
-	var slide = document.getElementById(id);
+	const slide = document.getElementById(id);
 	if (! slide) return false;
 	return moveToSlide(slide, source);
 }
@@ -1658,7 +1658,7 @@ function moveToSlideWithId(id, source) {
 function moveToSlide(slide, source) {
 	if (! slide) return false;
 	if (currentSlide == slide) return;
-	var previousSlide = currentSlide;
+	const previousSlide = currentSlide;
 	setSlideSelected(false);
 	currentSlide = slide;
 	setSlideSelected(true);
@@ -1672,7 +1672,7 @@ function setSlideSelected(selected) {
 	currentSlide.classList.toggle('selected', selected);
 
 	// Index slide
-	var indexSlide = document.getElementById('index-' + currentSlide.id);
+	const indexSlide = document.getElementById('index-' + currentSlide.id);
 	if (indexSlide) indexSlide.classList.toggle('selected', selected);
 }
 
@@ -1697,10 +1697,10 @@ function setSlideVisibility(slide, isVisible) {
 
 // Controller
 
-var presentationModeButton = document.getElementById('presentationModeButton');
-var normalModeButton = document.getElementById('normalModeButton');
+const presentationModeButton = document.getElementById('presentationModeButton');
+const normalModeButton = document.getElementById('normalModeButton');
 
-var controller = null;
+let controller = null;
 setMode(localStorage.getItem('mode'));
 
 presentationModeButton.onclick = function(event) {
@@ -1727,7 +1727,7 @@ function setMode(mode) {
 	}
 
 	localStorage.setItem('mode', mode);
-	var isPresentation = mode == 'presentation';
+	const isPresentation = mode == 'presentation';
 	presentationModeButton.classList.toggle('selected', isPresentation);
 	normalModeButton.classList.toggle('selected', ! isPresentation);
 	document.body.classList.toggle('presentation', isPresentation);
@@ -1755,31 +1755,31 @@ function NormalMode() {
 
 	this.onCurrentSlideChanged = function(source) {
 		if (source == 'scroll') return;
-		var rect = currentSlide.getBoundingClientRect();
+		const rect = currentSlide.getBoundingClientRect();
 		window.scrollBy(0, rect.y - 20);
 	};
 
 	// Slide visibility
-	var currentFirstVisible = null;
-	var currentLastVisible = null;
+	let currentFirstVisible = null;
+	let currentLastVisible = null;
 
 	function updateVisibleSlides() {
 		// Find the first visible slide
-		var firstVisible = currentSlide;
-		for (var slide = currentSlide.previousElementSibling; slide; slide = slide.previousElementSibling) {
+		let firstVisible = currentSlide;
+		for (let slide = currentSlide.previousElementSibling; slide; slide = slide.previousElementSibling) {
 			if (isVisible(slide)) firstVisible = slide;
 			else break;
 		}
 
 		// Find the last visible slide
-		var lastVisible = currentSlide;
-		for (var slide = currentSlide.nextElementSibling; slide; slide = slide.nextElementSibling) {
+		let lastVisible = currentSlide;
+		for (let slide = currentSlide.nextElementSibling; slide; slide = slide.nextElementSibling) {
 			if (isVisible(slide)) lastVisible = slide;
 			else break;
 		}
 
 		// Mark these slides as visible
-		for (var slide = firstVisible; slide; slide = slide.nextElementSibling) {
+		for (let slide = firstVisible; slide; slide = slide.nextElementSibling) {
 			setSlideVisibility(slide, true);
 			if (slide == currentFirstVisible) currentFirstVisible = null;
 			if (slide == currentLastVisible) currentLastVisible = null;
@@ -1787,14 +1787,14 @@ function NormalMode() {
 		}
 
 		// Hide old slides from the beginning
-		for (var slide = currentFirstVisible; slide; slide = slide.nextElementSibling) {
+		for (let slide = currentFirstVisible; slide; slide = slide.nextElementSibling) {
 			if (slide == firstVisible) break;
 			setSlideVisibility(slide, false);
 			if (slide == currentLastVisible) { currentLastVisible = null; break; }
 		}
 
 		// Hide old slides from the end
-		for (var slide = currentLastVisible; slide; slide = slide.previousElementSibling) {
+		for (let slide = currentLastVisible; slide; slide = slide.previousElementSibling) {
 			if (slide == lastVisible) break;
 			setSlideVisibility(slide, false);
 		}
@@ -1805,7 +1805,7 @@ function NormalMode() {
 	}
 
 	function isVisible(slide) {
-		var rect = slide.getBoundingClientRect();
+		const rect = slide.getBoundingClientRect();
 		if (rect.bottom < -50) return false;
 		if (rect.top > innerHeight + 50) return false;
 		return true;
@@ -1813,8 +1813,8 @@ function NormalMode() {
 
 	// Scrolling
 	onscroll = function(event) {
-		var slide = currentSlide;
-		var rect = slide.getBoundingClientRect();
+		let slide = currentSlide;
+		let rect = slide.getBoundingClientRect();
 
 		// Move to next
 		while (rect.top < -500) {
@@ -1835,10 +1835,10 @@ function NormalMode() {
 	};
 
 	// Resizing
-	var bottomSpacer = document.getElementById('bottomSpacer');
+	const bottomSpacer = document.getElementById('bottomSpacer');
 
 	onresize = function(event) {
-		var space = Math.round(innerHeight - 640);
+		const space = Math.round(innerHeight - 640);
 		bottomSpacer.style.height = space + 'px';
 		if (space < 180) {
 			bottomSpacer.firstElementChild.style.display = 'none';
@@ -1877,12 +1877,12 @@ function PresentationMode() {
 	};
 
 	// Scaling to the maximum size
-	var slideTransform = '';
+	let slideTransform = '';
 
 	onresize = function(event) {
-		var xScaling = innerWidth / 1000;
-		var yScaling = innerHeight / 600;
-		var scaling = Math.min(xScaling, yScaling);
+		const xScaling = innerWidth / 1000;
+		const yScaling = innerHeight / 600;
+		const scaling = Math.min(xScaling, yScaling);
 		slideTransform = 'translate(-500px, -300px) translate(' + (innerWidth * 0.5) + 'px, ' + (innerHeight * 0.5) + 'px) scale(' + scaling + ')';
 		currentSlide.style.transform = slideTransform;
 	};
@@ -1896,11 +1896,10 @@ function PresentationMode() {
 	}
 
 	// Touch
-	var currentTouch = null;
+	let currentTouch = null;
 
 	document.body.ontouchstart = function(event) {
-		for (var i = 0; i < event.changedTouches.length; i++) {
-			var touch = event.changedTouches[i];
+		for (const touch of event.changedTouches) {
 			currentTouch = {identifier: touch.identifier, clientX: touch.clientX, clientY: touch.clientY};
 			break;
 		}
@@ -1908,12 +1907,11 @@ function PresentationMode() {
 
 	document.body.ontouchmove = function(event) {
 		if (! currentTouch) return;
-		for (var i = 0; i < event.changedTouches.length; i++) {
-			var touch = event.changedTouches[i];
+		for (const touch of event.changedTouches) {
 			if (currentTouch.identifier != touch.identifier) continue;
 
-			var difference = touch.clientX - currentTouch.clientX;
-			var target = difference > 0 ? currentSlide.previousElementSibling : currentSlide.nextElementSibling;
+			const difference = touch.clientX - currentTouch.clientX;
+			const target = difference > 0 ? currentSlide.previousElementSibling : currentSlide.nextElementSibling;
 			currentSlide.style.opacity = target == null ? 1 : Math.max(0.6, Math.min(1, 1 - Math.abs(difference) / 1000));
 			break;
 		}
@@ -1921,12 +1919,11 @@ function PresentationMode() {
 
 	document.body.ontouchend = function(event) {
 		if (! currentTouch) return;
-		for (var i = 0; i < event.changedTouches.length; i++) {
-			var touch = event.changedTouches[i];
+		for (const touch of event.changedTouches) {
 			if (currentTouch.identifier != touch.identifier) continue;
 
 			currentSlide.style.opacity = 1;
-			var difference = touch.clientX - currentTouch.clientX;
+			const difference = touch.clientX - currentTouch.clientX;
 			if (difference > 100) moveToSlide(currentSlide.previousElementSibling);
 			else if (difference < -100) moveToSlide(currentSlide.nextElementSibling);
 
@@ -1939,7 +1936,7 @@ function PresentationMode() {
 		onresize = null;
 		document.body.ontouchstart = null;
 
-		for (var element = main.firstElementChild; element; element = element.nextElementSibling) {
+		for (let element = main.firstElementChild; element; element = element.nextElementSibling) {
 			element.style.transform = null;
 			element.style.opacity = null;
 		}
@@ -1950,6 +1947,8 @@ function PresentationMode() {
 
 // Start with the previously saved local state
 remote.mergeLocalState();
+// Line 101 "/home/thomas/Desktop/html-slides/demo/skeleton/presentation.inc.html"
+
 </script>
 
 </body>

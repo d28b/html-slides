@@ -1,4 +1,5 @@
-<? import skeleton/presentation.lib.js ?><?
+<?
+use('skeleton/presentation.lib.js');
 
 title('Your presentation title');
 
@@ -8,4 +9,5 @@ slide('slides/system.inc.svg', 'System');
 slide('slides/measurements.inc.html', 'Results');
 slide('slides/next-steps.inc.html', 'Next steps');
 
-?><? include skeleton/presentation.inc.html ?>
+include('skeleton/presentation.inc.html');
+?>

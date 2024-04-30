@@ -1,10 +1,10 @@
 // Document focus and key handling
 
-var focusedSince = 0;
+let focusedSince = 0;
 
 document.body.onkeydown = function(event) {
-	var inputFocused = document.activeElement.tagName == 'INPUT' || document.activeElement.tagName == 'TEXTAREA';
-	var hasModifier = event.getModifierState('Control') || event.getModifierState('Alt') || event.getModifierState('OS') || event.getModifierState('Meta');
+	const inputFocused = document.activeElement.tagName == 'INPUT' || document.activeElement.tagName == 'TEXTAREA';
+	const hasModifier = event.getModifierState('Control') || event.getModifierState('Alt') || event.getModifierState('OS') || event.getModifierState('Meta');
 
 	if (indexHandleKey(event, inputFocused, hasModifier) || controller.handleKey(event, inputFocused, hasModifier)) {
 		event.preventDefault();
@@ -25,9 +25,9 @@ window.onblur = function(event) {
 
 // Index and settings
 
-var index = document.getElementById('index');
-var indexContent = document.getElementById('indexContent');
-var indexButton = document.getElementById('indexButton');
+const index = document.getElementById('index');
+const indexContent = document.getElementById('indexContent');
+const indexButton = document.getElementById('indexButton');
 
 function isIndexOpen() {
 	return document.body.classList.contains('openIndex');
@@ -79,7 +79,7 @@ function indexHandleKey(event, inputFocused, hasModifier) {
 }
 
 function onIndexSlideClick(indexSlide) {
-	var id = indexSlide.id;
+	const id = indexSlide.id;
 	if (id.substr(0, 6) != 'index-') return;
 	moveToSlideWithId(id.substr(6));
 	openIndex(false);
@@ -87,20 +87,20 @@ function onIndexSlideClick(indexSlide) {
 
 // Remote
 
-var remote = new Remote();
+const remote = new Remote();
 
 function Remote() {
-	var remoteSend = document.getElementById('remoteSend');
-	var remoteSendToken = document.getElementById('remoteSendToken');
-	var remoteListen = document.getElementById('remoteListen');
-	var remoteListenConfirm = document.getElementById('remoteListenConfirm');
-	var remoteListenToken = document.getElementById('remoteListenToken');
+	const remoteSend = document.getElementById('remoteSend');
+	const remoteSendToken = document.getElementById('remoteSendToken');
+	const remoteListen = document.getElementById('remoteListen');
+	const remoteListenConfirm = document.getElementById('remoteListenConfirm');
+	const remoteListenToken = document.getElementById('remoteListenToken');
 
-	var role = 'start';
-	var listenToken = localStorage.getItem('listen to token') || '';
+	let role = 'start';
+	let listenToken = localStorage.getItem('listen to token') || '';
 	remoteListenToken.value = listenToken;
 
-	var myToken = localStorage.getItem('my token');
+	let myToken = localStorage.getItem('my token');
 	if (! myToken) {
 		myToken = randomToken(6);
 		localStorage.setItem('my token', myToken);
@@ -108,7 +108,7 @@ function Remote() {
 
 	remoteSendToken.textContent = myToken;
 
-	var myWriteKey = localStorage.getItem('my write key');
+	let myWriteKey = localStorage.getItem('my write key');
 	if (! myWriteKey) {
 		myWriteKey = randomToken(16);
 		localStorage.setItem('my write key', myWriteKey);
@@ -171,16 +171,16 @@ function Remote() {
 	}
 
 	function randomToken(len) {
-		var token = '';
-		for (var i = 0; i < len; i++) token += String.fromCharCode(97 + Math.floor(Math.random() * 26));
+		let token = '';
+		for (let i = 0; i < len; i++) token += String.fromCharCode(97 + Math.floor(Math.random() * 26));
 		return token;
 	}
 
 	// Sender
 
-	var myState = {revision: 0};
-	var needsSubmission = false;
-	var isSubmitting = false;
+	const myState = {revision: 0};
+	let needsSubmission = false;
+	let isSubmitting = false;
 
 	this.sendState = function(key, value) {
 		if (myState[key] == value) return;
@@ -198,11 +198,11 @@ function Remote() {
 		if (role != 'send') return;
 
 		isSubmitting = true;
-		var request = new XMLHttpRequest();
+		const request = new XMLHttpRequest();
 		request.responseType = 'text';
 
 		request.onload = function(event) {
-			var success = request.status == 200 || request.status == 204;
+			const success = request.status == 200 || request.status == 204;
 			if (! success) return request.onerror(event);
 			isSubmitting = false;
 			setTimeout(submit, 20);
@@ -222,8 +222,8 @@ function Remote() {
 
 	// Listener
 
-	var isReading = false;
-	var receivedState = {revision: 0, id: ''};
+	let isReading = false;
+	let receivedState = {revision: 0, id: ''};
 
 	function read() {
 		if (isReading) return;
@@ -232,13 +232,13 @@ function Remote() {
 		if (document.visibilityState == 'hidden') return;
 
 		isReading = true;
-		var request = new XMLHttpRequest();
+		const request = new XMLHttpRequest();
 		request.responseType = 'text';
 
 		request.onload = function(event) {
-			var success = request.status == 200 || request.status == 204;
+			const success = request.status == 200 || request.status == 204;
 			if (! success) return request.onerror(event);
-			var revision = parseInt(request.getResponseHeader('revision')) || 0;
+			const revision = parseInt(request.getResponseHeader('revision')) || 0;
 			process(revision, request.responseText);
 			isReading = false;
 			setTimeout(read, 1000);
@@ -257,7 +257,7 @@ function Remote() {
 	function process(revision, text) {
 		if (revision <= receivedState.revision) return;
 
-		var state = parseState(text);
+		const state = parseState(text);
 		if (! state) return;
 
 		state.revision = revision;
@@ -276,7 +276,7 @@ function Remote() {
 	};
 
 	function mergeState(text) {
-		var state = parseState(text);
+		const state = parseState(text);
 		if (! state) return;
 		if (state.revision < receivedState.revision) return;
 		receivedState = state;
@@ -286,7 +286,7 @@ function Remote() {
 	function parseState(text) {
 		if (! text) return;
 		try {
-			var state = JSON.parse(text);
+			const state = JSON.parse(text);
 			if (state == null) return;
 			if (typeof(state) != 'object') return;
 			return state;
@@ -295,7 +295,7 @@ function Remote() {
 		}
 	}
 
-	var stateListeners = [];
+	const stateListeners = [];
 
 	this.addStateListener = function(handler) {
 		stateListeners.push(handler);
@@ -303,13 +303,13 @@ function Remote() {
 	};
 
 	this.removeStateListener = function(handler) {
-		var index = stateListeners.indexOf(handler);
+		const index = stateListeners.indexOf(handler);
 		if (index >= 0) stateListeners.splice(index, 1);
 	};
 
 	function notifyListeners() {
-		for (var i = 0; i < stateListeners.length; i++)
-			stateListeners[i](receivedState);
+		for (const listener of stateListeners)
+			listener(receivedState);
 	}
 
 	document.onvisibilitychange = function(event) {
@@ -322,14 +322,14 @@ function Remote() {
 
 // Current slide
 
-var main = document.getElementById('main');
-var currentSlide = main.firstElementChild;
+const main = document.getElementById('main');
+let currentSlide = main.firstElementChild;
 setSlideSelected(true);
 
 function moveToSlideWithId(id, source) {
 	if (! id) return false;
 	if (currentSlide.id == id) return;
-	var slide = document.getElementById(id);
+	const slide = document.getElementById(id);
 	if (! slide) return false;
 	return moveToSlide(slide, source);
 }
@@ -337,7 +337,7 @@ function moveToSlideWithId(id, source) {
 function moveToSlide(slide, source) {
 	if (! slide) return false;
 	if (currentSlide == slide) return;
-	var previousSlide = currentSlide;
+	const previousSlide = currentSlide;
 	setSlideSelected(false);
 	currentSlide = slide;
 	setSlideSelected(true);
@@ -351,7 +351,7 @@ function setSlideSelected(selected) {
 	currentSlide.classList.toggle('selected', selected);
 
 	// Index slide
-	var indexSlide = document.getElementById('index-' + currentSlide.id);
+	const indexSlide = document.getElementById('index-' + currentSlide.id);
 	if (indexSlide) indexSlide.classList.toggle('selected', selected);
 }
 
@@ -376,10 +376,10 @@ function setSlideVisibility(slide, isVisible) {
 
 // Controller
 
-var presentationModeButton = document.getElementById('presentationModeButton');
-var normalModeButton = document.getElementById('normalModeButton');
+const presentationModeButton = document.getElementById('presentationModeButton');
+const normalModeButton = document.getElementById('normalModeButton');
 
-var controller = null;
+let controller = null;
 setMode(localStorage.getItem('mode'));
 
 presentationModeButton.onclick = function(event) {
@@ -406,7 +406,7 @@ function setMode(mode) {
 	}
 
 	localStorage.setItem('mode', mode);
-	var isPresentation = mode == 'presentation';
+	const isPresentation = mode == 'presentation';
 	presentationModeButton.classList.toggle('selected', isPresentation);
 	normalModeButton.classList.toggle('selected', ! isPresentation);
 	document.body.classList.toggle('presentation', isPresentation);
@@ -434,31 +434,31 @@ function NormalMode() {
 
 	this.onCurrentSlideChanged = function(source) {
 		if (source == 'scroll') return;
-		var rect = currentSlide.getBoundingClientRect();
+		const rect = currentSlide.getBoundingClientRect();
 		window.scrollBy(0, rect.y - 20);
 	};
 
 	// Slide visibility
-	var currentFirstVisible = null;
-	var currentLastVisible = null;
+	let currentFirstVisible = null;
+	let currentLastVisible = null;
 
 	function updateVisibleSlides() {
 		// Find the first visible slide
-		var firstVisible = currentSlide;
-		for (var slide = currentSlide.previousElementSibling; slide; slide = slide.previousElementSibling) {
+		let firstVisible = currentSlide;
+		for (let slide = currentSlide.previousElementSibling; slide; slide = slide.previousElementSibling) {
 			if (isVisible(slide)) firstVisible = slide;
 			else break;
 		}
 
 		// Find the last visible slide
-		var lastVisible = currentSlide;
-		for (var slide = currentSlide.nextElementSibling; slide; slide = slide.nextElementSibling) {
+		let lastVisible = currentSlide;
+		for (let slide = currentSlide.nextElementSibling; slide; slide = slide.nextElementSibling) {
 			if (isVisible(slide)) lastVisible = slide;
 			else break;
 		}
 
 		// Mark these slides as visible
-		for (var slide = firstVisible; slide; slide = slide.nextElementSibling) {
+		for (let slide = firstVisible; slide; slide = slide.nextElementSibling) {
 			setSlideVisibility(slide, true);
 			if (slide == currentFirstVisible) currentFirstVisible = null;
 			if (slide == currentLastVisible) currentLastVisible = null;
@@ -466,14 +466,14 @@ function NormalMode() {
 		}
 
 		// Hide old slides from the beginning
-		for (var slide = currentFirstVisible; slide; slide = slide.nextElementSibling) {
+		for (let slide = currentFirstVisible; slide; slide = slide.nextElementSibling) {
 			if (slide == firstVisible) break;
 			setSlideVisibility(slide, false);
 			if (slide == currentLastVisible) { currentLastVisible = null; break; }
 		}
 
 		// Hide old slides from the end
-		for (var slide = currentLastVisible; slide; slide = slide.previousElementSibling) {
+		for (let slide = currentLastVisible; slide; slide = slide.previousElementSibling) {
 			if (slide == lastVisible) break;
 			setSlideVisibility(slide, false);
 		}
@@ -484,7 +484,7 @@ function NormalMode() {
 	}
 
 	function isVisible(slide) {
-		var rect = slide.getBoundingClientRect();
+		const rect = slide.getBoundingClientRect();
 		if (rect.bottom < -50) return false;
 		if (rect.top > innerHeight + 50) return false;
 		return true;
@@ -492,8 +492,8 @@ function NormalMode() {
 
 	// Scrolling
 	onscroll = function(event) {
-		var slide = currentSlide;
-		var rect = slide.getBoundingClientRect();
+		let slide = currentSlide;
+		let rect = slide.getBoundingClientRect();
 
 		// Move to next
 		while (rect.top < -500) {
@@ -514,10 +514,10 @@ function NormalMode() {
 	};
 
 	// Resizing
-	var bottomSpacer = document.getElementById('bottomSpacer');
+	const bottomSpacer = document.getElementById('bottomSpacer');
 
 	onresize = function(event) {
-		var space = Math.round(innerHeight - 640);
+		const space = Math.round(innerHeight - 640);
 		bottomSpacer.style.height = space + 'px';
 		if (space < 180) {
 			bottomSpacer.firstElementChild.style.display = 'none';
@@ -556,12 +556,12 @@ function PresentationMode() {
 	};
 
 	// Scaling to the maximum size
-	var slideTransform = '';
+	let slideTransform = '';
 
 	onresize = function(event) {
-		var xScaling = innerWidth / 1000;
-		var yScaling = innerHeight / 600;
-		var scaling = Math.min(xScaling, yScaling);
+		const xScaling = innerWidth / 1000;
+		const yScaling = innerHeight / 600;
+		const scaling = Math.min(xScaling, yScaling);
 		slideTransform = 'translate(-500px, -300px) translate(' + (innerWidth * 0.5) + 'px, ' + (innerHeight * 0.5) + 'px) scale(' + scaling + ')';
 		currentSlide.style.transform = slideTransform;
 	};
@@ -575,11 +575,10 @@ function PresentationMode() {
 	}
 
 	// Touch
-	var currentTouch = null;
+	let currentTouch = null;
 
 	document.body.ontouchstart = function(event) {
-		for (var i = 0; i < event.changedTouches.length; i++) {
-			var touch = event.changedTouches[i];
+		for (const touch of event.changedTouches) {
 			currentTouch = {identifier: touch.identifier, clientX: touch.clientX, clientY: touch.clientY};
 			break;
 		}
@@ -587,12 +586,11 @@ function PresentationMode() {
 
 	document.body.ontouchmove = function(event) {
 		if (! currentTouch) return;
-		for (var i = 0; i < event.changedTouches.length; i++) {
-			var touch = event.changedTouches[i];
+		for (const touch of event.changedTouches) {
 			if (currentTouch.identifier != touch.identifier) continue;
 
-			var difference = touch.clientX - currentTouch.clientX;
-			var target = difference > 0 ? currentSlide.previousElementSibling : currentSlide.nextElementSibling;
+			const difference = touch.clientX - currentTouch.clientX;
+			const target = difference > 0 ? currentSlide.previousElementSibling : currentSlide.nextElementSibling;
 			currentSlide.style.opacity = target == null ? 1 : Math.max(0.6, Math.min(1, 1 - Math.abs(difference) / 1000));
 			break;
 		}
@@ -600,12 +598,11 @@ function PresentationMode() {
 
 	document.body.ontouchend = function(event) {
 		if (! currentTouch) return;
-		for (var i = 0; i < event.changedTouches.length; i++) {
-			var touch = event.changedTouches[i];
+		for (const touch of event.changedTouches) {
 			if (currentTouch.identifier != touch.identifier) continue;
 
 			currentSlide.style.opacity = 1;
-			var difference = touch.clientX - currentTouch.clientX;
+			const difference = touch.clientX - currentTouch.clientX;
 			if (difference > 100) moveToSlide(currentSlide.previousElementSibling);
 			else if (difference < -100) moveToSlide(currentSlide.nextElementSibling);
 
@@ -618,7 +615,7 @@ function PresentationMode() {
 		onresize = null;
 		document.body.ontouchstart = null;
 
-		for (var element = main.firstElementChild; element; element = element.nextElementSibling) {
+		for (let element = main.firstElementChild; element; element = element.nextElementSibling) {
 			element.style.transform = null;
 			element.style.opacity = null;
 		}

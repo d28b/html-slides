@@ -1,6 +1,8 @@
-INCLUDE 3d/matrix4.inc.js
-INCLUDE 3d/facets.inc.js
-INCLUDE 3d/glDisplay.inc.js
+<?
+include('3d/matrix4.inc.js');
+include('3d/facets.inc.js');
+include('3d/glDisplay.inc.js');
+?>
 
 // Scene
 
