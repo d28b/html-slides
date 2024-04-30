@@ -176,7 +176,8 @@ slide('slides/video.mp4', 'Video', 'black');
 The slide index may be structured using `topic` and `subTopic`:
 
 ```javascript
-<? import skeleton/presentation.lib.js ?><?
+<?
+use('skeleton/presentation.lib.js');
 
 title('Title of your presentation');
 
@@ -194,7 +195,8 @@ topic('Topic 2');
 slide('...');
 slide('...');
 
-?><? include skeleton/presentation.inc.html ?>
+include('skeleton/presentation.inc.html');
+?>
 ```
 
 Topics and subtopics only appear on the slide index. They have no effect on the slides or the presentation flow.
